@@ -1,0 +1,14 @@
+{
+    "name": "@neer/device-control",
+    "version": "1.0.0",
+    "description": "Neer Device Control plugin (Screen & Audio)",
+    "type": "module",
+    "devDependencies": {
+        "neer": "workspace:*"
+    },
+    "neer": {
+        "extensions": [
+            "./index.ts"
+        ]
+    }
+}

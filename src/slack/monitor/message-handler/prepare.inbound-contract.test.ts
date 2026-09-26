@@ -3,7 +3,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../../config/config.js";
+import type { NeerConfig } from "../../../config/config.js";
 import type { RuntimeEnv } from "../../../runtime.js";
 import type { ResolvedSlackAccount } from "../../accounts.js";
 import type { SlackMessageEvent } from "../../types.js";
@@ -18,7 +18,7 @@ describe("slack prepareSlackMessage inbound contract", () => {
     const slackCtx = createSlackMonitorContext({
       cfg: {
         channels: { slack: { enabled: true } },
-      } as OpenClawConfig,
+      } as NeerConfig,
       accountId: "default",
       botToken: "token",
       app: { client: {} } as App,
@@ -44,7 +44,7 @@ describe("slack prepareSlackMessage inbound contract", () => {
       threadInheritParent: false,
       slashCommand: {
         enabled: false,
-        name: "openclaw",
+        name: "neer",
         sessionPrefix: "slack:slash",
         ephemeral: true,
       },
@@ -92,7 +92,7 @@ describe("slack prepareSlackMessage inbound contract", () => {
             enabled: true,
           },
         },
-      } as OpenClawConfig,
+      } as NeerConfig,
       accountId: "default",
       botToken: "token",
       app: { client: {} } as App,
@@ -121,7 +121,7 @@ describe("slack prepareSlackMessage inbound contract", () => {
       threadInheritParent: false,
       slashCommand: {
         enabled: false,
-        name: "openclaw",
+        name: "neer",
         sessionPrefix: "slack:slash",
         ephemeral: true,
       },
@@ -176,7 +176,7 @@ describe("slack prepareSlackMessage inbound contract", () => {
     const slackCtx = createSlackMonitorContext({
       cfg: {
         channels: { slack: { enabled: true, replyToMode: "all" } },
-      } as OpenClawConfig,
+      } as NeerConfig,
       accountId: "default",
       botToken: "token",
       app: { client: {} } as App,
@@ -202,7 +202,7 @@ describe("slack prepareSlackMessage inbound contract", () => {
       threadInheritParent: false,
       slashCommand: {
         enabled: false,
-        name: "openclaw",
+        name: "neer",
         sessionPrefix: "slack:slash",
         ephemeral: true,
       },
@@ -242,7 +242,7 @@ describe("slack prepareSlackMessage inbound contract", () => {
   });
 
   it("marks first thread turn and injects thread history for a new thread session", async () => {
-    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-slack-thread-"));
+    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "neer-slack-thread-"));
     const storePath = path.join(tmpDir, "sessions.json");
     try {
       const replies = vi
@@ -263,7 +263,7 @@ describe("slack prepareSlackMessage inbound contract", () => {
         cfg: {
           session: { store: storePath },
           channels: { slack: { enabled: true, replyToMode: "all", groupPolicy: "open" } },
-        } as OpenClawConfig,
+        } as NeerConfig,
         accountId: "default",
         botToken: "token",
         app: { client: { conversations: { replies } } } as App,
@@ -289,7 +289,7 @@ describe("slack prepareSlackMessage inbound contract", () => {
         threadInheritParent: false,
         slashCommand: {
           enabled: false,
-          name: "openclaw",
+          name: "neer",
           sessionPrefix: "slack:slash",
           ephemeral: true,
         },
@@ -342,13 +342,13 @@ describe("slack prepareSlackMessage inbound contract", () => {
   });
 
   it("does not mark first thread turn when thread session already exists in store", async () => {
-    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-slack-thread-"));
+    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "neer-slack-thread-"));
     const storePath = path.join(tmpDir, "sessions.json");
     try {
       const cfg = {
         session: { store: storePath },
         channels: { slack: { enabled: true, replyToMode: "all", groupPolicy: "open" } },
-      } as OpenClawConfig;
+      } as NeerConfig;
       const route = resolveAgentRoute({
         cfg,
         channel: "slack",
@@ -395,7 +395,7 @@ describe("slack prepareSlackMessage inbound contract", () => {
         threadInheritParent: false,
         slashCommand: {
           enabled: false,
-          name: "openclaw",
+          name: "neer",
           sessionPrefix: "slack:slash",
           ephemeral: true,
         },
@@ -446,7 +446,7 @@ describe("slack prepareSlackMessage inbound contract", () => {
     const slackCtx = createSlackMonitorContext({
       cfg: {
         channels: { slack: { enabled: true } },
-      } as OpenClawConfig,
+      } as NeerConfig,
       accountId: "default",
       botToken: "token",
       app: { client: {} } as App,
@@ -472,7 +472,7 @@ describe("slack prepareSlackMessage inbound contract", () => {
       threadInheritParent: false,
       slashCommand: {
         enabled: false,
-        name: "openclaw",
+        name: "neer",
         sessionPrefix: "slack:slash",
         ephemeral: true,
       },
@@ -520,7 +520,7 @@ describe("slack prepareSlackMessage inbound contract", () => {
     const slackCtx = createSlackMonitorContext({
       cfg: {
         channels: { slack: { enabled: true } },
-      } as OpenClawConfig,
+      } as NeerConfig,
       accountId: "default",
       botToken: "token",
       app: { client: {} } as App,
@@ -546,7 +546,7 @@ describe("slack prepareSlackMessage inbound contract", () => {
       threadInheritParent: false,
       slashCommand: {
         enabled: false,
-        name: "openclaw",
+        name: "neer",
         sessionPrefix: "slack:slash",
         ephemeral: true,
       },
@@ -591,7 +591,7 @@ describe("slack prepareSlackMessage inbound contract", () => {
     const slackCtx = createSlackMonitorContext({
       cfg: {
         channels: { slack: { enabled: true } },
-      } as OpenClawConfig,
+      } as NeerConfig,
       accountId: "default",
       botToken: "token",
       app: { client: {} } as App,
@@ -617,7 +617,7 @@ describe("slack prepareSlackMessage inbound contract", () => {
       threadInheritParent: false,
       slashCommand: {
         enabled: false,
-        name: "openclaw",
+        name: "neer",
         sessionPrefix: "slack:slash",
         ephemeral: true,
       },

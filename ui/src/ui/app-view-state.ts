@@ -30,6 +30,7 @@ import type {
   SessionsListResult,
   SkillStatusReport,
   StatusSummary,
+  VoiceState,
 } from "./types.ts";
 import type { ChatAttachment, ChatQueueItem, CronFormState } from "./ui-types.ts";
 import type { NostrProfileFormState } from "./views/channels.nostr-profile-form.ts";
@@ -50,6 +51,8 @@ export type AppViewState = {
   assistantName: string;
   assistantAvatar: string | null;
   assistantAgentId: string | null;
+  gpuWorkload: number;
+  currentTask: string | null;
   sessionKey: string;
   chatLoading: boolean;
   chatSending: boolean;
@@ -65,6 +68,11 @@ export type AppViewState = {
   chatThinkingLevel: string | null;
   chatQueue: ChatQueueItem[];
   chatManualRefreshInFlight: boolean;
+  chatRecording: boolean;
+  chatTranscribing: boolean;
+  chatVoiceMode: boolean;
+  chatVoiceState: VoiceState;
+  chatVoiceCallMode: boolean;
   nodesLoading: boolean;
   nodes: Array<Record<string, unknown>>;
   chatNewMessagesBelow: boolean;
@@ -282,4 +290,8 @@ export type AppViewState = {
   handleOpenSidebar: (content: string) => void;
   handleCloseSidebar: () => void;
   handleSplitRatioChange: (ratio: number) => void;
+  handleStartRecording: () => Promise<void>;
+  handleStopRecording: () => void;
+  handleToggleVoiceMode: () => void;
+  handleToggleVoiceCall: () => void;
 };

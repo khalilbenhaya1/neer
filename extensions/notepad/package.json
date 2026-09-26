@@ -1,0 +1,14 @@
+{
+    "name": "@neer/notepad",
+    "version": "1.0.0",
+    "description": "Neer Notepad plugin",
+    "type": "module",
+    "devDependencies": {
+        "neer": "workspace:*"
+    },
+    "neer": {
+        "extensions": [
+            "./index.ts"
+        ]
+    }
+}

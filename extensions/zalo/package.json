@@ -1,15 +1,15 @@
 {
-  "name": "@openclaw/zalo",
+  "name": "@neer/zalo",
   "version": "2026.2.13",
-  "description": "OpenClaw Zalo channel plugin",
+  "description": "Neer Zalo channel plugin",
   "type": "module",
   "dependencies": {
     "undici": "7.21.0"
   },
   "devDependencies": {
-    "openclaw": "workspace:*"
+    "neer": "workspace:*"
   },
-  "openclaw": {
+  "neer": {
     "extensions": [
       "./index.ts"
     ],
@@ -27,7 +27,7 @@
       "quickstartAllowFrom": true
     },
     "install": {
-      "npmSpec": "@openclaw/zalo",
+      "npmSpec": "@neer/zalo",
       "localPath": "extensions/zalo",
       "defaultChoice": "npm"
     }

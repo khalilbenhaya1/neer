@@ -2,11 +2,11 @@
 import process from "node:process";
 import type { GatewayLockHandle } from "../infra/gateway-lock.js";
 
-declare const __OPENCLAW_VERSION__: string | undefined;
+declare const __NEER_VERSION__: string | undefined;
 
 const BUNDLED_VERSION =
-  (typeof __OPENCLAW_VERSION__ === "string" && __OPENCLAW_VERSION__) ||
-  process.env.OPENCLAW_BUNDLED_VERSION ||
+  (typeof __NEER_VERSION__ === "string" && __NEER_VERSION__) ||
+  process.env.NEER_BUNDLED_VERSION ||
   "0.0.0";
 
 function argValue(args: string[], flag: string): string | undefined {
@@ -28,40 +28,21 @@ type GatewayWsLogStyle = "auto" | "full" | "compact";
 
 async function main() {
   if (hasFlag(args, "--version") || hasFlag(args, "-v")) {
-    // Match `openclaw --version` behavior for Swift env/version checks.
+    // Match `neer --version` behavior for Swift env/version checks.
     // Keep output a single line.
     console.log(BUNDLED_VERSION);
     process.exit(0);
   }
 
-  // Bun runtime ships a global `Long` that protobufjs detects, but it does not
-  // implement the long.js API that Baileys/WAProto expects (fromBits, ...).
-  // Ensure we use long.js so the embedded gateway doesn't crash at startup.
-  if (typeof process.versions.bun === "string") {
-    const mod = await import("long");
-    const Long = (mod as unknown as { default?: unknown }).default ?? mod;
-    (globalThis as unknown as { Long?: unknown }).Long = Long;
-  }
-
-  const [
-    { loadConfig },
-    { startGatewayServer },
-    { setGatewayWsLogStyle },
-    { setVerbose },
-    { acquireGatewayLock, GatewayLockError },
-    { consumeGatewaySigusr1RestartAuthorization, isGatewaySigusr1RestartExternallyAllowed },
-    { defaultRuntime },
-    { enableConsoleCapture, setConsoleTimestampPrefix },
-  ] = await Promise.all([
-    import("../config/config.js"),
-    import("../gateway/server.js"),
-    import("../gateway/ws-logging.js"),
-    import("../globals.js"),
-    import("../infra/gateway-lock.js"),
-    import("../infra/restart.js"),
-    import("../runtime.js"),
-    import("../logging.js"),
-  ] as const);
+  import "./bun-long-polyfill.js";
+  import { loadConfig } from "../config/config.js";
+  import { startGatewayServer } from "../gateway/server.js";
+  import { setGatewayWsLogStyle } from "../gateway/ws-logging.js";
+  import { setVerbose } from "../globals.js";
+  import { acquireGatewayLock, GatewayLockError } from "../infra/gateway-lock.js";
+  import { consumeGatewaySigusr1RestartAuthorization, isGatewaySigusr1RestartExternallyAllowed } from "../infra/restart.js";
+  import { defaultRuntime } from "../runtime.js";
+  import { enableConsoleCapture, setConsoleTimestampPrefix } from "../logging.js";
 
   enableConsoleCapture();
   setConsoleTimestampPrefix(true);
@@ -75,8 +56,8 @@ async function main() {
   const cfg = loadConfig();
   const portRaw =
     argValue(args, "--port") ??
-    process.env.OPENCLAW_GATEWAY_PORT ??
-    process.env.CLAWDBOT_GATEWAY_PORT ??
+    process.env.NEER_GATEWAY_PORT ??
+    process.env.NEER_GATEWAY_PORT ??
     (typeof cfg.gateway?.port === "number" ? String(cfg.gateway.port) : "") ??
     "18789";
   const port = Number.parseInt(portRaw, 10);
@@ -87,16 +68,16 @@ async function main() {
 
   const bindRaw =
     argValue(args, "--bind") ??
-    process.env.OPENCLAW_GATEWAY_BIND ??
-    process.env.CLAWDBOT_GATEWAY_BIND ??
+    process.env.NEER_GATEWAY_BIND ??
+    process.env.NEER_GATEWAY_BIND ??
     cfg.gateway?.bind ??
     "loopback";
   const bind =
     bindRaw === "loopback" ||
-    bindRaw === "lan" ||
-    bindRaw === "auto" ||
-    bindRaw === "custom" ||
-    bindRaw === "tailnet"
+      bindRaw === "lan" ||
+      bindRaw === "auto" ||
+      bindRaw === "custom" ||
+      bindRaw === "tailnet"
       ? bindRaw
       : null;
   if (!bind) {
@@ -106,7 +87,7 @@ async function main() {
 
   const token = argValue(args, "--token");
   if (token) {
-    process.env.OPENCLAW_GATEWAY_TOKEN = token;
+    process.env.NEER_GATEWAY_TOKEN = token;
   }
 
   let server: Awaited<ReturnType<typeof startGatewayServer>> | null = null;
@@ -217,7 +198,7 @@ async function main() {
 
 void main().catch((err) => {
   console.error(
-    "[openclaw] Gateway daemon failed:",
+    "[neer] Gateway daemon failed:",
     err instanceof Error ? (err.stack ?? err.message) : err,
   );
   process.exit(1);

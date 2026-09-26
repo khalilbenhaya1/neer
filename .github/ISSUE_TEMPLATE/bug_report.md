@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Report a problem or unexpected behavior in Clawdbot.
+about: Report a problem or unexpected behavior in Neer.
 title: "[Bug]: "
 labels: bug
 ---
@@ -25,7 +25,7 @@ What actually happened?
 
 ## Environment
 
-- Clawdbot version:
+- Neer version:
 - OS:
 - Install method (pnpm/npx/docker/etc):
 

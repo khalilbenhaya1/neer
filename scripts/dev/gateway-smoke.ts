@@ -15,14 +15,14 @@ const getArg = (flag: string) => {
   return undefined;
 };
 
-const urlRaw = getArg("--url") ?? process.env.OPENCLAW_GATEWAY_URL;
-const token = getArg("--token") ?? process.env.OPENCLAW_GATEWAY_TOKEN;
+const urlRaw = getArg("--url") ?? process.env.NEER_GATEWAY_URL;
+const token = getArg("--token") ?? process.env.NEER_GATEWAY_TOKEN;
 
 if (!urlRaw || !token) {
   // eslint-disable-next-line no-console
   console.error(
     "Usage: bun scripts/dev/gateway-smoke.ts --url <wss://host[:port]> --token <gateway.auth.token>\n" +
-      "Or set env: OPENCLAW_GATEWAY_URL / OPENCLAW_GATEWAY_TOKEN",
+      "Or set env: NEER_GATEWAY_URL / NEER_GATEWAY_TOKEN",
   );
   process.exit(1);
 }
@@ -120,12 +120,12 @@ async function main() {
     minProtocol: 3,
     maxProtocol: 3,
     client: {
-      id: "openclaw-ios",
-      displayName: "openclaw gateway smoke test",
+      id: "neer-ios",
+      displayName: "neer gateway smoke test",
       version: "dev",
       platform: "dev",
       mode: "ui",
-      instanceId: "openclaw-dev-smoke",
+      instanceId: "neer-dev-smoke",
     },
     locale: "en-US",
     userAgent: "gateway-smoke",

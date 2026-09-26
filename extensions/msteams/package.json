@@ -1,7 +1,7 @@
 {
-  "name": "@openclaw/msteams",
+  "name": "@neer/msteams",
   "version": "2026.2.13",
-  "description": "OpenClaw Microsoft Teams channel plugin",
+  "description": "Neer Microsoft Teams channel plugin",
   "type": "module",
   "dependencies": {
     "@microsoft/agents-hosting": "^1.2.3",
@@ -11,9 +11,9 @@
     "proper-lockfile": "^4.1.2"
   },
   "devDependencies": {
-    "openclaw": "workspace:*"
+    "neer": "workspace:*"
   },
-  "openclaw": {
+  "neer": {
     "extensions": [
       "./index.ts"
     ],
@@ -30,7 +30,7 @@
       "order": 60
     },
     "install": {
-      "npmSpec": "@openclaw/msteams",
+      "npmSpec": "@neer/msteams",
       "localPath": "extensions/msteams",
       "defaultChoice": "npm"
     }

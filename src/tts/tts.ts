@@ -12,9 +12,10 @@ import {
 } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
+import { generateSpeech } from "../gateway/piper-manager.js";
 import type { ReplyPayload } from "../auto-reply/types.js";
 import type { ChannelId } from "../channels/plugins/types.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { NeerConfig } from "../config/config.js";
 import type {
   TtsConfig,
   TtsAutoMode,
@@ -122,6 +123,11 @@ export type ResolvedTtsConfig = {
     saveSubtitles: boolean;
     proxy?: string;
     timeoutMs?: number;
+  };
+  piper: {
+    enabled: boolean;
+    voice: string;
+    speed: number;
   };
   prefsPath?: string;
   maxTextLength: number;
@@ -246,7 +252,7 @@ function resolveModelOverridePolicy(
   };
 }
 
-export function resolveTtsConfig(cfg: OpenClawConfig): ResolvedTtsConfig {
+export function resolveTtsConfig(cfg: NeerConfig): ResolvedTtsConfig {
   const raw: TtsConfig = cfg.messages?.tts ?? {};
   const providerSource = raw.provider ? "config" : "default";
   const edgeOutputFormat = raw.edge?.outputFormat?.trim();
@@ -297,6 +303,11 @@ export function resolveTtsConfig(cfg: OpenClawConfig): ResolvedTtsConfig {
       proxy: raw.edge?.proxy?.trim() || undefined,
       timeoutMs: raw.edge?.timeoutMs,
     },
+    piper: {
+      enabled: raw.piper?.enabled ?? true,
+      voice: raw.piper?.voice?.trim() || "en_US-lessac-medium",
+      speed: raw.piper?.speed ?? 1.0,
+    },
     prefsPath: raw.prefsPath,
     maxTextLength: raw.maxTextLength ?? DEFAULT_MAX_TEXT_LENGTH,
     timeoutMs: raw.timeoutMs ?? DEFAULT_TIMEOUT_MS,
@@ -307,7 +318,7 @@ export function resolveTtsPrefsPath(config: ResolvedTtsConfig): string {
   if (config.prefsPath?.trim()) {
     return resolveUserPath(config.prefsPath.trim());
   }
-  const envPath = process.env.OPENCLAW_TTS_PREFS?.trim();
+  const envPath = process.env.NEER_TTS_PREFS?.trim();
   if (envPath) {
     return resolveUserPath(envPath);
   }
@@ -341,7 +352,7 @@ export function resolveTtsAutoMode(params: {
   return params.config.auto;
 }
 
-export function buildTtsSystemPromptHint(cfg: OpenClawConfig): string | undefined {
+export function buildTtsSystemPromptHint(cfg: NeerConfig): string | undefined {
   const config = resolveTtsConfig(cfg);
   const prefsPath = resolveTtsPrefsPath(config);
   const autoMode = resolveTtsAutoMode({ config, prefsPath });
@@ -502,7 +513,7 @@ export function resolveTtsApiKey(
   return undefined;
 }
 
-export const TTS_PROVIDERS = ["openai", "elevenlabs", "edge"] as const;
+export const TTS_PROVIDERS = ["openai", "elevenlabs", "edge", "piper"] as const;
 
 export function resolveTtsProviderOrder(primary: TtsProvider): TtsProvider[] {
   return [primary, ...TTS_PROVIDERS.filter((provider) => provider !== primary)];
@@ -511,6 +522,9 @@ export function resolveTtsProviderOrder(primary: TtsProvider): TtsProvider[] {
 export function isTtsProviderConfigured(config: ResolvedTtsConfig, provider: TtsProvider): boolean {
   if (provider === "edge") {
     return config.edge.enabled;
+  }
+  if (provider === "piper") {
+    return config.piper.enabled;
   }
   return Boolean(resolveTtsApiKey(config, provider));
 }
@@ -882,7 +896,7 @@ type SummaryModelSelection = {
 };
 
 function resolveSummaryModelRef(
-  cfg: OpenClawConfig,
+  cfg: NeerConfig,
   config: ResolvedTtsConfig,
 ): SummaryModelSelection {
   const defaultRef = resolveDefaultModelForAgent({ cfg });
@@ -910,7 +924,7 @@ function isTextContentBlock(block: { type: string }): block is TextContent {
 async function summarizeText(params: {
   text: string;
   targetLength: number;
-  cfg: OpenClawConfig;
+  cfg: NeerConfig;
   config: ResolvedTtsConfig;
   timeoutMs: number;
 }): Promise<SummarizeResult> {
@@ -1161,7 +1175,7 @@ async function edgeTTS(params: {
 
 export async function textToSpeech(params: {
   text: string;
-  cfg: OpenClawConfig;
+  cfg: NeerConfig;
   prefsPath?: string;
   channel?: string;
   overrides?: TtsDirectiveOverrides;
@@ -1256,6 +1270,36 @@ export async function textToSpeech(params: {
         };
       }
 
+      if (provider === "piper") {
+        if (!config.piper.enabled) {
+          lastError = "piper: disabled";
+          continue;
+        }
+
+        const piperLogger = {
+          info: (m: string) => logVerbose(`TTS: piper: ${m}`),
+          warn: (m: string) => logVerbose(`TTS: piper warning: ${m}`),
+          error: (m: string) => logVerbose(`TTS: piper error: ${m}`),
+        };
+
+        const resultPath = await generateSpeech(params.text, piperLogger);
+        if (!resultPath) {
+          lastError = "piper: generation failed";
+          continue;
+        }
+
+        const voiceCompatible = isVoiceCompatibleAudio({ fileName: resultPath });
+
+        return {
+          success: true,
+          audioPath: resultPath,
+          latencyMs: Date.now() - providerStart,
+          provider,
+          outputFormat: "wav",
+          voiceCompatible,
+        };
+      }
+
       const apiKey = resolveTtsApiKey(config, provider);
       if (!apiKey) {
         lastError = `No API key for ${provider}`;
@@ -1332,7 +1376,7 @@ export async function textToSpeech(params: {
 
 export async function textToSpeechTelephony(params: {
   text: string;
-  cfg: OpenClawConfig;
+  cfg: NeerConfig;
   prefsPath?: string;
 }): Promise<TtsTelephonyResult> {
   const config = resolveTtsConfig(params.cfg);
@@ -1356,6 +1400,31 @@ export async function textToSpeechTelephony(params: {
       if (provider === "edge") {
         lastError = "edge: unsupported for telephony";
         continue;
+      }
+
+      if (provider === "piper") {
+        const piperLogger = {
+          info: (m: string) => logVerbose(`TTS: piper: ${m}`),
+          warn: (m: string) => logVerbose(`TTS: piper warning: ${m}`),
+          error: (m: string) => logVerbose(`TTS: piper error: ${m}`),
+        };
+        const audioPath = await generateSpeech(params.text, piperLogger);
+        if (!audioPath) {
+          lastError = "piper: generation failed";
+          continue;
+        }
+        const audioBuffer = readFileSync(audioPath);
+        // Clean up temp file
+        try { unlinkSync(audioPath); } catch { /* ignore */ }
+
+        return {
+          success: true,
+          audioBuffer,
+          latencyMs: Date.now() - providerStart,
+          provider,
+          outputFormat: "wav",
+          sampleRate: 22050, // Piper medium uses 22050
+        };
       }
 
       const apiKey = resolveTtsApiKey(config, provider);
@@ -1426,7 +1495,7 @@ export async function textToSpeechTelephony(params: {
 
 export async function maybeApplyTtsToPayload(params: {
   payload: ReplyPayload;
-  cfg: OpenClawConfig;
+  cfg: NeerConfig;
   channel?: string;
   kind?: "tool" | "block" | "final";
   inboundAudio?: boolean;
@@ -1458,9 +1527,9 @@ export async function maybeApplyTtsToPayload(params: {
     visibleText === text.trim()
       ? params.payload
       : {
-          ...params.payload,
-          text: visibleText.length > 0 ? visibleText : undefined,
-        };
+        ...params.payload,
+        text: visibleText.length > 0 ? visibleText : undefined,
+      };
 
   if (autoMode === "tagged" && !directives.hasDirective) {
     return nextPayload;

@@ -3,7 +3,7 @@ name: github
 description: "Interact with GitHub using the `gh` CLI. Use `gh issue`, `gh pr`, `gh run`, and `gh api` for issues, PRs, CI runs, and advanced queries."
 metadata:
   {
-    "openclaw":
+    "neer":
       {
         "emoji": "🐙",
         "requires": { "bins": ["gh"] },
@@ -15,6 +15,12 @@ metadata:
               "formula": "gh",
               "bins": ["gh"],
               "label": "Install GitHub CLI (brew)",
+            },
+            {
+               "id": "manual",
+                "kind": "manual",
+                "label": "Install GitHub CLI (Windows)",
+                "bins": ["gh"]
             },
             {
               "id": "apt",

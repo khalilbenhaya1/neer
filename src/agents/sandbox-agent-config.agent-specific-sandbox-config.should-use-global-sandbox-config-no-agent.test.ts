@@ -4,7 +4,7 @@ import os from "node:os";
 import path from "node:path";
 import { Readable } from "node:stream";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { NeerConfig } from "../config/config.js";
 
 // We need to test the internal defaultSandboxConfig function, but it's not exported.
 // Instead, we test the behavior through resolveSandboxContext which uses it.
@@ -54,9 +54,9 @@ describe("Agent-specific sandbox config", () => {
 
   beforeEach(async () => {
     spawnCalls.length = 0;
-    previousStateDir = process.env.MOLTBOT_STATE_DIR;
-    tempStateDir = await fs.mkdtemp(path.join(os.tmpdir(), "moltbot-test-state-"));
-    process.env.MOLTBOT_STATE_DIR = tempStateDir;
+    previousStateDir = process.env.NEER_STATE_DIR;
+    tempStateDir = await fs.mkdtemp(path.join(os.tmpdir(), "neer-test-state-"));
+    process.env.NEER_STATE_DIR = tempStateDir;
     vi.resetModules();
   });
 
@@ -65,9 +65,9 @@ describe("Agent-specific sandbox config", () => {
       await fs.rm(tempStateDir, { recursive: true, force: true });
     }
     if (previousStateDir === undefined) {
-      delete process.env.MOLTBOT_STATE_DIR;
+      delete process.env.NEER_STATE_DIR;
     } else {
-      process.env.MOLTBOT_STATE_DIR = previousStateDir;
+      process.env.NEER_STATE_DIR = previousStateDir;
     }
     tempStateDir = undefined;
   });
@@ -78,7 +78,7 @@ describe("Agent-specific sandbox config", () => {
     async () => {
       const { resolveSandboxContext } = await import("./sandbox.js");
 
-      const cfg: OpenClawConfig = {
+      const cfg: NeerConfig = {
         agents: {
           defaults: {
             sandbox: {
@@ -89,7 +89,7 @@ describe("Agent-specific sandbox config", () => {
           list: [
             {
               id: "main",
-              workspace: "~/openclaw",
+              workspace: "~/neer",
             },
           ],
         },
@@ -108,7 +108,7 @@ describe("Agent-specific sandbox config", () => {
   it("should allow agent-specific docker setupCommand overrides", async () => {
     const { resolveSandboxContext } = await import("./sandbox.js");
 
-    const cfg: OpenClawConfig = {
+    const cfg: NeerConfig = {
       agents: {
         defaults: {
           sandbox: {
@@ -122,7 +122,7 @@ describe("Agent-specific sandbox config", () => {
         list: [
           {
             id: "work",
-            workspace: "~/openclaw-work",
+            workspace: "~/neer-work",
             sandbox: {
               mode: "all",
               scope: "agent",
@@ -156,7 +156,7 @@ describe("Agent-specific sandbox config", () => {
   it("should ignore agent-specific docker overrides when scope is shared", async () => {
     const { resolveSandboxContext } = await import("./sandbox.js");
 
-    const cfg: OpenClawConfig = {
+    const cfg: NeerConfig = {
       agents: {
         defaults: {
           sandbox: {
@@ -170,7 +170,7 @@ describe("Agent-specific sandbox config", () => {
         list: [
           {
             id: "work",
-            workspace: "~/openclaw-work",
+            workspace: "~/neer-work",
             sandbox: {
               mode: "all",
               scope: "shared",

@@ -7,7 +7,7 @@ import { getChannelPluginCatalogEntry, listChannelPluginCatalogEntries } from ".
 describe("channel plugin catalog", () => {
   it("includes Microsoft Teams", () => {
     const entry = getChannelPluginCatalogEntry("msteams");
-    expect(entry?.install.npmSpec).toBe("@openclaw/msteams");
+    expect(entry?.install.npmSpec).toBe("@neer/msteams");
     expect(entry?.meta.aliases).toContain("teams");
   });
 
@@ -17,15 +17,15 @@ describe("channel plugin catalog", () => {
   });
 
   it("includes external catalog entries", () => {
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-catalog-"));
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "neer-catalog-"));
     const catalogPath = path.join(dir, "catalog.json");
     fs.writeFileSync(
       catalogPath,
       JSON.stringify({
         entries: [
           {
-            name: "@openclaw/demo-channel",
-            openclaw: {
+            name: "@neer/demo-channel",
+            neer: {
               channel: {
                 id: "demo-channel",
                 label: "Demo Channel",
@@ -35,7 +35,7 @@ describe("channel plugin catalog", () => {
                 order: 999,
               },
               install: {
-                npmSpec: "@openclaw/demo-channel",
+                npmSpec: "@neer/demo-channel",
               },
             },
           },

@@ -2,7 +2,7 @@
 read_when:
   - 实现 macOS 应用功能
   - 在 macOS 上更改 Gateway 网关生命周期或节点桥接
-summary: OpenClaw macOS 配套应用（菜单栏 + Gateway 网关代理）
+summary: Neer macOS 配套应用（菜单栏 + Gateway 网关代理）
 title: macOS 应用
 x-i18n:
   generated_at: "2026-02-03T07:53:14Z"
@@ -13,9 +13,9 @@ x-i18n:
   workflow: 15
 ---
 
-# OpenClaw macOS 配套应用（菜单栏 + Gateway 网关代理）
+# Neer macOS 配套应用（菜单栏 + Gateway 网关代理）
 
-macOS 应用是 OpenClaw 的**菜单栏配套应用**。它拥有权限，在本地管理/附加到 Gateway 网关（launchd 或手动），并作为节点向智能体暴露 macOS 功能。
+macOS 应用是 Neer 的**菜单栏配套应用**。它拥有权限，在本地管理/附加到 Gateway 网关（launchd 或手动），并作为节点向智能体暴露 macOS 功能。
 
 ## 功能
 
@@ -25,18 +25,18 @@ macOS 应用是 OpenClaw 的**菜单栏配套应用**。它拥有权限，在本
 - 暴露 macOS 专用工具（Canvas、相机、屏幕录制、`system.run`）。
 - 在**远程**模式下启动本地节点主机服务（launchd），在**本地**模式下停止它。
 - 可选地托管 **PeekabooBridge** 用于 UI 自动化。
-- 根据请求通过 npm/pnpm 安装全局 CLI（`openclaw`）（不建议使用 bun 作为 Gateway 网关运行时）。
+- 根据请求通过 npm/pnpm 安装全局 CLI（`neer`）（不建议使用 bun 作为 Gateway 网关运行时）。
 
 ## 本地 vs 远程模式
 
-- **本地**（默认）：如果存在运行中的本地 Gateway 网关，应用附加到它；否则通过 `openclaw gateway install` 启用 launchd 服务。
+- **本地**（默认）：如果存在运行中的本地 Gateway 网关，应用附加到它；否则通过 `neer gateway install` 启用 launchd 服务。
 - **远程**：应用通过 SSH/Tailscale 连接到 Gateway 网关，从不启动本地进程。
   应用启动本地**节点主机服务**，以便远程 Gateway 网关可以访问此 Mac。
   应用不会将 Gateway 网关作为子进程生成。
 
 ## Launchd 控制
 
-应用管理一个标记为 `bot.molt.gateway` 的每用户 LaunchAgent（使用 `--profile`/`OPENCLAW_PROFILE` 时为 `bot.molt.<profile>`；旧版 `com.openclaw.*` 仍会卸载）。
+应用管理一个标记为 `bot.molt.gateway` 的每用户 LaunchAgent（使用 `--profile`/`NEER_PROFILE` 时为 `bot.molt.<profile>`；旧版 `com.neer.*` 仍会卸载）。
 
 ```bash
 launchctl kickstart -k gui/$UID/bot.molt.gateway
@@ -45,7 +45,7 @@ launchctl bootout gui/$UID/bot.molt.gateway
 
 运行命名配置文件时，将标签替换为 `bot.molt.<profile>`。
 
-如果 LaunchAgent 未安装，从应用中启用它或运行 `openclaw gateway install`。
+如果 LaunchAgent 未安装，从应用中启用它或运行 `neer gateway install`。
 
 ## 节点功能（mac）
 
@@ -77,7 +77,7 @@ Gateway -> Node Service (WS)
 `system.run` 由 macOS 应用中的 **Exec 审批**控制（设置 → Exec approvals）。安全 + 询问 + 允许列表本地存储在 Mac 上：
 
 ```
-~/.openclaw/exec-approvals.json
+~/.neer/exec-approvals.json
 ```
 
 示例：
@@ -107,14 +107,14 @@ Gateway -> Node Service (WS)
 
 ## 深度链接
 
-应用为本地操作注册 `openclaw://` URL 方案。
+应用为本地操作注册 `neer://` URL 方案。
 
-### `openclaw://agent`
+### `neer://agent`
 
 触发 Gateway 网关 `agent` 请求。
 
 ```bash
-open 'openclaw://agent?message=Hello%20from%20deep%20link'
+open 'neer://agent?message=Hello%20from%20deep%20link'
 ```
 
 查询参数：
@@ -133,15 +133,15 @@ open 'openclaw://agent?message=Hello%20from%20deep%20link'
 
 ## 新手引导流程（典型）
 
-1. 安装并启动 **OpenClaw.app**。
+1. 安装并启动 **Neer.app**。
 2. 完成权限清单（TCC 提示）。
 3. 确保**本地**模式处于活动状态且 Gateway 网关正在运行。
 4. 如果你想要终端访问，安装 CLI。
 
 ## 构建和开发工作流程（原生）
 
-- `cd apps/macos && swift build`
-- `swift run OpenClaw`（或 Xcode）
+- `cd apps/neer-macos && swift build`
+- `swift run Neer`（或 Xcode）
 - 打包应用：`scripts/package-mac-app.sh`
 
 ## 调试 Gateway 网关连接（macOS CLI）
@@ -149,9 +149,9 @@ open 'openclaw://agent?message=Hello%20from%20deep%20link'
 使用调试 CLI 来执行与 macOS 应用使用的相同的 Gateway 网关 WebSocket 握手和发现逻辑，而无需启动应用。
 
 ```bash
-cd apps/macos
-swift run openclaw-mac connect --json
-swift run openclaw-mac discover --timeout 3000 --json
+cd apps/neer-macos
+swift run neer-mac connect --json
+swift run neer-mac discover --timeout 3000 --json
 ```
 
 Connect 选项：
@@ -168,7 +168,7 @@ Discovery 选项：
 - `--timeout <ms>`：总体发现窗口（默认：`2000`）
 - `--json`：用于比较的结构化输出
 
-提示：与 `openclaw gateway discover --json` 比较，查看 macOS 应用的发现管道（NWBrowser + tailnet DNS-SD 回退）是否与 Node CLI 基于 `dns-sd` 的发现不同。
+提示：与 `neer gateway discover --json` 比较，查看 macOS 应用的发现管道（NWBrowser + tailnet DNS-SD 回退）是否与 Node CLI 基于 `dns-sd` 的发现不同。
 
 ## 远程连接管道（SSH 隧道）
 

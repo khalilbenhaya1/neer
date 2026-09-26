@@ -20,6 +20,8 @@ export type OverviewProps = {
   onSessionKeyChange: (next: string) => void;
   onConnect: () => void;
   onRefresh: () => void;
+  gpuWorkload: number;
+  currentTask: string | null;
 };
 
 export function renderOverview(props: OverviewProps) {
@@ -44,13 +46,13 @@ export function renderOverview(props: OverviewProps) {
         <div class="muted" style="margin-top: 8px">
           This gateway requires auth. Add a token or password, then click Connect.
           <div style="margin-top: 6px">
-            <span class="mono">openclaw dashboard --no-open</span> → open the Control UI<br />
-            <span class="mono">openclaw doctor --generate-gateway-token</span> → set token
+            <span class="mono">neer dashboard --no-open</span> → open the Control UI<br />
+            <span class="mono">neer doctor --generate-gateway-token</span> → set token
           </div>
           <div style="margin-top: 6px">
             <a
               class="session-link"
-              href="https://docs.openclaw.ai/web/dashboard"
+              href="https://docs.neer.ai/web/dashboard"
               target="_blank"
               rel="noreferrer"
               title="Control UI auth docs (opens in new tab)"
@@ -66,7 +68,7 @@ export function renderOverview(props: OverviewProps) {
         <div style="margin-top: 6px">
           <a
             class="session-link"
-            href="https://docs.openclaw.ai/web/dashboard"
+            href="https://docs.neer.ai/web/dashboard"
             target="_blank"
             rel="noreferrer"
             title="Control UI auth docs (opens in new tab)"
@@ -99,7 +101,7 @@ export function renderOverview(props: OverviewProps) {
         <div style="margin-top: 6px">
           <a
             class="session-link"
-            href="https://docs.openclaw.ai/gateway/tailscale"
+            href="https://docs.neer.ai/gateway/tailscale"
             target="_blank"
             rel="noreferrer"
             title="Tailscale Serve docs (opens in new tab)"
@@ -108,7 +110,7 @@ export function renderOverview(props: OverviewProps) {
           <span class="muted"> · </span>
           <a
             class="session-link"
-            href="https://docs.openclaw.ai/web/control-ui#insecure-http"
+            href="https://docs.neer.ai/web/control-ui#insecure-http"
             target="_blank"
             rel="noreferrer"
             title="Insecure HTTP docs (opens in new tab)"
@@ -119,7 +121,105 @@ export function renderOverview(props: OverviewProps) {
     `;
   })();
 
+  /* ── Row 1: System Brain Status Indicators ── */
+  const statusOk = props.connected;
+  const taskLabel = props.currentTask || "Idle";
+  const gpuPct = props.gpuWorkload ?? 0;
+
   return html`
+    <!-- ══ Row 1: System Brain ══ -->
+    <div class="cc-section-label">System Brain</div>
+    <section class="grid grid-cols-4" style="margin-bottom: 18px;">
+      <div class="card stat-card cc-brain-card ${statusOk ? "cc-ok" : "cc-warn"}">
+        <div class="stat-label">Gateway</div>
+        <div class="stat-value ${statusOk ? "ok" : "warn"}">
+          ${statusOk ? "● ONLINE" : "● OFFLINE"}
+        </div>
+        <div class="muted">WebSocket connection</div>
+      </div>
+      <div class="card stat-card cc-brain-card">
+        <div class="stat-label">Uptime</div>
+        <div class="stat-value">${uptime}</div>
+        <div class="muted">Since last restart</div>
+      </div>
+      <div class="card stat-card cc-brain-card">
+        <div class="stat-label">Current Task</div>
+        <div class="stat-value" style="font-size: 0.85em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${taskLabel}">
+          ${taskLabel}
+        </div>
+        <div class="muted">Tick: ${tick}</div>
+      </div>
+      <div class="card stat-card cc-brain-card ${gpuPct > 80 ? "cc-warn" : ""}">
+        <div class="stat-label">GPU Workload</div>
+        <div class="stat-value ${gpuPct > 80 ? "warn" : ""}">${gpuPct}%</div>
+        <div class="cc-bar-wrap">
+          <div class="cc-bar" style="width: ${Math.min(gpuPct, 100)}%; background: ${gpuPct > 80 ? "var(--danger)" : "var(--accent)"};"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ Row 2: Live Metrics ══ -->
+    <div class="cc-section-label">Live Metrics</div>
+    <section class="grid grid-cols-3" style="margin-bottom: 18px;">
+      <div class="card stat-card">
+        <div class="stat-label">Instances</div>
+        <div class="stat-value">${props.presenceCount}</div>
+        <div class="muted">Presence beacons (last 5 min)</div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-label">Sessions</div>
+        <div class="stat-value">${props.sessionsCount ?? "n/a"}</div>
+        <div class="muted">Session keys tracked</div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-label">Automation</div>
+        <div class="stat-value">
+          ${props.cronEnabled == null ? "n/a" : props.cronEnabled ? "Enabled" : "Disabled"}
+        </div>
+        <div class="muted">Next wake ${formatNextRun(props.cronNext)}</div>
+      </div>
+    </section>
+
+    <!-- ══ Row 3: Channels Refresh ══ -->
+    <div class="cc-section-label">Intelligence</div>
+    <section class="grid grid-cols-2" style="margin-bottom: 18px;">
+      <div class="card">
+        <div class="card-title">Channels Last Refresh</div>
+        <div class="card-sub">Most recent successful channel data pull.</div>
+        <div class="stat-value" style="margin-top: 10px; font-size: 1.05em;">
+          ${props.lastChannelsRefresh ? formatRelativeTimestamp(props.lastChannelsRefresh) : "n/a"}
+        </div>
+      </div>
+      ${props.lastError
+      ? html`<div class="card">
+              <div class="callout danger">
+                <div>${props.lastError}</div>
+                ${authHint ?? ""}
+                ${insecureContextHint ?? ""}
+              </div>
+            </div>`
+      : html`<div class="card">
+              <div class="card-title">System Notes</div>
+              <div class="note-grid" style="margin-top: 10px;">
+                <div>
+                  <div class="note-title">Tailscale serve</div>
+                  <div class="muted">Prefer serve mode for tailnet auth.</div>
+                </div>
+                <div>
+                  <div class="note-title">Session hygiene</div>
+                  <div class="muted">Use /new or sessions.patch to reset context.</div>
+                </div>
+                <div>
+                  <div class="note-title">Cron reminders</div>
+                  <div class="muted">Use isolated sessions for recurring runs.</div>
+                </div>
+              </div>
+            </div>`
+    }
+    </section>
+
+    <!-- ══ Row 4: Gateway Access ══ -->
+    <div class="cc-section-label">Quick Connect</div>
     <section class="grid grid-cols-2">
       <div class="card">
         <div class="card-title">Gateway Access</div>
@@ -130,9 +230,9 @@ export function renderOverview(props: OverviewProps) {
             <input
               .value=${props.settings.gatewayUrl}
               @input=${(e: Event) => {
-                const v = (e.target as HTMLInputElement).value;
-                props.onSettingsChange({ ...props.settings, gatewayUrl: v });
-              }}
+      const v = (e.target as HTMLInputElement).value;
+      props.onSettingsChange({ ...props.settings, gatewayUrl: v });
+    }}
               placeholder="ws://100.x.y.z:18789"
             />
           </label>
@@ -141,10 +241,10 @@ export function renderOverview(props: OverviewProps) {
             <input
               .value=${props.settings.token}
               @input=${(e: Event) => {
-                const v = (e.target as HTMLInputElement).value;
-                props.onSettingsChange({ ...props.settings, token: v });
-              }}
-              placeholder="OPENCLAW_GATEWAY_TOKEN"
+      const v = (e.target as HTMLInputElement).value;
+      props.onSettingsChange({ ...props.settings, token: v });
+    }}
+              placeholder="NEER_GATEWAY_TOKEN"
             />
           </label>
           <label class="field">
@@ -153,9 +253,9 @@ export function renderOverview(props: OverviewProps) {
               type="password"
               .value=${props.password}
               @input=${(e: Event) => {
-                const v = (e.target as HTMLInputElement).value;
-                props.onPasswordChange(v);
-              }}
+      const v = (e.target as HTMLInputElement).value;
+      props.onPasswordChange(v);
+    }}
               placeholder="system or shared password"
             />
           </label>
@@ -164,9 +264,9 @@ export function renderOverview(props: OverviewProps) {
             <input
               .value=${props.settings.sessionKey}
               @input=${(e: Event) => {
-                const v = (e.target as HTMLInputElement).value;
-                props.onSessionKeyChange(v);
-              }}
+      const v = (e.target as HTMLInputElement).value;
+      props.onSessionKeyChange(v);
+    }}
             />
           </label>
         </div>
@@ -178,8 +278,8 @@ export function renderOverview(props: OverviewProps) {
       </div>
 
       <div class="card">
-        <div class="card-title">Snapshot</div>
-        <div class="card-sub">Latest gateway handshake information.</div>
+        <div class="card-title">Gateway Snapshot</div>
+        <div class="card-sub">Latest handshake information from the gateway.</div>
         <div class="stat-grid" style="margin-top: 16px;">
           <div class="stat">
             <div class="stat-label">Status</div>
@@ -196,65 +296,15 @@ export function renderOverview(props: OverviewProps) {
             <div class="stat-value">${tick}</div>
           </div>
           <div class="stat">
-            <div class="stat-label">Last Channels Refresh</div>
-            <div class="stat-value">
-              ${props.lastChannelsRefresh ? formatRelativeTimestamp(props.lastChannelsRefresh) : "n/a"}
+            <div class="stat-label">GPU Workload</div>
+            <div class="stat-value">${gpuPct}%</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Current Task</div>
+            <div class="stat-value" style="font-size: 0.9em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px;" title="${props.currentTask || "Idle"}">
+              ${props.currentTask || "Idle"}
             </div>
           </div>
-        </div>
-        ${
-          props.lastError
-            ? html`<div class="callout danger" style="margin-top: 14px;">
-              <div>${props.lastError}</div>
-              ${authHint ?? ""}
-              ${insecureContextHint ?? ""}
-            </div>`
-            : html`
-                <div class="callout" style="margin-top: 14px">
-                  Use Channels to link WhatsApp, Telegram, Discord, Signal, or iMessage.
-                </div>
-              `
-        }
-      </div>
-    </section>
-
-    <section class="grid grid-cols-3" style="margin-top: 18px;">
-      <div class="card stat-card">
-        <div class="stat-label">Instances</div>
-        <div class="stat-value">${props.presenceCount}</div>
-        <div class="muted">Presence beacons in the last 5 minutes.</div>
-      </div>
-      <div class="card stat-card">
-        <div class="stat-label">Sessions</div>
-        <div class="stat-value">${props.sessionsCount ?? "n/a"}</div>
-        <div class="muted">Recent session keys tracked by the gateway.</div>
-      </div>
-      <div class="card stat-card">
-        <div class="stat-label">Cron</div>
-        <div class="stat-value">
-          ${props.cronEnabled == null ? "n/a" : props.cronEnabled ? "Enabled" : "Disabled"}
-        </div>
-        <div class="muted">Next wake ${formatNextRun(props.cronNext)}</div>
-      </div>
-    </section>
-
-    <section class="card" style="margin-top: 18px;">
-      <div class="card-title">Notes</div>
-      <div class="card-sub">Quick reminders for remote control setups.</div>
-      <div class="note-grid" style="margin-top: 14px;">
-        <div>
-          <div class="note-title">Tailscale serve</div>
-          <div class="muted">
-            Prefer serve mode to keep the gateway on loopback with tailnet auth.
-          </div>
-        </div>
-        <div>
-          <div class="note-title">Session hygiene</div>
-          <div class="muted">Use /new or sessions.patch to reset context.</div>
-        </div>
-        <div>
-          <div class="note-title">Cron reminders</div>
-          <div class="muted">Use isolated sessions for recurring runs.</div>
         </div>
       </div>
     </section>

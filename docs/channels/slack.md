@@ -34,7 +34,7 @@ Status: production-ready for DMs + channels via Slack app integrations. Default 
         - install app and copy **Bot Token** (`xoxb-...`)
       </Step>
 
-      <Step title="Configure OpenClaw">
+      <Step title="Configure Neer">
 
 ```json5
 {
@@ -74,7 +74,7 @@ SLACK_BOT_TOKEN=xoxb-...
       <Step title="Start gateway">
 
 ```bash
-openclaw gateway
+neer gateway
 ```
 
       </Step>
@@ -92,7 +92,7 @@ openclaw gateway
 
       </Step>
 
-      <Step title="Configure OpenClaw HTTP mode">
+      <Step title="Configure Neer HTTP mode">
 
 ```json5
 {
@@ -150,7 +150,7 @@ For actions/directory reads, user token can be preferred when configured. For wr
     - `dm.groupEnabled` (group DMs default false)
     - `dm.groupChannels` (optional MPIM allowlist)
 
-    Pairing in DMs uses `openclaw pairing approve slack <code>`.
+    Pairing in DMs uses `neer pairing approve slack <code>`.
 
   </Tab>
 
@@ -203,7 +203,7 @@ For actions/directory reads, user token can be preferred when configured. For wr
 Default slash command settings:
 
 - `enabled: false`
-- `name: "openclaw"`
+- `name: "neer"`
 - `sessionPrefix: "slack:slash"`
 - `ephemeral: true`
 
@@ -291,12 +291,12 @@ Available action groups in current Slack tooling:
 ```json
 {
   "display_information": {
-    "name": "OpenClaw",
-    "description": "Slack connector for OpenClaw"
+    "name": "Neer",
+    "description": "Slack connector for Neer"
   },
   "features": {
     "bot_user": {
-      "display_name": "OpenClaw",
+      "display_name": "Neer",
       "always_online": false
     },
     "app_home": {
@@ -305,8 +305,8 @@ Available action groups in current Slack tooling:
     },
     "slash_commands": [
       {
-        "command": "/openclaw",
-        "description": "Send a message to OpenClaw",
+        "command": "/neer",
+        "description": "Send a message to Neer",
         "should_escape": false
       }
     ]
@@ -385,9 +385,9 @@ Available action groups in current Slack tooling:
     Useful commands:
 
 ```bash
-openclaw channels status --probe
-openclaw logs --follow
-openclaw doctor
+neer channels status --probe
+neer logs --follow
+neer doctor
 ```
 
   </Accordion>
@@ -400,7 +400,7 @@ openclaw doctor
     - pairing approvals / allowlist entries
 
 ```bash
-openclaw pairing list slack
+neer pairing list slack
 ```
 
   </Accordion>

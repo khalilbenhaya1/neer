@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/config.js";
+import type { NeerConfig } from "../config/config.js";
 import type { ModelProviderConfig } from "../config/types.models.js";
 import type { RuntimeEnv } from "../runtime.js";
 import type { WizardPrompter } from "../wizard/prompts.js";
@@ -16,14 +16,14 @@ const VERIFY_TIMEOUT_MS = 10000;
 export type CustomApiCompatibility = "openai" | "anthropic";
 type CustomApiCompatibilityChoice = CustomApiCompatibility | "unknown";
 export type CustomApiResult = {
-  config: OpenClawConfig;
+  config: NeerConfig;
   providerId?: string;
   modelId?: string;
   providerIdRenamedFrom?: string;
 };
 
 export type ApplyCustomApiConfigParams = {
-  config: OpenClawConfig;
+  config: NeerConfig;
   baseUrl: string;
   modelId: string;
   compatibility: CustomApiCompatibility;
@@ -67,7 +67,7 @@ export class CustomApiError extends Error {
 }
 
 export type ResolveCustomProviderIdParams = {
-  config: OpenClawConfig;
+  config: NeerConfig;
   baseUrl: string;
   providerId?: string;
 };
@@ -140,7 +140,7 @@ function resolveUniqueEndpointId(params: {
 
 function resolveAliasError(params: {
   raw: string;
-  cfg: OpenClawConfig;
+  cfg: NeerConfig;
   modelRef: string;
 }): string | undefined {
   const trimmed = params.raw.trim();
@@ -436,7 +436,7 @@ export function applyCustomApiConfig(params: ApplyCustomApiConfigParams): Custom
   const normalizedApiKey =
     params.apiKey?.trim() || (existingApiKey ? existingApiKey.trim() : undefined);
 
-  let config: OpenClawConfig = {
+  let config: NeerConfig = {
     ...params.config,
     models: {
       ...params.config.models,
@@ -487,7 +487,7 @@ export function applyCustomApiConfig(params: ApplyCustomApiConfigParams): Custom
 export async function promptCustomApiConfig(params: {
   prompter: WizardPrompter;
   runtime: RuntimeEnv;
-  config: OpenClawConfig;
+  config: NeerConfig;
 }): Promise<CustomApiResult> {
   const { prompter, runtime, config } = params;
 

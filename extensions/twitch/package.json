@@ -1,8 +1,8 @@
 {
-  "name": "@openclaw/twitch",
+  "name": "@neer/twitch",
   "version": "2026.2.13",
   "private": true,
-  "description": "OpenClaw Twitch channel plugin",
+  "description": "Neer Twitch channel plugin",
   "type": "module",
   "dependencies": {
     "@twurple/api": "^8.0.3",
@@ -11,9 +11,9 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "openclaw": "workspace:*"
+    "neer": "workspace:*"
   },
-  "openclaw": {
+  "neer": {
     "extensions": [
       "./index.ts"
     ]

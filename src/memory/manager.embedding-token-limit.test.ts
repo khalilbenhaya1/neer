@@ -30,7 +30,7 @@ describe("memory embedding token limits", () => {
     embedQuery.mockReset();
     embedBatch.mockImplementation(async (texts: string[]) => texts.map(() => [0, 1, 0]));
     embedQuery.mockImplementation(async () => [0, 1, 0]);
-    workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-mem-token-"));
+    workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "neer-mem-token-"));
     indexPath = path.join(workspaceDir, "index.sqlite");
     await fs.mkdir(path.join(workspaceDir, "memory"));
   });

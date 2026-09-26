@@ -1,0 +1,39 @@
+{
+    "name": "neer-desktop",
+    "version": "0.0.1",
+    "description": "Neer Desktop Application",
+    "main": "dist/main.js",
+    "scripts": {
+        "start": "tsc && electron .",
+        "build": "tsc",
+        "package": "npm run build && electron-builder --dir",
+        "dist": "npm run build && electron-builder"
+    },
+    "build": {
+        "appId": "ai.neer.desktop",
+        "productName": "Neer",
+        "win": {
+            "target": "nsis"
+        },
+        "files": [
+            "dist/**/*",
+            "package.json",
+            "../ui-next/dist/**/*"
+        ],
+        "directories": {
+            "output": "release"
+        }
+    },
+    "dependencies": {
+        "neer": "file:../../neer-0.0.1.tgz",
+        "node-llama-cpp": "3.15.1"
+    },
+    "devDependencies": {
+        "@electron/rebuild": "^4.0.3",
+        "electron": "^33.0.0",
+        "electron-builder": "^25.1.8",
+        "electron-packager": "^17.1.2",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.7.3"
+    }
+}

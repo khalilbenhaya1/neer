@@ -13,9 +13,9 @@ import { appendCdpPath, createTargetViaCdp, getHeadersWithAuth, normalizeCdpWsUr
 import {
   isChromeCdpReady,
   isChromeReachable,
-  launchOpenClawChrome,
-  resolveOpenClawUserDataDir,
-  stopOpenClawChrome,
+  launchNeerChrome,
+  resolveNeerUserDataDir,
+  stopNeerChrome,
 } from "./chrome.js";
 import { resolveProfile } from "./config.js";
 import {
@@ -173,14 +173,14 @@ function createProfileContext(
     if (createdViaCdp) {
       const profileState = getProfileState();
       profileState.lastTargetId = createdViaCdp;
-      const deadline = Date.now() + 2000;
+      const deadline = Date.now() + 5000;
       while (Date.now() < deadline) {
         const tabs = await listTabs().catch(() => [] as BrowserTab[]);
         const found = tabs.find((t) => t.targetId === createdViaCdp);
         if (found) {
           return found;
         }
-        await new Promise((r) => setTimeout(r, 100));
+        await new Promise((r) => setTimeout(r, 200));
       }
       return { targetId: createdViaCdp, title: "", url, type: "page" };
     }
@@ -197,9 +197,9 @@ function createProfileContext(
     const endpointUrl = new URL(appendCdpPath(profile.cdpUrl, "/json/new"));
     const endpoint = endpointUrl.search
       ? (() => {
-          endpointUrl.searchParams.set("url", url);
-          return endpointUrl.toString();
-        })()
+        endpointUrl.searchParams.set("url", url);
+        return endpointUrl.toString();
+      })()
       : `${endpointUrl.toString()}?${encoded}`;
     const created = await fetchJson<CdpTarget>(endpoint, 1500, {
       method: "PUT",
@@ -302,7 +302,7 @@ function createProfileContext(
       }
       // Relay server is up, but no attached tab yet. Prompt user to attach.
       throw new Error(
-        `Chrome extension relay is running, but no tab is connected. Click the OpenClaw Chrome extension icon on a tab to attach it (profile "${profile.name}").`,
+        `Chrome extension relay is running, but no tab is connected. Click the Neer Chrome extension icon on a tab to attach it (profile "${profile.name}").`,
       );
     }
 
@@ -320,7 +320,7 @@ function createProfileContext(
             : `Browser attachOnly is enabled and profile "${profile.name}" is not running.`,
         );
       }
-      const launched = await launchOpenClawChrome(current.resolved, profile);
+      const launched = await launchNeerChrome(current.resolved, profile);
       attachRunning(launched);
       return;
     }
@@ -333,8 +333,8 @@ function createProfileContext(
     // HTTP responds but WebSocket fails - port in use by something else
     if (!profileState.running) {
       throw new Error(
-        `Port ${profile.cdpPort} is in use for profile "${profile.name}" but not by openclaw. ` +
-          `Run action=reset-profile profile=${profile.name} to kill the process.`,
+        `Port ${profile.cdpPort} is in use for profile "${profile.name}" but not by neer. ` +
+        `Run action=reset-profile profile=${profile.name} to kill the process.`,
       );
     }
 
@@ -353,10 +353,10 @@ function createProfileContext(
       );
     }
 
-    await stopOpenClawChrome(profileState.running);
+    await stopNeerChrome(profileState.running);
     setProfileRunning(null);
 
-    const relaunched = await launchOpenClawChrome(current.resolved, profile);
+    const relaunched = await launchNeerChrome(current.resolved, profile);
     attachRunning(relaunched);
 
     if (!(await isReachable(600))) {
@@ -367,64 +367,77 @@ function createProfileContext(
   };
 
   const ensureTabAvailable = async (targetId?: string): Promise<BrowserTab> => {
-    await ensureBrowserAvailable();
-    const profileState = getProfileState();
-    const tabs1 = await listTabs();
-    if (tabs1.length === 0) {
-      if (profile.driver === "extension") {
-        throw new Error(
-          `tab not found (no attached Chrome tabs for profile "${profile.name}"). ` +
-            "Click the OpenClaw Browser Relay toolbar icon on the tab you want to control (badge ON).",
-        );
-      }
-      await openTab("about:blank");
-    }
-
-    const tabs = await listTabs();
-    // For remote profiles using Playwright's persistent connection, we don't need wsUrl
-    // because we access pages directly through Playwright, not via individual WebSocket URLs.
-    const candidates =
-      profile.driver === "extension" || !profile.cdpIsLoopback
-        ? tabs
-        : tabs.filter((t) => Boolean(t.wsUrl));
-
-    const resolveById = (raw: string) => {
-      const resolved = resolveTargetIdFromTabs(raw, candidates);
-      if (!resolved.ok) {
-        if (resolved.reason === "ambiguous") {
-          return "AMBIGUOUS" as const;
+    let lastErr: unknown = null;
+    for (let i = 0; i < 3; i++) {
+      try {
+        await ensureBrowserAvailable();
+        const profileState = getProfileState();
+        const tabs1 = await listTabs();
+        if (tabs1.length === 0) {
+          if (profile.driver === "extension") {
+            throw new Error(
+              `tab not found (no attached Chrome tabs for profile "${profile.name}"). ` +
+              "Click the Neer Browser Relay toolbar icon on the tab you want to control (badge ON).",
+            );
+          }
+          await openTab("about:blank");
         }
-        return null;
+
+        const tabs = await listTabs();
+        // For remote profiles using Playwright's persistent connection, we don't need wsUrl
+        // because we access pages directly through Playwright, not via individual WebSocket URLs.
+        const candidates =
+          profile.driver === "extension" || !profile.cdpIsLoopback
+            ? tabs
+            : tabs.filter((t) => Boolean(t.wsUrl));
+
+        const resolveById = (raw: string) => {
+          const resolved = resolveTargetIdFromTabs(raw, candidates);
+          if (!resolved.ok) {
+            if (resolved.reason === "ambiguous") {
+              return "AMBIGUOUS" as const;
+            }
+            return null;
+          }
+          return candidates.find((t) => t.targetId === resolved.targetId) ?? null;
+        };
+
+        const pickDefault = () => {
+          const last = profileState.lastTargetId?.trim() || "";
+          const lastResolved = last ? resolveById(last) : null;
+          if (lastResolved && lastResolved !== "AMBIGUOUS") {
+            return lastResolved;
+          }
+          // Prefer a real page tab first (avoid service workers/background targets).
+          const page = candidates.find((t) => (t.type ?? "page") === "page");
+          return page ?? candidates.at(0) ?? null;
+        };
+
+        let chosen = targetId ? resolveById(targetId) : pickDefault();
+        if (!chosen && profile.driver === "extension" && candidates.length === 1) {
+          // If an agent passes a stale/foreign targetId but we only have a single attached tab,
+          // recover by using that tab instead of failing hard.
+          chosen = candidates[0] ?? null;
+        }
+
+        if (chosen === "AMBIGUOUS") {
+          throw new Error("ambiguous target id prefix");
+        }
+        if (!chosen) {
+          throw new Error("tab not found");
+        }
+        profileState.lastTargetId = chosen.targetId;
+        return chosen;
+      } catch (err) {
+        lastErr = err;
+        if (String(err).includes("tab not found")) {
+          await new Promise((r) => setTimeout(r, 500));
+          continue;
+        }
+        throw err;
       }
-      return candidates.find((t) => t.targetId === resolved.targetId) ?? null;
-    };
-
-    const pickDefault = () => {
-      const last = profileState.lastTargetId?.trim() || "";
-      const lastResolved = last ? resolveById(last) : null;
-      if (lastResolved && lastResolved !== "AMBIGUOUS") {
-        return lastResolved;
-      }
-      // Prefer a real page tab first (avoid service workers/background targets).
-      const page = candidates.find((t) => (t.type ?? "page") === "page");
-      return page ?? candidates.at(0) ?? null;
-    };
-
-    let chosen = targetId ? resolveById(targetId) : pickDefault();
-    if (!chosen && profile.driver === "extension" && candidates.length === 1) {
-      // If an agent passes a stale/foreign targetId but we only have a single attached tab,
-      // recover by using that tab instead of failing hard.
-      chosen = candidates[0] ?? null;
     }
-
-    if (chosen === "AMBIGUOUS") {
-      throw new Error("ambiguous target id prefix");
-    }
-    if (!chosen) {
-      throw new Error("tab not found");
-    }
-    profileState.lastTargetId = chosen.targetId;
-    return chosen;
+    throw lastErr;
   };
 
   const focusTab = async (targetId: string): Promise<void> => {
@@ -495,14 +508,14 @@ function createProfileContext(
     if (!profileState.running) {
       return { stopped: false };
     }
-    await stopOpenClawChrome(profileState.running);
+    await stopNeerChrome(profileState.running);
     setProfileRunning(null);
     return { stopped: true };
   };
 
   const resetProfile = async () => {
     if (profile.driver === "extension") {
-      await stopChromeExtensionRelayServer({ cdpUrl: profile.cdpUrl }).catch(() => {});
+      await stopChromeExtensionRelayServer({ cdpUrl: profile.cdpUrl }).catch(() => { });
       return { moved: false, from: profile.cdpUrl };
     }
     if (!profile.cdpIsLoopback) {
@@ -510,7 +523,7 @@ function createProfileContext(
         `reset-profile is only supported for local profiles (profile "${profile.name}" is remote).`,
       );
     }
-    const userDataDir = resolveOpenClawUserDataDir(profile.name);
+    const userDataDir = resolveNeerUserDataDir(profile.name);
     const profileState = getProfileState();
 
     const httpReachable = await isHttpReachable(300);

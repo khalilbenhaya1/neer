@@ -92,7 +92,7 @@ const MemorySchema = z
   .strict()
   .optional();
 
-export const OpenClawSchema = z
+export const NeerSchema = z
   .object({
     meta: z
       .object({
@@ -356,6 +356,29 @@ export const OpenClawSchema = z
         root: z.string().optional(),
         port: z.number().int().positive().optional(),
         liveReload: z.boolean().optional(),
+      })
+      .strict()
+      .optional(),
+    voice: z
+      .object({
+        stt: z
+          .object({
+            provider: z.union([z.literal("openai"), z.literal("local")]).optional(),
+          })
+          .strict()
+          .optional(),
+        tts: z
+          .object({
+            provider: z.union([z.literal("openai"), z.literal("elevenlabs"), z.literal("local")]).optional(),
+            elevenlabs: z
+              .object({
+                voiceId: z.string().optional(),
+              })
+              .strict()
+              .optional(),
+          })
+          .strict()
+          .optional(),
       })
       .strict()
       .optional(),

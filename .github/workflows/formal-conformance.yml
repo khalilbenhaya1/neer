@@ -16,28 +16,28 @@ jobs:
       pull-requests: write
 
     steps:
-      - name: Checkout openclaw (PR)
+      - name: Checkout neer (PR)
         uses: actions/checkout@v4
         with:
-          path: openclaw
+          path: neer
 
       - name: Checkout formal models
         uses: actions/checkout@v4
         with:
-          repository: vignesh07/clawdbot-formal-models
+          repository: vignesh07/neer-formal-models
           ref: main
-          path: clawdbot-formal-models
+          path: neer-formal-models
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: "22"
 
-      - name: Regenerate extracted constants from openclaw
+      - name: Regenerate extracted constants from neer
         run: |
           set -euo pipefail
-          cd clawdbot-formal-models
-          export OPENCLAW_REPO_DIR="${GITHUB_WORKSPACE}/openclaw"
+          cd neer-formal-models
+          export NEER_REPO_DIR="${GITHUB_WORKSPACE}/neer"
           node scripts/extract-tool-groups.mjs
           node scripts/check-tool-group-alias.mjs
 
@@ -47,7 +47,7 @@ jobs:
         id: drift
         run: |
           set -euo pipefail
-          cd clawdbot-formal-models
+          cd neer-formal-models
 
           if git diff --quiet -- generated; then
             echo "drift=false" >> "$GITHUB_OUTPUT"
@@ -60,7 +60,7 @@ jobs:
       - name: Model check (green suite)
         run: |
           set -euo pipefail
-          cd clawdbot-formal-models
+          cd neer-formal-models
           make \
             precedence groups elevated nodes-policy \
             attacker approvals approvals-token nodes-pipeline \
@@ -73,7 +73,7 @@ jobs:
             ingress-retry session-key-stability session-explosion-bound config-normalization \
             queue-drain delivery-route-stability delivery-pipeline retry-termination retry-eventual-success \
             no-cross-stream multi-event-eventual-emission \
-            dedupe-collision-fallback crash-restart-dedupe two-worker-dedupe openclaw-session-key-conformance \
+            dedupe-collision-fallback crash-restart-dedupe two-worker-dedupe neer-session-key-conformance \
             routing-thread-parent-channel-override routing-trirule gateway-auth-proxy-header-spoof \
             group-alias-check
 
@@ -81,7 +81,7 @@ jobs:
         continue-on-error: true
         run: |
           set -euo pipefail
-          cd clawdbot-formal-models
+          cd neer-formal-models
           make -k \
             precedence-negative groups-negative elevated-negative nodes-policy-negative \
             attacker-negative attacker-nodes-negative attacker-nodes-allowlist-negative attacker-nodes-allowlist-negative \
@@ -96,7 +96,7 @@ jobs:
             ingress-retry-negative session-key-stability-negative config-normalization-negative \
             queue-drain delivery-route-stability-negative delivery-pipeline-negative retry-termination-negative retry-eventual-success-negative \
             no-cross-stream-negative multi-event-eventual-emission-negative \
-            dedupe-collision-fallback-negative crash-restart-dedupe-negative two-worker-dedupe-negative openclaw-session-key-conformance-negative \
+            dedupe-collision-fallback-negative crash-restart-dedupe-negative two-worker-dedupe-negative neer-session-key-conformance-negative \
             routing-thread-parent-channel-override-negative routing-trirule-negative gateway-auth-proxy-header-spoof-negative
 
       - name: Upload drift diff artifact
@@ -114,7 +114,7 @@ jobs:
             const body = [
               '⚠️ **Formal models conformance drift detected**',
               '',
-              'The formal models extracted constants (`generated/*`) do not match this openclaw PR.',
+              'The formal models extracted constants (`generated/*`) do not match this neer PR.',
               '',
               'This check is **informational** (not blocking merges yet).',
               'See the `formal-models-conformance-drift` artifact for the diff.',

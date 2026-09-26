@@ -1,0 +1,6 @@
+
+> neer-desktop@0.0.1 start
+> tsc && electron .
+
+src/main.ts(4,36): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("neer/server")' call instead.
+  To convert this file to an ECMAScript module, change its file extension to '.mts', or add the field `"type": "module"` to 'C:/Users/khali/OneDrive/Desktop/Neer-folder/neer/apps/neer-desktop/package.json'.

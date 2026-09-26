@@ -1,4 +1,4 @@
-const DEFAULT_TAGLINE = "All your chats, one OpenClaw.";
+const DEFAULT_TAGLINE = "All your chats, one Neer.";
 
 const HOLIDAY_TAGLINES = {
   newYear:
@@ -66,7 +66,7 @@ const TAGLINES: string[] = [
   "Because texting yourself reminders is so 2024.",
   "Your inbox, your infra, your rules.",
   'Turning "I\'ll reply later" into "my bot replied instantly".',
-  "The only crab in your contacts you actually want to hear from. 🦞",
+  "Your AI assistant that keeps you connected and in control.",
   "Chat automation for people who peaked at IRC.",
   "Because Siri wasn't answering at 3AM.",
   "IPC, but it's your phone.",
@@ -117,24 +117,24 @@ function utcParts(date: Date) {
 
 const onMonthDay =
   (month: number, day: number): HolidayRule =>
-  (date) => {
-    const parts = utcParts(date);
-    return parts.month === month && parts.day === day;
-  };
+    (date) => {
+      const parts = utcParts(date);
+      return parts.month === month && parts.day === day;
+    };
 
 const onSpecificDates =
   (dates: Array<[number, number, number]>, durationDays = 1): HolidayRule =>
-  (date) => {
-    const parts = utcParts(date);
-    return dates.some(([year, month, day]) => {
-      if (parts.year !== year) {
-        return false;
-      }
-      const start = Date.UTC(year, month, day);
-      const current = Date.UTC(parts.year, parts.month, parts.day);
-      return current >= start && current < start + durationDays * DAY_MS;
-    });
-  };
+    (date) => {
+      const parts = utcParts(date);
+      return dates.some(([year, month, day]) => {
+        if (parts.year !== year) {
+          return false;
+        }
+        const start = Date.UTC(year, month, day);
+        const current = Date.UTC(parts.year, parts.month, parts.day);
+        return current >= start && current < start + durationDays * DAY_MS;
+      });
+    };
 
 const inYearWindow =
   (
@@ -145,16 +145,16 @@ const inYearWindow =
       duration: number;
     }>,
   ): HolidayRule =>
-  (date) => {
-    const parts = utcParts(date);
-    const window = windows.find((entry) => entry.year === parts.year);
-    if (!window) {
-      return false;
-    }
-    const start = Date.UTC(window.year, window.month, window.day);
-    const current = Date.UTC(parts.year, parts.month, parts.day);
-    return current >= start && current < start + window.duration * DAY_MS;
-  };
+    (date) => {
+      const parts = utcParts(date);
+      const window = windows.find((entry) => entry.year === parts.year);
+      if (!window) {
+        return false;
+      }
+      const start = Date.UTC(window.year, window.month, window.day);
+      const current = Date.UTC(parts.year, parts.month, parts.day);
+      return current >= start && current < start + window.duration * DAY_MS;
+    };
 
 const isFourthThursdayOfNovember: HolidayRule = (date) => {
   const parts = utcParts(date);
@@ -253,7 +253,7 @@ export function activeTaglines(options: TaglineOptions = {}): string[] {
 
 export function pickTagline(options: TaglineOptions = {}): string {
   const env = options.env ?? process.env;
-  const override = env?.OPENCLAW_TAGLINE_INDEX;
+  const override = env?.NEER_TAGLINE_INDEX;
   if (override !== undefined) {
     const parsed = Number.parseInt(override, 10);
     if (!Number.isNaN(parsed) && parsed >= 0) {

@@ -1,16 +1,14 @@
 ---
-summary: "Clawnet refactor: unify network protocol, roles, auth, approvals, identity"
+summary: "Historical proposal for consolidating network protocols, roles, authentication, approvals, and identity"
+noindex: true
 read_when:
-  - Planning a unified network protocol for nodes + operator clients
-  - Reworking approvals, pairing, TLS, and presence across devices
-title: "Clawnet Refactor"
+  - Reviewing the historical protocol-consolidation proposal
+title: "Protocol Consolidation Proposal"
 ---
 
-# Clawnet refactor (protocol + auth unification)
+# Protocol consolidation proposal
 
-## Hi
-
-Hi Peter — great direction; this unlocks simpler UX + stronger security.
+> **Status: Proposal, not an implementation specification.** The unified protocol, role model, centralized approvals, and TLS changes below are proposed outcomes. The “as-is” notes are a historical snapshot and have not been revalidated in this documentation pass. Verify current behavior against source before using this page as an operational reference.
 
 ## Purpose
 

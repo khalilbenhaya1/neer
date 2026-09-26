@@ -17,6 +17,7 @@ import { registerOnboardCommand } from "./register.onboard.js";
 import { registerSetupCommand } from "./register.setup.js";
 import { registerStatusHealthSessionsCommands } from "./register.status-health-sessions.js";
 import { registerSubCliCommands } from "./register.subclis.js";
+import { launchConsoleDashboard } from "../console/dashboard.js";
 
 type CommandRegisterParams = {
   program: Command;
@@ -160,6 +161,17 @@ export const commandRegistry: CommandRegistration[] = [
   {
     id: "browser",
     register: ({ program }) => registerBrowserCli(program),
+  },
+  {
+    id: "console",
+    register: ({ program, ctx }) => {
+      program
+        .command("console")
+        .description("Launch the interactive Terminal Dashboard")
+        .action(() => {
+          launchConsoleDashboard(ctx.programVersion);
+        });
+    },
   },
 ];
 

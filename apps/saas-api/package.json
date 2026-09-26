@@ -1,0 +1,29 @@
+{
+  "name": "@neer/saas-api",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "tsx watch src/main.ts",
+    "build": "tsc -p tsconfig.json && node scripts/copy-migrations.mjs",
+    "start": "node dist/src/main.js",
+    "migrate": "tsx src/migrate.ts",
+    "test": "vitest run --config vitest.config.ts"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "@neer/core-runtime": "link:../..",
+    "pg": "^8.23.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.2.3",
+    "@types/pg": "^8.23.1",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18"
+  }
+}

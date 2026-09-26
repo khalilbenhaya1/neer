@@ -1,6 +1,7 @@
 import fsSync from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
+import { sanitizeForFilename } from "../utils/sanitize-filename.js";
 
 type LockFilePayload = {
   pid: number;
@@ -38,7 +39,7 @@ function releaseAllLocksSync(): void {
   for (const [sessionFile, held] of HELD_LOCKS) {
     try {
       if (typeof held.handle.close === "function") {
-        void held.handle.close().catch(() => {});
+        void held.handle.close().catch(() => { });
       }
     } catch {
       // Ignore errors during cleanup - best effort
@@ -128,8 +129,12 @@ export async function acquireSessionWriteLock(params: {
   } catch {
     // Fall back to the resolved path if realpath fails (permissions, transient FS).
   }
+  // normalizedSessionFile is used as the in-memory HELD_LOCKS key (no FS restriction).
+  // safeSessionFile is the sanitized version used for actual file I/O (Windows-safe).
   const normalizedSessionFile = path.join(normalizedDir, path.basename(sessionFile));
-  const lockPath = `${normalizedSessionFile}.lock`;
+  const safeBasename = sanitizeForFilename(path.basename(normalizedSessionFile));
+  const safeSessionFile = path.join(normalizedDir, safeBasename);
+  const lockPath = `${safeSessionFile}.lock`;
 
   const held = HELD_LOCKS.get(normalizedSessionFile);
   if (held) {

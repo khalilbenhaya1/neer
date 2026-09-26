@@ -13,7 +13,7 @@ vi.mock("../process/exec.js", () => ({
 }));
 
 function makeTempDir() {
-  const dir = path.join(os.tmpdir(), `openclaw-hook-install-${randomUUID()}`);
+  const dir = path.join(os.tmpdir(), `neer-hook-install-${randomUUID()}`);
   fs.mkdirSync(dir, { recursive: true });
   tempDirs.push(dir);
   return dir;
@@ -39,9 +39,9 @@ describe("installHooksFromArchive", () => {
     zip.file(
       "package/package.json",
       JSON.stringify({
-        name: "@openclaw/zip-hooks",
+        name: "@neer/zip-hooks",
         version: "0.0.1",
-        openclaw: { hooks: ["./hooks/zip-hook"] },
+        neer: { hooks: ["./hooks/zip-hook"] },
       }),
     );
     zip.file(
@@ -50,7 +50,7 @@ describe("installHooksFromArchive", () => {
         "---",
         "name: zip-hook",
         "description: Zip hook",
-        'metadata: {"openclaw":{"events":["command:new"]}}',
+        'metadata: {"neer":{"events":["command:new"]}}',
         "---",
         "",
         "# Zip Hook",
@@ -84,9 +84,9 @@ describe("installHooksFromArchive", () => {
     fs.writeFileSync(
       path.join(pkgDir, "package.json"),
       JSON.stringify({
-        name: "@openclaw/tar-hooks",
+        name: "@neer/tar-hooks",
         version: "0.0.1",
-        openclaw: { hooks: ["./hooks/tar-hook"] },
+        neer: { hooks: ["./hooks/tar-hook"] },
       }),
       "utf-8",
     );
@@ -96,7 +96,7 @@ describe("installHooksFromArchive", () => {
         "---",
         "name: tar-hook",
         "description: Tar hook",
-        'metadata: {"openclaw":{"events":["command:new"]}}',
+        'metadata: {"neer":{"events":["command:new"]}}',
         "---",
         "",
         "# Tar Hook",
@@ -135,7 +135,7 @@ describe("installHooksFromArchive", () => {
       JSON.stringify({
         name: "@evil/..",
         version: "0.0.1",
-        openclaw: { hooks: ["./hooks/evil-hook"] },
+        neer: { hooks: ["./hooks/evil-hook"] },
       }),
       "utf-8",
     );
@@ -145,7 +145,7 @@ describe("installHooksFromArchive", () => {
         "---",
         "name: evil-hook",
         "description: Evil hook",
-        'metadata: {"openclaw":{"events":["command:new"]}}',
+        'metadata: {"neer":{"events":["command:new"]}}',
         "---",
         "",
         "# Evil Hook",
@@ -182,7 +182,7 @@ describe("installHooksFromArchive", () => {
       JSON.stringify({
         name: "@evil/.",
         version: "0.0.1",
-        openclaw: { hooks: ["./hooks/reserved-hook"] },
+        neer: { hooks: ["./hooks/reserved-hook"] },
       }),
       "utf-8",
     );
@@ -192,7 +192,7 @@ describe("installHooksFromArchive", () => {
         "---",
         "name: reserved-hook",
         "description: Reserved hook",
-        'metadata: {"openclaw":{"events":["command:new"]}}',
+        'metadata: {"neer":{"events":["command:new"]}}',
         "---",
         "",
         "# Reserved Hook",
@@ -227,9 +227,9 @@ describe("installHooksFromPath", () => {
     fs.writeFileSync(
       path.join(pkgDir, "package.json"),
       JSON.stringify({
-        name: "@openclaw/test-hooks",
+        name: "@neer/test-hooks",
         version: "0.0.1",
-        openclaw: { hooks: ["./hooks/one-hook"] },
+        neer: { hooks: ["./hooks/one-hook"] },
         dependencies: { "left-pad": "1.3.0" },
       }),
       "utf-8",
@@ -240,7 +240,7 @@ describe("installHooksFromPath", () => {
         "---",
         "name: one-hook",
         "description: One hook",
-        'metadata: {"openclaw":{"events":["command:new"]}}',
+        'metadata: {"neer":{"events":["command:new"]}}',
         "---",
         "",
         "# One Hook",
@@ -291,7 +291,7 @@ describe("installHooksFromPath", () => {
         "---",
         "name: my-hook",
         "description: My hook",
-        'metadata: {"openclaw":{"events":["command:new"]}}',
+        'metadata: {"neer":{"events":["command:new"]}}',
         "---",
         "",
         "# My Hook",

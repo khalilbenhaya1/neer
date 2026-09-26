@@ -1,24 +1,26 @@
 import { isTruthyEnvValue } from "../infra/env.js";
 
+import * as defaultBrowserService from "../browser/control-service.js";
+
 export type BrowserControlServer = {
   stop: () => Promise<void>;
 };
 
 export async function startBrowserControlServerIfEnabled(): Promise<BrowserControlServer | null> {
-  if (isTruthyEnvValue(process.env.OPENCLAW_SKIP_BROWSER_CONTROL_SERVER)) {
+  if (isTruthyEnvValue(process.env.NEER_SKIP_BROWSER_CONTROL_SERVER)) {
     return null;
   }
   // Lazy import: keeps startup fast, but still bundles for the embedded
   // gateway (bun --compile) via the static specifier path.
-  const override = process.env.OPENCLAW_BROWSER_CONTROL_MODULE?.trim();
-  const mod = override ? await import(override) : await import("../browser/control-service.js");
+  const override = process.env.NEER_BROWSER_CONTROL_MODULE?.trim();
+  const mod = override ? await import(override) : defaultBrowserService;
   const start =
     typeof (mod as { startBrowserControlServiceFromConfig?: unknown })
       .startBrowserControlServiceFromConfig === "function"
       ? (mod as { startBrowserControlServiceFromConfig: () => Promise<unknown> })
-          .startBrowserControlServiceFromConfig
+        .startBrowserControlServiceFromConfig
       : (mod as { startBrowserControlServerFromConfig?: () => Promise<unknown> })
-          .startBrowserControlServerFromConfig;
+        .startBrowserControlServerFromConfig;
   const stop =
     typeof (mod as { stopBrowserControlService?: unknown }).stopBrowserControlService === "function"
       ? (mod as { stopBrowserControlService: () => Promise<void> }).stopBrowserControlService
@@ -27,5 +29,5 @@ export async function startBrowserControlServerIfEnabled(): Promise<BrowserContr
     return null;
   }
   await start();
-  return { stop: stop ?? (async () => {}) };
+  return { stop: stop ?? (async () => { }) };
 }

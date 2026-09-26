@@ -6,7 +6,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 /**
  * Test for issue #6070:
- * `openclaw config set` should use snapshot.parsed (raw user config) instead of
+ * `neer config set` should use snapshot.parsed (raw user config) instead of
  * snapshot.config (runtime-merged config with defaults), to avoid overwriting
  * the entire config with defaults when validation fails or config is unreadable.
  */
@@ -27,12 +27,12 @@ vi.mock("../runtime.js", () => ({
 }));
 
 async function withTempHome(run: (home: string) => Promise<void>): Promise<void> {
-  const home = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-config-cli-"));
+  const home = await fs.mkdtemp(path.join(os.tmpdir(), "neer-config-cli-"));
   const originalEnv = { ...process.env };
   try {
     // Override config path to use temp directory
-    process.env.OPENCLAW_CONFIG_PATH = path.join(home, ".openclaw", "openclaw.json");
-    await fs.mkdir(path.join(home, ".openclaw"), { recursive: true });
+    process.env.NEER_CONFIG_PATH = path.join(home, ".neer", "neer.json");
+    await fs.mkdir(path.join(home, ".neer"), { recursive: true });
     await run(home);
   } finally {
     process.env = originalEnv;
@@ -41,13 +41,13 @@ async function withTempHome(run: (home: string) => Promise<void>): Promise<void>
 }
 
 async function readConfigFile(home: string): Promise<Record<string, unknown>> {
-  const configPath = path.join(home, ".openclaw", "openclaw.json");
+  const configPath = path.join(home, ".neer", "neer.json");
   const content = await fs.readFile(configPath, "utf-8");
   return JSON.parse(content);
 }
 
 async function writeConfigFile(home: string, config: Record<string, unknown>): Promise<void> {
-  const configPath = path.join(home, ".openclaw", "openclaw.json");
+  const configPath = path.join(home, ".neer", "neer.json");
   await fs.writeFile(configPath, JSON.stringify(config, null, 2));
 }
 

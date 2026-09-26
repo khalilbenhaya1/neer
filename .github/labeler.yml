@@ -113,17 +113,17 @@
 "app: android":
   - changed-files:
       - any-glob-to-any-file:
-          - "apps/android/**"
+          - "apps/neer-android/**"
           - "docs/platforms/android.md"
 "app: ios":
   - changed-files:
       - any-glob-to-any-file:
-          - "apps/ios/**"
+          - "apps/neer-ios/**"
           - "docs/platforms/ios.md"
 "app: macos":
   - changed-files:
       - any-glob-to-any-file:
-          - "apps/macos/**"
+          - "apps/neer-macos/**"
           - "docs/platforms/macos.md"
           - "docs/platforms/mac/**"
 "app: web-ui":

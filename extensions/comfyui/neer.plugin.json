@@ -1,0 +1,24 @@
+{
+    "id": "comfyui",
+    "name": "ComfyUI",
+    "description": "Integration with local ComfyUI for image generation",
+    "kind": "media",
+    "uiHints": {
+        "pythonPath": {
+            "label": "Python Executable Path",
+            "placeholder": "python"
+        }
+    },
+    "configSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+            "enabled": {
+                "type": "boolean"
+            },
+            "pythonPath": {
+                "type": "string"
+            }
+        }
+    }
+}

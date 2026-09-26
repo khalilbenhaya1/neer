@@ -39,7 +39,7 @@ exit 0
 }
 
 async function createDockerSetupSandbox(): Promise<DockerSetupSandbox> {
-  const rootDir = await mkdtemp(join(tmpdir(), "openclaw-docker-setup-"));
+  const rootDir = await mkdtemp(join(tmpdir(), "neer-docker-setup-"));
   const scriptPath = join(rootDir, "docker-setup.sh");
   const dockerfilePath = join(rootDir, "Dockerfile");
   const composePath = join(rootDir, "docker-compose.yml");
@@ -51,7 +51,7 @@ async function createDockerSetupSandbox(): Promise<DockerSetupSandbox> {
   await writeFile(dockerfilePath, "FROM scratch\n");
   await writeFile(
     composePath,
-    "services:\n  openclaw-gateway:\n    image: noop\n  openclaw-cli:\n    image: noop\n",
+    "services:\n  neer-gateway:\n    image: noop\n  neer-cli:\n    image: noop\n",
   );
   await writeDockerStub(binDir, logPath);
 
@@ -66,9 +66,9 @@ function createEnv(
     ...process.env,
     PATH: `${sandbox.binDir}:${process.env.PATH ?? ""}`,
     DOCKER_STUB_LOG: sandbox.logPath,
-    OPENCLAW_GATEWAY_TOKEN: "test-token",
-    OPENCLAW_CONFIG_DIR: join(sandbox.rootDir, "config"),
-    OPENCLAW_WORKSPACE_DIR: join(sandbox.rootDir, "openclaw"),
+    NEER_GATEWAY_TOKEN: "test-token",
+    NEER_CONFIG_DIR: join(sandbox.rootDir, "config"),
+    NEER_WORKSPACE_DIR: join(sandbox.rootDir, "neer"),
     ...overrides,
   };
 }
@@ -88,9 +88,9 @@ describe("docker-setup.sh", () => {
   it("handles unset optional env vars under strict mode", async () => {
     const sandbox = await createDockerSetupSandbox();
     const env = createEnv(sandbox, {
-      OPENCLAW_DOCKER_APT_PACKAGES: undefined,
-      OPENCLAW_EXTRA_MOUNTS: undefined,
-      OPENCLAW_HOME_VOLUME: undefined,
+      NEER_DOCKER_APT_PACKAGES: undefined,
+      NEER_EXTRA_MOUNTS: undefined,
+      NEER_HOME_VOLUME: undefined,
     });
 
     const result = spawnSync("bash", [sandbox.scriptPath], {
@@ -102,16 +102,16 @@ describe("docker-setup.sh", () => {
     expect(result.status).toBe(0);
 
     const envFile = await readFile(join(sandbox.rootDir, ".env"), "utf8");
-    expect(envFile).toContain("OPENCLAW_DOCKER_APT_PACKAGES=");
-    expect(envFile).toContain("OPENCLAW_EXTRA_MOUNTS=");
-    expect(envFile).toContain("OPENCLAW_HOME_VOLUME=");
+    expect(envFile).toContain("NEER_DOCKER_APT_PACKAGES=");
+    expect(envFile).toContain("NEER_EXTRA_MOUNTS=");
+    expect(envFile).toContain("NEER_HOME_VOLUME=");
   });
 
   it("supports a home volume when extra mounts are empty", async () => {
     const sandbox = await createDockerSetupSandbox();
     const env = createEnv(sandbox, {
-      OPENCLAW_EXTRA_MOUNTS: "",
-      OPENCLAW_HOME_VOLUME: "openclaw-home",
+      NEER_EXTRA_MOUNTS: "",
+      NEER_HOME_VOLUME: "neer-home",
     });
 
     const result = spawnSync("bash", [sandbox.scriptPath], {
@@ -123,9 +123,9 @@ describe("docker-setup.sh", () => {
     expect(result.status).toBe(0);
 
     const extraCompose = await readFile(join(sandbox.rootDir, "docker-compose.extra.yml"), "utf8");
-    expect(extraCompose).toContain("openclaw-home:/home/node");
+    expect(extraCompose).toContain("neer-home:/home/node");
     expect(extraCompose).toContain("volumes:");
-    expect(extraCompose).toContain("openclaw-home:");
+    expect(extraCompose).toContain("neer-home:");
   });
 
   it("avoids associative arrays so the script remains Bash 3.2-compatible", async () => {
@@ -148,8 +148,8 @@ describe("docker-setup.sh", () => {
 
     const sandbox = await createDockerSetupSandbox();
     const env = createEnv(sandbox, {
-      OPENCLAW_EXTRA_MOUNTS: "",
-      OPENCLAW_HOME_VOLUME: "",
+      NEER_EXTRA_MOUNTS: "",
+      NEER_HOME_VOLUME: "",
     });
     const result = spawnSync(systemBash, [sandbox.scriptPath], {
       cwd: sandbox.rootDir,
@@ -161,12 +161,12 @@ describe("docker-setup.sh", () => {
     expect(result.stderr).not.toContain("declare: -A: invalid option");
   });
 
-  it("plumbs OPENCLAW_DOCKER_APT_PACKAGES into .env and docker build args", async () => {
+  it("plumbs NEER_DOCKER_APT_PACKAGES into .env and docker build args", async () => {
     const sandbox = await createDockerSetupSandbox();
     const env = createEnv(sandbox, {
-      OPENCLAW_DOCKER_APT_PACKAGES: "ffmpeg build-essential",
-      OPENCLAW_EXTRA_MOUNTS: "",
-      OPENCLAW_HOME_VOLUME: "",
+      NEER_DOCKER_APT_PACKAGES: "ffmpeg build-essential",
+      NEER_EXTRA_MOUNTS: "",
+      NEER_HOME_VOLUME: "",
     });
 
     const result = spawnSync("bash", [sandbox.scriptPath], {
@@ -178,10 +178,10 @@ describe("docker-setup.sh", () => {
     expect(result.status).toBe(0);
 
     const envFile = await readFile(join(sandbox.rootDir, ".env"), "utf8");
-    expect(envFile).toContain("OPENCLAW_DOCKER_APT_PACKAGES=ffmpeg build-essential");
+    expect(envFile).toContain("NEER_DOCKER_APT_PACKAGES=ffmpeg build-essential");
 
     const log = await readFile(sandbox.logPath, "utf8");
-    expect(log).toContain("--build-arg OPENCLAW_DOCKER_APT_PACKAGES=ffmpeg build-essential");
+    expect(log).toContain("--build-arg NEER_DOCKER_APT_PACKAGES=ffmpeg build-essential");
   });
 
   it("keeps docker-compose gateway command in sync", async () => {

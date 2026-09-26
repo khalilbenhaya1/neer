@@ -1,192 +1,69 @@
 ---
-summary: "OpenClaw is a multi-channel gateway for AI agents that runs on any OS."
-read_when:
-  - Introducing OpenClaw to newcomers
-title: "OpenClaw"
+title: "NEER documentation"
+description: "Install, configure, operate, and extend the NEER Gateway and agent runtime."
 ---
 
-# OpenClaw 🦞
+# NEER
 
-<p align="center">
-    <img
-        src="/assets/openclaw-logo-text-dark.png"
-        alt="OpenClaw"
-        width="500"
-        class="dark:hidden"
-    />
-    <img
-        src="/assets/openclaw-logo-text.png"
-        alt="OpenClaw"
-        width="500"
-        class="hidden dark:block"
-    />
-</p>
+**Cognitive Infrastructure** for running an AI assistant through a Gateway, agent sessions, model providers, tools, and messaging integrations.
 
-> _"EXFOLIATE! EXFOLIATE!"_ — A space lobster, probably
+NEER is a Node.js application that you can run on your own machine or server. Its `neer` CLI configures and operates a Gateway process. The Gateway connects supported clients and channel adapters to agent sessions. Depending on configuration, an agent can call model providers and tools, including optional extension tools.
 
-<p align="center">
-  <strong>Any OS gateway for AI agents across WhatsApp, Telegram, Discord, iMessage, and more.</strong><br />
-  Send a message, get an agent response from your pocket. Plugins add Mattermost and more.
-</p>
+The repository currently identifies package version `0.0.1` and credits Khalil Benhaya as designer and engineer. Feature availability varies by platform, provider, and installed extensions.
 
-<Columns>
-  <Card title="Get Started" href="/start/getting-started" icon="rocket">
-    Install OpenClaw and bring up the Gateway in minutes.
+<CardGroup cols={2}>
+  <Card title="Get started" icon="rocket" href="/start/getting-started">
+    Install NEER, configure a Gateway, and start a first chat.
   </Card>
-  <Card title="Run the Wizard" href="/start/wizard" icon="sparkles">
-    Guided setup with `openclaw onboard` and pairing flows.
+  <Card title="What is NEER?" icon="circle-help" href="/start/neer">
+    Understand the runtime, integrations, and current limits.
   </Card>
-  <Card title="Open the Control UI" href="/web/control-ui" icon="layout-dashboard">
-    Launch the browser dashboard for chat, config, and sessions.
+  <Card title="Architecture" icon="network" href="/architecture">
+    Follow a request from client or channel through the Gateway and agent runtime.
   </Card>
-</Columns>
+  <Card title="CLI reference" icon="terminal" href="/cli">
+    Find command syntax and operational options.
+  </Card>
+</CardGroup>
 
-## What is OpenClaw?
-
-OpenClaw is a **self-hosted gateway** that connects your favorite chat apps — WhatsApp, Telegram, Discord, iMessage, and more — to AI coding agents like Pi. You run a single Gateway process on your own machine (or a server), and it becomes the bridge between your messaging apps and an always-available AI assistant.
-
-**Who is it for?** Developers and power users who want a personal AI assistant they can message from anywhere — without giving up control of their data or relying on a hosted service.
-
-**What makes it different?**
-
-- **Self-hosted**: runs on your hardware, your rules
-- **Multi-channel**: one Gateway serves WhatsApp, Telegram, Discord, and more simultaneously
-- **Agent-native**: built for coding agents with tool use, sessions, memory, and multi-agent routing
-- **Open source**: MIT licensed, community-driven
-
-**What do you need?** Node 22+, an API key (Anthropic recommended), and 5 minutes.
-
-## How it works
+## Request flow
 
 ```mermaid
 flowchart LR
-  A["Chat apps + plugins"] --> B["Gateway"]
-  B --> C["Pi agent"]
-  B --> D["CLI"]
-  B --> E["Web Control UI"]
-  B --> F["macOS app"]
-  B --> G["iOS and Android nodes"]
+    U[User] --> C[Client or channel]
+    C --> G[NEER Gateway]
+    G --> S[Agent route and session]
+    S --> A[Agent runtime]
+    A --> M[Configured model provider]
+    M --> A
+    A --> T[Available tools]
+    T --> A
+    A --> G
+    G --> C
 ```
 
-The Gateway is the single source of truth for sessions, routing, and channel connections.
+The Gateway normally uses loopback binding and port `18789`. Remote access and non-loopback binds require deliberate network and authentication configuration. Review [Gateway security](/gateway/security) before exposing the service.
 
-## Key capabilities
+Model requests may go to an external provider. Running the Gateway on your own machine does not guarantee that inference or every integration stays local. See [model providers](/providers) and [memory](/concepts/memory) for the relevant configuration and limitations.
 
-<Columns>
-  <Card title="Multi-channel gateway" icon="network">
-    WhatsApp, Telegram, Discord, and iMessage with a single Gateway process.
-  </Card>
-  <Card title="Plugin channels" icon="plug">
-    Add Mattermost and more with extension packages.
-  </Card>
-  <Card title="Multi-agent routing" icon="route">
-    Isolated sessions per agent, workspace, or sender.
-  </Card>
-  <Card title="Media support" icon="image">
-    Send and receive images, audio, and documents.
-  </Card>
-  <Card title="Web Control UI" icon="monitor">
-    Browser dashboard for chat, config, sessions, and nodes.
-  </Card>
-  <Card title="Mobile nodes" icon="smartphone">
-    Pair iOS and Android nodes with Canvas support.
-  </Card>
-</Columns>
+## Documentation sections
 
-## Quick start
+- [Installation](/install) — supported installation and deployment methods.
+- [Channels](/channels) — built-in and extension-backed messaging integrations.
+- [Agents](/concepts/agent) — sessions, context, routing, and execution.
+- [Tools and skills](/tools) — built-in tools, plugins, and skill loading.
+- [Models](/providers) — provider setup and model selection.
+- [Gateway and operations](/gateway) — configuration, authentication, networking, and troubleshooting.
+- [Development](/start/setup) — repository setup, build, lint, and development workflows.
 
-<Steps>
-  <Step title="Install OpenClaw">
-    ```bash
-    npm install -g openclaw@latest
-    ```
-  </Step>
-  <Step title="Onboard and install the service">
-    ```bash
-    openclaw onboard --install-daemon
-    ```
-  </Step>
-  <Step title="Pair WhatsApp and start the Gateway">
-    ```bash
-    openclaw channels login
-    openclaw gateway --port 18789
-    ```
-  </Step>
-</Steps>
+## Repository facts
 
-Need the full install and dev setup? See [Quick start](/start/quickstart).
+| Item            | Current repository metadata |
+| --------------- | --------------------------- |
+| Package         | `neer`                      |
+| Version         | `0.0.1`                     |
+| Node.js         | `>=22.12.0`                 |
+| Package manager | pnpm `10.23.0`              |
+| License         | MIT                         |
 
-## Dashboard
-
-Open the browser Control UI after the Gateway starts.
-
-- Local default: [http://127.0.0.1:18789/](http://127.0.0.1:18789/)
-- Remote access: [Web surfaces](/web) and [Tailscale](/gateway/tailscale)
-
-<p align="center">
-  <img src="whatsapp-openclaw.jpg" alt="OpenClaw" width="420" />
-</p>
-
-## Configuration (optional)
-
-Config lives at `~/.openclaw/openclaw.json`.
-
-- If you **do nothing**, OpenClaw uses the bundled Pi binary in RPC mode with per-sender sessions.
-- If you want to lock it down, start with `channels.whatsapp.allowFrom` and (for groups) mention rules.
-
-Example:
-
-```json5
-{
-  channels: {
-    whatsapp: {
-      allowFrom: ["+15555550123"],
-      groups: { "*": { requireMention: true } },
-    },
-  },
-  messages: { groupChat: { mentionPatterns: ["@openclaw"] } },
-}
-```
-
-## Start here
-
-<Columns>
-  <Card title="Docs hubs" href="/start/hubs" icon="book-open">
-    All docs and guides, organized by use case.
-  </Card>
-  <Card title="Configuration" href="/gateway/configuration" icon="settings">
-    Core Gateway settings, tokens, and provider config.
-  </Card>
-  <Card title="Remote access" href="/gateway/remote" icon="globe">
-    SSH and tailnet access patterns.
-  </Card>
-  <Card title="Channels" href="/channels/telegram" icon="message-square">
-    Channel-specific setup for WhatsApp, Telegram, Discord, and more.
-  </Card>
-  <Card title="Nodes" href="/nodes" icon="smartphone">
-    iOS and Android nodes with pairing and Canvas.
-  </Card>
-  <Card title="Help" href="/help" icon="life-buoy">
-    Common fixes and troubleshooting entry point.
-  </Card>
-</Columns>
-
-## Learn more
-
-<Columns>
-  <Card title="Full feature list" href="/concepts/features" icon="list">
-    Complete channel, routing, and media capabilities.
-  </Card>
-  <Card title="Multi-agent routing" href="/concepts/multi-agent" icon="route">
-    Workspace isolation and per-agent sessions.
-  </Card>
-  <Card title="Security" href="/gateway/security" icon="shield">
-    Tokens, allowlists, and safety controls.
-  </Card>
-  <Card title="Troubleshooting" href="/gateway/troubleshooting" icon="wrench">
-    Gateway diagnostics and common errors.
-  </Card>
-  <Card title="About and credits" href="/reference/credits" icon="info">
-    Project origins, contributors, and license.
-  </Card>
-</Columns>
+These values describe the checked-out repository metadata, not a promise about the latest published release. For the implementation map and distinctions between implemented, optional, and experimental behavior, see [NEER Architecture](/architecture).

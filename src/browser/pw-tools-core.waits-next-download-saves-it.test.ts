@@ -30,9 +30,9 @@ const sessionMocks = vi.hoisted(() => ({
 
 vi.mock("./pw-session.js", () => sessionMocks);
 const tmpDirMocks = vi.hoisted(() => ({
-  resolvePreferredOpenClawTmpDir: vi.fn(() => "/tmp/openclaw"),
+  resolvePreferredNeerTmpDir: vi.fn(() => "/tmp/neer"),
 }));
-vi.mock("../infra/tmp-openclaw-dir.js", () => tmpDirMocks);
+vi.mock("../infra/tmp-neer-dir.js", () => tmpDirMocks);
 
 async function importModule() {
   return await import("./pw-tools-core.js");
@@ -54,7 +54,7 @@ describe("pw-tools-core", () => {
     for (const fn of Object.values(tmpDirMocks)) {
       fn.mockClear();
     }
-    tmpDirMocks.resolvePreferredOpenClawTmpDir.mockReturnValue("/tmp/openclaw");
+    tmpDirMocks.resolvePreferredNeerTmpDir.mockReturnValue("/tmp/neer");
   });
 
   it("waits for the next download and saves it", async () => {
@@ -149,7 +149,7 @@ describe("pw-tools-core", () => {
       saveAs,
     };
 
-    tmpDirMocks.resolvePreferredOpenClawTmpDir.mockReturnValue("/tmp/openclaw-preferred");
+    tmpDirMocks.resolvePreferredNeerTmpDir.mockReturnValue("/tmp/neer-preferred");
     currentPage = { on, off };
 
     const mod = await importModule();
@@ -168,14 +168,14 @@ describe("pw-tools-core", () => {
     const expectedRootedDownloadsDir = path.join(
       path.sep,
       "tmp",
-      "openclaw-preferred",
+      "neer-preferred",
       "downloads",
     );
-    const expectedDownloadsTail = `${path.join("tmp", "openclaw-preferred", "downloads")}${path.sep}`;
+    const expectedDownloadsTail = `${path.join("tmp", "neer-preferred", "downloads")}${path.sep}`;
     expect(path.dirname(String(outPath))).toBe(expectedRootedDownloadsDir);
     expect(path.basename(String(outPath))).toMatch(/-file\.bin$/);
     expect(path.normalize(res.path)).toContain(path.normalize(expectedDownloadsTail));
-    expect(tmpDirMocks.resolvePreferredOpenClawTmpDir).toHaveBeenCalled();
+    expect(tmpDirMocks.resolvePreferredNeerTmpDir).toHaveBeenCalled();
   });
   it("waits for a matching response and returns its body", async () => {
     let responseHandler: ((resp: unknown) => void) | undefined;

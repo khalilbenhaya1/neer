@@ -1,4 +1,4 @@
-import type { OpenClawApp } from "./app.ts";
+import type { NeerApp } from "./app.ts";
 import type { GatewayHelloOk } from "./gateway.ts";
 import type { ChatAttachment, ChatQueueItem } from "./ui-types.ts";
 import { parseAgentSessionKey } from "../../../src/sessions/session-key-utils.js";
@@ -65,7 +65,7 @@ export async function handleAbortChat(host: ChatHost) {
     return;
   }
   host.chatMessage = "";
-  await abortChatRun(host as unknown as OpenClawApp);
+  await abortChatRun(host as unknown as NeerApp);
 }
 
 function enqueueChatMessage(
@@ -104,7 +104,7 @@ async function sendChatMessageNow(
   },
 ) {
   resetToolStream(host as unknown as Parameters<typeof resetToolStream>[0]);
-  const runId = await sendChatMessage(host as unknown as OpenClawApp, message, opts?.attachments);
+  const runId = await sendChatMessage(host as unknown as NeerApp, message, opts?.attachments);
   const ok = Boolean(runId);
   if (!ok && opts?.previousDraft != null) {
     host.chatMessage = opts.previousDraft;
@@ -175,6 +175,17 @@ export async function handleSendChat(
     return;
   }
 
+  // Inject default text for attachments if message is empty
+  // This prevents "I didn't receive any text" errors from some models
+  let finalMessage = message;
+  if (!finalMessage && hasAttachments) {
+    if (attachmentsToSend.length === 1) {
+      finalMessage = "Analyze this image.";
+    } else {
+      finalMessage = `Analyze these ${attachmentsToSend.length} images.`;
+    }
+  }
+
   if (isChatStopCommand(message)) {
     await handleAbortChat(host);
     return;
@@ -192,7 +203,7 @@ export async function handleSendChat(
     return;
   }
 
-  await sendChatMessageNow(host, message, {
+  await sendChatMessageNow(host, finalMessage, {
     previousDraft: messageOverride == null ? previousDraft : undefined,
     restoreDraft: Boolean(messageOverride && opts?.restoreDraft),
     attachments: hasAttachments ? attachmentsToSend : undefined,
@@ -204,8 +215,8 @@ export async function handleSendChat(
 
 export async function refreshChat(host: ChatHost, opts?: { scheduleScroll?: boolean }) {
   await Promise.all([
-    loadChatHistory(host as unknown as OpenClawApp),
-    loadSessions(host as unknown as OpenClawApp, {
+    loadChatHistory(host as unknown as NeerApp),
+    loadSessions(host as unknown as NeerApp, {
       activeMinutes: CHAT_SESSIONS_ACTIVE_MINUTES,
     }),
     refreshChatAvatar(host),

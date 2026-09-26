@@ -77,7 +77,7 @@ type ConnectedTarget = {
   targetInfo: TargetInfo;
 };
 
-const RELAY_AUTH_HEADER = "x-openclaw-relay-token";
+const RELAY_AUTH_HEADER = "x-neer-relay-token";
 
 function headerValue(value: string | string[] | undefined): string | undefined {
   if (!value) {
@@ -124,10 +124,10 @@ function text(res: Duplex, status: number, bodyText: string) {
   const body = Buffer.from(bodyText);
   res.write(
     `HTTP/1.1 ${status} ${status === 200 ? "OK" : "ERR"}\r\n` +
-      "Content-Type: text/plain; charset=utf-8\r\n" +
-      `Content-Length: ${body.length}\r\n` +
-      "Connection: close\r\n" +
-      "\r\n",
+    "Content-Type: text/plain; charset=utf-8\r\n" +
+    `Content-Length: ${body.length}\r\n` +
+    "Connection: close\r\n" +
+    "\r\n",
   );
   res.write(body);
   res.end();
@@ -262,9 +262,9 @@ export async function ensureChromeExtensionRelayServer(opts: {
       case "Browser.getVersion":
         return {
           protocolVersion: "1.3",
-          product: "Chrome/OpenClaw-Extension-Relay",
+          product: "Chrome/Neer-Extension-Relay",
           revision: "0",
-          userAgent: "OpenClaw-Extension-Relay",
+          userAgent: "Neer-Extension-Relay",
           jsVersion: "V8",
         };
       case "Browser.setDownloadBehavior":
@@ -301,12 +301,15 @@ export async function ensureChromeExtensionRelayServer(opts: {
       case "Target.attachToTarget": {
         const params = (cmd.params ?? {}) as { targetId?: string };
         const targetId = typeof params.targetId === "string" ? params.targetId : undefined;
-        if (!targetId) {
-          throw new Error("targetId required");
-        }
-        for (const t of connectedTargets.values()) {
-          if (t.targetId === targetId) {
-            return { sessionId: t.sessionId };
+        if (targetId) {
+          const deadline = Date.now() + 3000;
+          while (Date.now() < deadline) {
+            for (const t of connectedTargets.values()) {
+              if (t.targetId === targetId) {
+                return { sessionId: t.sessionId };
+              }
+            }
+            await new Promise((r) => setTimeout(r, 100));
           }
         }
         throw new Error("target not found");
@@ -368,7 +371,7 @@ export async function ensureChromeExtensionRelayServer(opts: {
       (req.method === "GET" || req.method === "PUT")
     ) {
       const payload: Record<string, unknown> = {
-        Browser: "OpenClaw/extension-relay",
+        Browser: "Neer/extension-relay",
         "Protocol-Version": "1.3",
       };
       // Only advertise the WS URL if a real extension is connected.

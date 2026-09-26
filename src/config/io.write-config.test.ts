@@ -7,7 +7,7 @@ import { withTempHome } from "./test-helpers.js";
 describe("config io write", () => {
   it("persists caller changes onto resolved config without leaking runtime defaults", async () => {
     await withTempHome(async (home) => {
-      const configPath = path.join(home, ".openclaw", "openclaw.json");
+      const configPath = path.join(home, ".neer", "neer.json");
       await fs.mkdir(path.dirname(configPath), { recursive: true });
       await fs.writeFile(
         configPath,

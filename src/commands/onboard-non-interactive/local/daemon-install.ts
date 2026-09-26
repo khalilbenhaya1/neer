@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../../../config/config.js";
+import type { NeerConfig } from "../../../config/config.js";
 import type { RuntimeEnv } from "../../../runtime.js";
 import type { OnboardOptions } from "../../onboard-types.js";
 import { resolveGatewayService } from "../../../daemon/service.js";
@@ -8,7 +8,7 @@ import { DEFAULT_GATEWAY_DAEMON_RUNTIME, isGatewayDaemonRuntime } from "../../da
 import { ensureSystemdUserLingerNonInteractive } from "../../systemd-linger.js";
 
 export async function installGatewayDaemonNonInteractive(params: {
-  nextConfig: OpenClawConfig;
+  nextConfig: NeerConfig;
   opts: OnboardOptions;
   runtime: RuntimeEnv;
   port: number;

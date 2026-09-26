@@ -6,7 +6,7 @@
  */
 
 import { type ChildProcess, spawn } from "node:child_process";
-import type { OpenClawConfig } from "../config/config.js";
+import type { NeerConfig } from "../config/config.js";
 import { hasBinary } from "../agents/skills.js";
 import { createSubsystemLogger } from "../logging/subsystem.js";
 import { runCommandWithTimeout } from "../process/exec.js";
@@ -102,7 +102,7 @@ function spawnGogServe(cfg: GmailHookRuntimeConfig): ChildProcess {
     if (addressInUse) {
       log.warn(
         "gog serve failed to bind (address already in use); stopping restarts. " +
-          "Another watcher is likely running. Set OPENCLAW_SKIP_GMAIL_WATCHER=1 or stop the other process.",
+        "Another watcher is likely running. Set NEER_SKIP_GMAIL_WATCHER=1 or stop the other process.",
       );
       watcherProcess = null;
       return;
@@ -129,7 +129,7 @@ export type GmailWatcherStartResult = {
  * Start the Gmail watcher service.
  * Called automatically by the gateway if hooks.gmail is configured.
  */
-export async function startGmailWatcher(cfg: OpenClawConfig): Promise<GmailWatcherStartResult> {
+export async function startGmailWatcher(cfg: NeerConfig): Promise<GmailWatcherStartResult> {
   // Check if gmail hooks are configured
   if (!cfg.hooks?.enabled) {
     return { started: false, reason: "hooks not enabled" };
@@ -167,10 +167,25 @@ export async function startGmailWatcher(cfg: OpenClawConfig): Promise<GmailWatch
         `tailscale ${runtimeConfig.tailscale.mode} configured for port ${runtimeConfig.serve.port}`,
       );
     } catch (err) {
-      log.error(`tailscale setup failed: ${String(err)}`);
+      // Handle AbortError and other errors gracefully
+      const errorMessage = err instanceof Error ? err.message : String(err);
+      const errorName = err instanceof Error ? err.name : "Unknown";
+
+      // Log the error with more context
+      log.error(`tailscale setup failed (${errorName}): ${errorMessage}`);
+
+      // Don't fail startup for AbortError - this can happen during shutdown
+      if (errorName === "AbortError") {
+        log.warn("tailscale setup was aborted, continuing without it");
+        return {
+          started: false,
+          reason: "tailscale setup aborted",
+        };
+      }
+
       return {
         started: false,
-        reason: `tailscale setup failed: ${String(err)}`,
+        reason: `tailscale setup failed: ${errorMessage}`,
       };
     }
   }

@@ -1,16 +1,16 @@
 {
-  "name": "@openclaw/memory-core",
+  "name": "@neer/memory-core",
   "version": "2026.2.13",
   "private": true,
-  "description": "OpenClaw core memory search plugin",
+  "description": "Neer core memory search plugin",
   "type": "module",
   "devDependencies": {
-    "openclaw": "workspace:*"
+    "neer": "workspace:*"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.1.26"
+    "neer": ">=2026.1.26"
   },
-  "openclaw": {
+  "neer": {
     "extensions": [
       "./index.ts"
     ]

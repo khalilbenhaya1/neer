@@ -109,7 +109,7 @@ describe("monitorSlackProvider tool results", () => {
           {
             id: "main",
             default: true,
-            identity: { name: "Mainbot", theme: "space lobster", emoji: "🦞" },
+            identity: { name: "Mainbot", theme: "space lobster", emoji: "✨" },
           },
           {
             id: "rich",
@@ -365,7 +365,7 @@ describe("monitorSlackProvider tool results", () => {
     slackTestState.config = {
       messages: {
         responsePrefix: "PFX",
-        groupChat: { mentionPatterns: ["\\bopenclaw\\b"] },
+        groupChat: { mentionPatterns: ["\\bneer\\b"] },
       },
       channels: {
         slack: {
@@ -393,7 +393,7 @@ describe("monitorSlackProvider tool results", () => {
       event: {
         type: "message",
         user: "U1",
-        text: "openclaw: hello",
+        text: "neer: hello",
         ts: "123",
         channel: "C1",
         channel_type: "channel",
@@ -412,7 +412,7 @@ describe("monitorSlackProvider tool results", () => {
     slackTestState.config = {
       messages: {
         responsePrefix: "PFX",
-        groupChat: { mentionPatterns: ["\\bopenclaw\\b"] },
+        groupChat: { mentionPatterns: ["\\bneer\\b"] },
       },
       channels: {
         slack: {
@@ -440,7 +440,7 @@ describe("monitorSlackProvider tool results", () => {
       event: {
         type: "message",
         user: "U1",
-        text: "openclaw: hello <@U2>",
+        text: "neer: hello <@U2>",
         ts: "123",
         channel: "C1",
         channel_type: "channel",

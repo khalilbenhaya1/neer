@@ -1,7 +1,7 @@
 import type { AgentToolResult } from "@mariozechner/pi-agent-core";
 import { Type } from "@sinclair/typebox";
 import crypto from "node:crypto";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { NeerConfig } from "../../config/config.js";
 import {
   type CameraFacing,
   cameraTempPath,
@@ -37,6 +37,7 @@ const NODES_TOOL_ACTIONS = [
   "screen_record",
   "location_get",
   "run",
+  "start",
   "invoke",
 ] as const;
 
@@ -92,7 +93,7 @@ const NodesToolSchema = Type.Object({
 
 export function createNodesTool(options?: {
   agentSessionKey?: string;
-  config?: OpenClawConfig;
+  config?: NeerConfig;
 }): AnyAgentTool {
   const sessionKey = options?.agentSessionKey?.trim() || undefined;
   const agentId = resolveSessionAgentId({
@@ -146,13 +147,13 @@ export function createNodesTool(options?: {
             );
           }
           case "notify": {
-            const node = readStringParam(params, "node", { required: true });
+            const node = readStringParam(params, "node");
             const title = typeof params.title === "string" ? params.title : "";
             const body = typeof params.body === "string" ? params.body : "";
             if (!title.trim() && !body.trim()) {
               throw new Error("title or body required");
             }
-            const nodeId = await resolveNodeId(gatewayOpts, node);
+            const nodeId = await resolveNodeId(gatewayOpts, node, true);
             await callGatewayTool("node.invoke", gatewayOpts, {
               nodeId,
               command: "system.notify",
@@ -168,8 +169,8 @@ export function createNodesTool(options?: {
             return jsonResult({ ok: true });
           }
           case "camera_snap": {
-            const node = readStringParam(params, "node", { required: true });
-            const nodeId = await resolveNodeId(gatewayOpts, node);
+            const node = readStringParam(params, "node");
+            const nodeId = await resolveNodeId(gatewayOpts, node, true);
             const facingRaw =
               typeof params.facing === "string" ? params.facing.toLowerCase() : "both";
             const facings: CameraFacing[] =
@@ -178,8 +179,8 @@ export function createNodesTool(options?: {
                 : facingRaw === "front" || facingRaw === "back"
                   ? [facingRaw]
                   : (() => {
-                      throw new Error("invalid facing (front|back|both)");
-                    })();
+                    throw new Error("invalid facing (front|back|both)");
+                  })();
             const maxWidth =
               typeof params.maxWidth === "number" && Number.isFinite(params.maxWidth)
                 ? params.maxWidth
@@ -250,8 +251,8 @@ export function createNodesTool(options?: {
             return await sanitizeToolResultImages(result, "nodes:camera_snap");
           }
           case "camera_list": {
-            const node = readStringParam(params, "node", { required: true });
-            const nodeId = await resolveNodeId(gatewayOpts, node);
+            const node = readStringParam(params, "node");
+            const nodeId = await resolveNodeId(gatewayOpts, node, true);
             const raw = await callGatewayTool<{ payload: unknown }>("node.invoke", gatewayOpts, {
               nodeId,
               command: "camera.list",
@@ -263,8 +264,8 @@ export function createNodesTool(options?: {
             return jsonResult(payload);
           }
           case "camera_clip": {
-            const node = readStringParam(params, "node", { required: true });
-            const nodeId = await resolveNodeId(gatewayOpts, node);
+            const node = readStringParam(params, "node");
+            const nodeId = await resolveNodeId(gatewayOpts, node, true);
             const facing =
               typeof params.facing === "string" ? params.facing.toLowerCase() : "front";
             if (facing !== "front" && facing !== "back") {
@@ -312,8 +313,8 @@ export function createNodesTool(options?: {
             };
           }
           case "screen_record": {
-            const node = readStringParam(params, "node", { required: true });
-            const nodeId = await resolveNodeId(gatewayOpts, node);
+            const node = readStringParam(params, "node");
+            const nodeId = await resolveNodeId(gatewayOpts, node, true);
             const durationMs =
               typeof params.durationMs === "number" && Number.isFinite(params.durationMs)
                 ? params.durationMs
@@ -358,21 +359,21 @@ export function createNodesTool(options?: {
             };
           }
           case "location_get": {
-            const node = readStringParam(params, "node", { required: true });
-            const nodeId = await resolveNodeId(gatewayOpts, node);
+            const node = readStringParam(params, "node");
+            const nodeId = await resolveNodeId(gatewayOpts, node, true);
             const maxAgeMs =
               typeof params.maxAgeMs === "number" && Number.isFinite(params.maxAgeMs)
                 ? params.maxAgeMs
                 : undefined;
             const desiredAccuracy =
               params.desiredAccuracy === "coarse" ||
-              params.desiredAccuracy === "balanced" ||
-              params.desiredAccuracy === "precise"
+                params.desiredAccuracy === "balanced" ||
+                params.desiredAccuracy === "precise"
                 ? params.desiredAccuracy
                 : undefined;
             const locationTimeoutMs =
               typeof params.locationTimeoutMs === "number" &&
-              Number.isFinite(params.locationTimeoutMs)
+                Number.isFinite(params.locationTimeoutMs)
                 ? params.locationTimeoutMs
                 : undefined;
             const raw = await callGatewayTool<{ payload: unknown }>("node.invoke", gatewayOpts, {
@@ -387,15 +388,16 @@ export function createNodesTool(options?: {
             });
             return jsonResult(raw?.payload ?? {});
           }
+          case "start":
           case "run": {
-            const node = readStringParam(params, "node", { required: true });
+            const node = readStringParam(params, "node");
             const nodes = await listNodes(gatewayOpts);
             if (nodes.length === 0) {
               throw new Error(
                 "system.run requires a paired companion app or node host (no nodes available).",
               );
             }
-            const nodeId = resolveNodeIdFromList(nodes, node);
+            const nodeId = resolveNodeIdFromList(nodes, node, true);
             const nodeInfo = nodes.find((entry) => entry.nodeId === nodeId);
             const supportsSystemRun = Array.isArray(nodeInfo?.commands)
               ? nodeInfo?.commands?.includes("system.run")
@@ -443,8 +445,8 @@ export function createNodesTool(options?: {
             return jsonResult(raw?.payload ?? {});
           }
           case "invoke": {
-            const node = readStringParam(params, "node", { required: true });
-            const nodeId = await resolveNodeId(gatewayOpts, node);
+            const node = readStringParam(params, "node");
+            const nodeId = await resolveNodeId(gatewayOpts, node, true);
             const invokeCommand = readStringParam(params, "invokeCommand", { required: true });
             const invokeParamsJson =
               typeof params.invokeParamsJson === "string" ? params.invokeParamsJson.trim() : "";

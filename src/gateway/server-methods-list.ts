@@ -88,6 +88,8 @@ const BASE_METHODS = [
   "chat.history",
   "chat.abort",
   "chat.send",
+  // Local voice transcription
+  "voice.transcribe",
 ];
 
 export function listGatewayMethods(): string[] {
@@ -114,4 +116,5 @@ export const GATEWAY_EVENTS = [
   "voicewake.changed",
   "exec.approval.requested",
   "exec.approval.resolved",
+  "agent.proactive",
 ];

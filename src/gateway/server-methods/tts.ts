@@ -1,4 +1,5 @@
 import type { GatewayRequestHandlers } from "./types.js";
+import { readFile } from "node:fs/promises";
 import { loadConfig } from "../../config/config.js";
 import {
   OPENAI_TTS_MODELS,
@@ -39,6 +40,7 @@ export const ttsHandlers: GatewayRequestHandlers = {
         hasOpenAIKey: Boolean(resolveTtsApiKey(config, "openai")),
         hasElevenLabsKey: Boolean(resolveTtsApiKey(config, "elevenlabs")),
         edgeEnabled: isTtsProviderConfigured(config, "edge"),
+        piperEnabled: isTtsProviderConfigured(config, "piper"),
       });
     } catch (err) {
       respond(false, undefined, errorShape(ErrorCodes.UNAVAILABLE, formatForLog(err)));
@@ -98,15 +100,45 @@ export const ttsHandlers: GatewayRequestHandlers = {
       respond(false, undefined, errorShape(ErrorCodes.UNAVAILABLE, formatForLog(err)));
     }
   },
+  /**
+   * Convert text to speech and return raw base64 audio data for browser playback.
+   * This is the method used by the Voice Call mode frontend.
+   */
+  "tts.speak": async ({ params, respond }) => {
+    const text = typeof params.text === "string" ? params.text.trim() : "";
+    if (!text) {
+      respond(false, undefined, errorShape(ErrorCodes.INVALID_REQUEST, "tts.speak requires text"));
+      return;
+    }
+    try {
+      const cfg = loadConfig();
+      const channel = typeof params.channel === "string" ? params.channel.trim() : undefined;
+      const result = await textToSpeech({ text, cfg, channel });
+      if (!result.success || !result.audioPath) {
+        respond(false, undefined, errorShape(ErrorCodes.UNAVAILABLE, result.error ?? "TTS conversion failed"));
+        return;
+      }
+      // Read the file and return as base64 so the browser can play it directly
+      const audioBytes = await readFile(result.audioPath);
+      const audioData = audioBytes.toString("base64");
+      respond(true, {
+        audioData,
+        outputFormat: result.outputFormat ?? "wav",
+        provider: result.provider,
+      });
+    } catch (err) {
+      respond(false, undefined, errorShape(ErrorCodes.UNAVAILABLE, formatForLog(err)));
+    }
+  },
   "tts.setProvider": async ({ params, respond }) => {
     const provider = typeof params.provider === "string" ? params.provider.trim() : "";
-    if (provider !== "openai" && provider !== "elevenlabs" && provider !== "edge") {
+    if (provider !== "openai" && provider !== "elevenlabs" && provider !== "edge" && provider !== "piper") {
       respond(
         false,
         undefined,
         errorShape(
           ErrorCodes.INVALID_REQUEST,
-          "Invalid provider. Use openai, elevenlabs, or edge.",
+          "Invalid provider. Use openai, elevenlabs, edge, or piper.",
         ),
       );
       return;
@@ -146,6 +178,12 @@ export const ttsHandlers: GatewayRequestHandlers = {
             name: "Edge TTS",
             configured: isTtsProviderConfigured(config, "edge"),
             models: [],
+          },
+          {
+            id: "piper",
+            name: "Piper (Local)",
+            configured: isTtsProviderConfigured(config, "piper"),
+            models: ["en_US-lessac-medium"],
           },
         ],
         active: getTtsProvider(config, prefsPath),

@@ -3,7 +3,7 @@ import os from "node:os";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { ChannelPlugin } from "../../channels/plugins/types.js";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { NeerConfig } from "../../config/config.js";
 import { slackPlugin } from "../../../extensions/slack/src/channel.js";
 import { telegramPlugin } from "../../../extensions/telegram/src/channel.js";
 import { whatsappPlugin } from "../../../extensions/whatsapp/src/channel.js";
@@ -32,7 +32,7 @@ const slackConfig = {
       appToken: "xapp-test",
     },
   },
-} as OpenClawConfig;
+} as NeerConfig;
 
 const whatsappConfig = {
   channels: {
@@ -40,7 +40,7 @@ const whatsappConfig = {
       allowFrom: ["*"],
     },
   },
-} as OpenClawConfig;
+} as NeerConfig;
 
 describe("runMessageAction context isolation", () => {
   beforeEach(async () => {
@@ -269,7 +269,7 @@ describe("runMessageAction context isolation", () => {
           token: "tg-test",
         },
       },
-    } as OpenClawConfig;
+    } as NeerConfig;
 
     const result = await runMessageAction({
       cfg: multiConfig,
@@ -311,7 +311,7 @@ describe("runMessageAction context isolation", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NeerConfig;
 
     await expect(
       runMessageAction({
@@ -429,7 +429,7 @@ describe("runMessageAction sendAttachment hydration", () => {
           password: "test-password",
         },
       },
-    } as OpenClawConfig;
+    } as NeerConfig;
 
     const result = await runMessageAction({
       cfg,
@@ -463,7 +463,7 @@ describe("runMessageAction sendAttachment hydration", () => {
           password: "test-password",
         },
       },
-    } as OpenClawConfig;
+    } as NeerConfig;
     const sandboxDir = await fs.mkdtemp(path.join(os.tmpdir(), "msg-sandbox-"));
     try {
       await runMessageAction({
@@ -650,7 +650,7 @@ describe("runMessageAction media caption behavior", () => {
           enabled: true,
         },
       },
-    } as OpenClawConfig;
+    } as NeerConfig;
 
     const result = await runMessageAction({
       cfg,
@@ -730,7 +730,7 @@ describe("runMessageAction card-only send behavior", () => {
           enabled: true,
         },
       },
-    } as OpenClawConfig;
+    } as NeerConfig;
 
     const card = {
       type: "AdaptiveCard",
@@ -801,7 +801,7 @@ describe("runMessageAction accountId defaults", () => {
 
   it("propagates defaultAccountId into params", async () => {
     await runMessageAction({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as NeerConfig,
       action: "send",
       params: {
         channel: "discord",

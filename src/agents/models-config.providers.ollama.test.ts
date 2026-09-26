@@ -26,7 +26,7 @@ describe("resolveOllamaApiBase", () => {
 
 describe("Ollama provider", () => {
   it("should not include ollama when no API key is configured", async () => {
-    const agentDir = mkdtempSync(join(tmpdir(), "openclaw-test-"));
+    const agentDir = mkdtempSync(join(tmpdir(), "neer-test-"));
     const providers = await resolveImplicitProviders({ agentDir });
 
     // Ollama requires explicit configuration via OLLAMA_API_KEY env var or profile
@@ -34,7 +34,7 @@ describe("Ollama provider", () => {
   });
 
   it("should disable streaming by default for Ollama models", async () => {
-    const agentDir = mkdtempSync(join(tmpdir(), "openclaw-test-"));
+    const agentDir = mkdtempSync(join(tmpdir(), "neer-test-"));
     process.env.OLLAMA_API_KEY = "test-key";
 
     try {
@@ -54,7 +54,7 @@ describe("Ollama provider", () => {
   });
 
   it("should preserve explicit ollama baseUrl on implicit provider injection", async () => {
-    const agentDir = mkdtempSync(join(tmpdir(), "openclaw-test-"));
+    const agentDir = mkdtempSync(join(tmpdir(), "neer-test-"));
     process.env.OLLAMA_API_KEY = "test-key";
 
     try {

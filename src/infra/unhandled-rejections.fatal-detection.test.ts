@@ -14,6 +14,7 @@ describe("installUnhandledRejectionHandler - fatal detection", () => {
   });
 
   beforeEach(() => {
+    vi.useFakeTimers();
     exitCalls = [];
 
     vi.spyOn(process, "exit").mockImplementation((code: string | number | null | undefined) => {
@@ -22,11 +23,13 @@ describe("installUnhandledRejectionHandler - fatal detection", () => {
       }
     });
 
-    consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-    consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => { });
+    consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation(() => { });
   });
 
   afterEach(() => {
+    vi.runOnlyPendingTimers();
+    vi.useRealTimers();
     vi.clearAllMocks();
     consoleErrorSpy.mockRestore();
     consoleWarnSpy.mockRestore();
@@ -43,10 +46,11 @@ describe("installUnhandledRejectionHandler - fatal detection", () => {
       });
 
       process.emit("unhandledRejection", oomErr, Promise.resolve());
+      vi.runAllTimers();
 
       expect(exitCalls).toEqual([1]);
       expect(consoleErrorSpy).toHaveBeenCalledWith(
-        "[openclaw] FATAL unhandled rejection:",
+        "[neer] FATAL unhandled rejection:",
         expect.stringContaining("Out of memory"),
       );
     });
@@ -57,6 +61,7 @@ describe("installUnhandledRejectionHandler - fatal detection", () => {
       });
 
       process.emit("unhandledRejection", timeoutErr, Promise.resolve());
+      vi.runAllTimers();
 
       expect(exitCalls).toEqual([1]);
     });
@@ -67,6 +72,7 @@ describe("installUnhandledRejectionHandler - fatal detection", () => {
       });
 
       process.emit("unhandledRejection", workerOomErr, Promise.resolve());
+      vi.runAllTimers();
 
       expect(exitCalls).toEqual([1]);
     });
@@ -79,10 +85,11 @@ describe("installUnhandledRejectionHandler - fatal detection", () => {
       });
 
       process.emit("unhandledRejection", configErr, Promise.resolve());
+      vi.runAllTimers();
 
       expect(exitCalls).toEqual([1]);
       expect(consoleErrorSpy).toHaveBeenCalledWith(
-        "[openclaw] CONFIGURATION ERROR - requires fix:",
+        "[neer] CONFIGURATION ERROR - requires fix:",
         expect.stringContaining("Invalid config"),
       );
     });
@@ -93,6 +100,7 @@ describe("installUnhandledRejectionHandler - fatal detection", () => {
       });
 
       process.emit("unhandledRejection", missingKeyErr, Promise.resolve());
+      vi.runAllTimers();
 
       expect(exitCalls).toEqual([1]);
     });
@@ -105,10 +113,11 @@ describe("installUnhandledRejectionHandler - fatal detection", () => {
       });
 
       process.emit("unhandledRejection", fetchErr, Promise.resolve());
+      vi.runAllTimers();
 
       expect(exitCalls).toEqual([]);
       expect(consoleWarnSpy).toHaveBeenCalledWith(
-        "[openclaw] Non-fatal unhandled rejection (continuing):",
+        "[neer] Non-fatal unhandled rejection (continuing):",
         expect.stringContaining("fetch failed"),
       );
     });
@@ -119,6 +128,7 @@ describe("installUnhandledRejectionHandler - fatal detection", () => {
       });
 
       process.emit("unhandledRejection", dnsErr, Promise.resolve());
+      vi.runAllTimers();
 
       expect(exitCalls).toEqual([]);
       expect(consoleWarnSpy).toHaveBeenCalled();
@@ -128,10 +138,11 @@ describe("installUnhandledRejectionHandler - fatal detection", () => {
       const genericErr = new Error("Something went wrong");
 
       process.emit("unhandledRejection", genericErr, Promise.resolve());
+      vi.runAllTimers();
 
       expect(exitCalls).toEqual([1]);
       expect(consoleErrorSpy).toHaveBeenCalledWith(
-        "[openclaw] Unhandled promise rejection:",
+        "[neer] Unhandled promise rejection:",
         expect.stringContaining("Something went wrong"),
       );
     });
@@ -142,6 +153,7 @@ describe("installUnhandledRejectionHandler - fatal detection", () => {
       });
 
       process.emit("unhandledRejection", connResetErr, Promise.resolve());
+      vi.runAllTimers();
 
       expect(exitCalls).toEqual([]);
       expect(consoleWarnSpy).toHaveBeenCalled();
@@ -153,6 +165,7 @@ describe("installUnhandledRejectionHandler - fatal detection", () => {
       });
 
       process.emit("unhandledRejection", timeoutErr, Promise.resolve());
+      vi.runAllTimers();
 
       expect(exitCalls).toEqual([]);
       expect(consoleWarnSpy).toHaveBeenCalled();

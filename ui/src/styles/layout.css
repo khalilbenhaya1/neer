@@ -3,23 +3,26 @@
    =========================================== */
 
 .shell {
-  --shell-pad: 16px;
-  --shell-gap: 16px;
-  --shell-nav-width: 220px;
-  --shell-topbar-height: 56px;
-  --shell-focus-duration: 200ms;
+  --shell-pad: 20px;
+  --shell-gap: 20px;
+  --shell-nav-width: 280px;
+  --shell-topbar-height: 0px;
+  /* Hidden topbar, moving content */
+  --shell-focus-duration: 250ms;
   --shell-focus-ease: var(--ease-out);
   height: 100vh;
   display: grid;
+  padding: var(--shell-pad);
+  gap: var(--shell-gap);
+  /* Nav and Content are floating columns */
   grid-template-columns: var(--shell-nav-width) minmax(0, 1fr);
-  grid-template-rows: var(--shell-topbar-height) 1fr;
-  grid-template-areas:
-    "topbar topbar"
-    "nav content";
-  gap: 0;
-  animation: dashboard-enter 0.4s var(--ease-out);
+  grid-template-rows: 1fr;
+  grid-template-areas: "nav content";
+  animation: dashboard-enter 0.5s var(--ease-out);
   transition: grid-template-columns var(--shell-focus-duration) var(--shell-focus-ease);
   overflow: hidden;
+  position: relative;
+  z-index: 1;
 }
 
 @supports (height: 100dvh) {
@@ -64,7 +67,7 @@
   padding-top: 0;
 }
 
-.shell--chat-focus .content > * + * {
+.shell--chat-focus .content>*+* {
   margin-top: 0;
 }
 
@@ -74,17 +77,8 @@
 
 .topbar {
   grid-area: topbar;
-  position: sticky;
-  top: 0;
-  z-index: 40;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  padding: 0 20px;
-  height: var(--shell-topbar-height);
-  border-bottom: 1px solid var(--border);
-  background: var(--bg);
+  display: none;
+  /* We will move branding to Sidebar */
 }
 
 .topbar-left {
@@ -135,20 +129,27 @@
 }
 
 .brand-title {
-  font-size: 16px;
+  font-family: var(--font-display);
+  font-size: 18px;
   font-weight: 700;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.04em;
   line-height: 1.1;
   color: var(--text-strong);
+  text-transform: lowercase;
+}
+
+.brand-title::first-letter {
+  text-transform: uppercase;
 }
 
 .brand-sub {
-  font-size: 10px;
-  font-weight: 500;
+  font-size: 9px;
+  font-weight: 600;
   color: var(--muted);
-  letter-spacing: 0.05em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   line-height: 1;
+  opacity: 0.8;
 }
 
 /* Topbar status */
@@ -156,6 +157,21 @@
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.nav-item.active {
+  color: var(--accent);
+  background: var(--accent-subtle);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border-color: rgba(255, 77, 109, 0.2);
+  box-shadow: 0 4px 12px rgba(255, 77, 109, 0.1);
+}
+
+.nav-item.active .nav-item__icon {
+  opacity: 1;
+  color: var(--accent);
+  filter: drop-shadow(0 0 5px var(--accent-glow));
 }
 
 .topbar-status .pill {
@@ -196,20 +212,57 @@
 
 .nav {
   grid-area: nav;
+  display: flex;
+  flex-direction: column;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 16px 12px;
-  background: var(--bg);
-  scrollbar-width: none; /* Firefox */
+  padding: 24px;
+
+  /* Glass Panel */
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: var(--radius-lg);
+
+  scrollbar-width: none;
   transition:
     width var(--shell-focus-duration) var(--shell-focus-ease),
     padding var(--shell-focus-duration) var(--shell-focus-ease),
     opacity var(--shell-focus-duration) var(--shell-focus-ease);
   min-height: 0;
+  position: relative;
+}
+
+/* Header inside Nav */
+.nav-header-area {
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-footer {
+  margin-top: auto;
+  padding: 20px 10px 4px;
+  border-top: 1px solid var(--border-subtle);
+  opacity: 0.6;
+}
+
+.nav-footer p {
+  font-size: 10px;
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.nav--collapsed .nav-footer {
+  display: none;
 }
 
 .nav::-webkit-scrollbar {
-  display: none; /* Chrome/Safari */
+  display: none;
+  /* Chrome/Safari */
 }
 
 .shell--chat-focus .nav {
@@ -420,14 +473,25 @@
 
 .content {
   grid-area: content;
-  padding: 12px 16px 32px;
-  display: block;
+  /* Glass Panel */
+  background: rgba(10, 10, 16, 0.4);
+  /* Slightly more transparent than sidebar */
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: var(--radius-lg);
+
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
   min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
+  position: relative;
 }
 
-.content > * + * {
+.content>*+* {
   margin-top: 24px;
 }
 
@@ -443,7 +507,7 @@
   padding-bottom: 0;
 }
 
-.content--chat > * + * {
+.content--chat>*+* {
   margin-top: 0;
 }
 
@@ -501,7 +565,7 @@
   gap: 16px;
 }
 
-.content--chat .content-header > div:first-child {
+.content--chat .content-header>div:first-child {
   text-align: left;
 }
 

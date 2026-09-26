@@ -17,9 +17,9 @@ vi.mock("../config/config.js", async (importOriginal) => {
       },
       browser: {
         enabled: true,
-        defaultProfile: "openclaw",
+        defaultProfile: "neer",
         profiles: {
-          openclaw: { cdpPort: testPort + 1, color: "#FF4500" },
+          neer: { cdpPort: testPort + 1, color: "#FF4500" },
         },
       },
     }),
@@ -53,7 +53,7 @@ vi.mock("./server-context.js", async (importOriginal) => {
 
 describe("browser control HTTP auth", () => {
   beforeEach(async () => {
-    prevGatewayPort = process.env.OPENCLAW_GATEWAY_PORT;
+    prevGatewayPort = process.env.NEER_GATEWAY_PORT;
 
     const probe = createServer();
     await new Promise<void>((resolve, reject) => {
@@ -64,16 +64,16 @@ describe("browser control HTTP auth", () => {
     testPort = addr.port;
     await new Promise<void>((resolve) => probe.close(() => resolve()));
 
-    process.env.OPENCLAW_GATEWAY_PORT = String(testPort - 2);
+    process.env.NEER_GATEWAY_PORT = String(testPort - 2);
   });
 
   afterEach(async () => {
     vi.unstubAllGlobals();
     vi.restoreAllMocks();
     if (prevGatewayPort === undefined) {
-      delete process.env.OPENCLAW_GATEWAY_PORT;
+      delete process.env.NEER_GATEWAY_PORT;
     } else {
-      process.env.OPENCLAW_GATEWAY_PORT = prevGatewayPort;
+      process.env.NEER_GATEWAY_PORT = prevGatewayPort;
     }
 
     const { stopBrowserControlServer } = await import("./server.js");

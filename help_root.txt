@@ -1,0 +1,90 @@
+
+✨ neer 0.0.1 (417509c) — iMessage green bubble energy, but for everyone.
+Designed & Engineered by Khalil Benhaya
+
+Usage: neer [options] [command]
+
+Options:
+  --dev             Dev profile: isolate state under ~/.neer-dev, default
+                    gateway port 19001, and shift derived ports (browser/canvas)
+  -h, --help        display help for command
+  --no-color        Disable ANSI colors
+  --profile <name>  Use a named profile (isolates
+                    NEER_STATE_DIR/NEER_CONFIG_PATH under ~/.neer-<name>)
+  -V, --version     output the version number
+
+Commands:
+  acp               Agent Control Protocol tools
+  agent             Run an agent turn via the Gateway (use --local for embedded)
+  agents            Manage isolated agents (workspaces + auth + routing)
+  approvals         Exec approvals
+  browser           Manage Neer's dedicated browser (Chrome/Chromium)
+  channels          Channel management
+  completion        Generate shell completion script
+  config            Config helpers (get/set/unset). Run without subcommand for
+                    the wizard.
+  configure         Interactive prompt to set up credentials, devices, and agent
+                    defaults
+  console           Launch the interactive Terminal Dashboard
+  cron              Cron scheduler
+  daemon            Gateway service (legacy alias)
+  dashboard         Open the Control UI with your current token
+  devices           Device pairing + token management
+  directory         Directory commands
+  dns               DNS helpers
+  docs              Docs helpers
+  doctor            Health checks + quick fixes for the gateway and channels
+  gateway           Gateway control
+  health            Fetch health from the running gateway
+  hooks             Hooks tooling
+  logs              Gateway logs
+  memory            Memory search tools
+  message           Send messages and channel actions
+  models            Model configuration
+  node              Node control
+  nodes             Node commands
+  onboard           Interactive wizard to set up the gateway, workspace, and
+                    skills
+  pairing           Pairing helpers
+  plugins           Plugin management
+  reset             Reset local config/state (keeps the CLI installed)
+  sandbox           Sandbox tools
+  security          Security helpers
+  sessions          List stored conversation sessions
+  setup             Initialize ~/.neer/neer.json and the agent workspace
+  skills            Skills management
+  status            Show channel health and recent session recipients
+  system            System events, heartbeat, and presence
+  tui               Terminal UI
+  uninstall         Uninstall the gateway service + local data (CLI remains)
+  update            CLI update helpers
+  webhooks          Webhook helpers
+
+Examples:
+  neer channels login --verbose
+    Link personal WhatsApp Web and show QR + connection logs.
+  neer message send --target +15555550123 --message "Hi" --json
+    Send via your web session and print JSON result.
+  neer gateway --port 18789
+    Run the WebSocket Gateway locally.
+  neer --dev gateway
+    Run a dev Gateway (isolated state/config) on ws://127.0.0.1:19001.
+  neer gateway --force
+    Kill anything bound to the default gateway port, then start it.
+  neer gateway ...
+    Gateway control via WebSocket.
+  neer agent --to +15555550123 --message "Run summary" --deliver
+    Talk directly to the agent using the Gateway; optionally send the WhatsApp reply.
+  neer message send --channel telegram --target @mychat --message "Hi"
+    Send via your Telegram bot.
+
+Docs: https://docs.neer.ai/cli
+
+   ────────────────────────────────────────────
+                                            NEER — Cognitive Infrastructure
+                                      © 2026 Khalil Benhaya. All rights reserved.
+
+                        For business inquiries, technical support, or vulnerability disclosures:
+                                          Email     : khalilbenhay07@gmail.com
+   ────────────────────────────────────────────
+

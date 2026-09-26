@@ -25,6 +25,7 @@ import { usageHandlers } from "./server-methods/usage.js";
 import { voicewakeHandlers } from "./server-methods/voicewake.js";
 import { webHandlers } from "./server-methods/web.js";
 import { wizardHandlers } from "./server-methods/wizard.js";
+import { voiceHandlers } from "./server-methods/voice.js";
 
 const ADMIN_SCOPE = "operator.admin";
 const READ_SCOPE = "operator.read";
@@ -83,6 +84,7 @@ const WRITE_METHODS = new Set([
   "tts.disable",
   "tts.convert",
   "tts.setProvider",
+  "voice.transcribe",
   "voicewake.set",
   "node.invoke",
   "chat.send",
@@ -188,6 +190,7 @@ export const coreGatewayHandlers: GatewayRequestHandlers = {
   ...agentHandlers,
   ...agentsHandlers,
   ...browserHandlers,
+  ...voiceHandlers,
 };
 
 export async function handleGatewayRequest(

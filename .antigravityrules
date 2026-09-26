@@ -1,0 +1,14 @@
+ENV: Windows.
+
+You are running on Windows 11.
+All shell commands MUST be executed using:
+
+cmd /c <command>
+
+Never use interactive shells.
+Never leave processes open.
+Never use background sessions.
+
+All commands must terminate and return EOF immediately.
+
+This rule has highest priority and overrides any other instruction.

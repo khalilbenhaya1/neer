@@ -1,0 +1,5 @@
+
+> neer-desktop@0.0.1 start
+> tsc && electron .
+
+src/main.ts(4,36): error TS2307: Cannot find module 'neer/server' or its corresponding type declarations.

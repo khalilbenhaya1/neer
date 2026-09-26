@@ -1,6 +1,6 @@
-import { type OpenClawConfig, loadConfig } from "../config/config.js";
-import { resolveOpenClawAgentDir } from "./agent-paths.js";
-import { ensureOpenClawModelsJson } from "./models-config.js";
+import { type NeerConfig, loadConfig } from "../config/config.js";
+import { resolveNeerAgentDir } from "./agent-paths.js";
+import { ensureNeerModelsJson } from "./models-config.js";
 
 export type ModelCatalogEntry = {
   id: string;
@@ -20,26 +20,16 @@ type DiscoveredModel = {
   input?: Array<"text" | "image">;
 };
 
-type PiSdkModule = typeof import("./pi-model-discovery.js");
-
 let modelCatalogPromise: Promise<ModelCatalogEntry[]> | null = null;
 let hasLoggedModelCatalogError = false;
-const defaultImportPiSdk = () => import("./pi-model-discovery.js");
-let importPiSdk = defaultImportPiSdk;
 
 export function resetModelCatalogCacheForTest() {
   modelCatalogPromise = null;
   hasLoggedModelCatalogError = false;
-  importPiSdk = defaultImportPiSdk;
-}
-
-// Test-only escape hatch: allow mocking the dynamic import to simulate transient failures.
-export function __setModelCatalogImportForTest(loader?: () => Promise<PiSdkModule>) {
-  importPiSdk = loader ?? defaultImportPiSdk;
 }
 
 export async function loadModelCatalog(params?: {
-  config?: OpenClawConfig;
+  config?: NeerConfig;
   useCache?: boolean;
 }): Promise<ModelCatalogEntry[]> {
   if (params?.useCache === false) {
@@ -61,22 +51,41 @@ export async function loadModelCatalog(params?: {
       });
     try {
       const cfg = params?.config ?? loadConfig();
-      await ensureOpenClawModelsJson(cfg);
-      // IMPORTANT: keep the dynamic import *inside* the try/catch.
-      // If this fails once (e.g. during a pnpm install that temporarily swaps node_modules),
-      // we must not poison the cache with a rejected promise (otherwise all channel handlers
-      // will keep failing until restart).
-      const piSdk = await importPiSdk();
-      const agentDir = resolveOpenClawAgentDir();
-      const { join } = await import("node:path");
-      const authStorage = new piSdk.AuthStorage(join(agentDir, "auth.json"));
-      const registry = new piSdk.ModelRegistry(authStorage, join(agentDir, "models.json")) as
-        | {
-            getAll: () => Array<DiscoveredModel>;
+      await ensureNeerModelsJson(cfg);
+
+      const agentDir = resolveNeerAgentDir();
+      const fs = await import("node:fs");
+      const path = await import("node:path");
+
+      const modelsJsonPath = path.join(agentDir, "models.json");
+      let discoveredModels: DiscoveredModel[] = [];
+      if (fs.existsSync(modelsJsonPath)) {
+        try {
+          const raw = fs.readFileSync(modelsJsonPath, "utf-8");
+          const parsed = JSON.parse(raw);
+          if (parsed && typeof parsed === "object" && parsed.providers) {
+            for (const providerKey in parsed.providers) {
+              const providerConfig = parsed.providers[providerKey];
+              const providerModels = Array.isArray(providerConfig?.models)
+                ? providerConfig.models
+                : [];
+              for (const entry of providerModels) {
+                discoveredModels.push({
+                  ...entry,
+                  provider: entry.provider || providerKey,
+                });
+              }
+            }
+          } else if (Array.isArray(parsed)) {
+            // Fallback for legacy format if any
+            discoveredModels = parsed;
           }
-        | Array<DiscoveredModel>;
-      const entries = Array.isArray(registry) ? registry : registry.getAll();
-      for (const entry of entries) {
+        } catch (e) {
+          console.warn(`[model-catalog] Could not parse models.json: ${String(e)}`);
+        }
+      }
+
+      for (const entry of discoveredModels) {
         const id = String(entry?.id ?? "").trim();
         if (!id) {
           continue;

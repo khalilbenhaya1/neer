@@ -5,7 +5,7 @@ import {
   createWriteTool,
   readTool,
 } from "@mariozechner/pi-coding-agent";
-import type { OpenClawConfig } from "../config/config.js";
+import type { NeerConfig } from "../config/config.js";
 import type { ModelAuthMode } from "./model-auth.js";
 import type { AnyAgentTool } from "./pi-tools.types.js";
 import type { SandboxContext } from "./sandbox.js";
@@ -21,9 +21,22 @@ import {
   type ProcessToolDefaults,
 } from "./bash-tools.js";
 import { listChannelAgentTools } from "./channel-tools.js";
-import { createOpenClawTools } from "./openclaw-tools.js";
+import { createNeerTools } from "./neer-tools.js";
 import { wrapToolWithAbortSignal } from "./pi-tools.abort.js";
 import { wrapToolWithBeforeToolCallHook } from "./pi-tools.before-tool-call.js";
+import {
+  completeGoalTool,
+  createGoalTool,
+  deleteGoalTool,
+  listGoalsTool,
+} from "./tools/goals-tool.js";
+import {
+  recallExperiencesTool,
+  recordExperienceTool,
+} from "./tools/experience-tool.js";
+import { generateImageTool } from "./tools/image-generation.js";
+import { uploadToTikTokTool } from "./tools/tiktok-tool.js";
+import { generateInfluencerContentTool } from "./tools/forge-vision.js";
 import {
   filterToolsByPolicy,
   isToolAllowedByPolicies,
@@ -34,7 +47,7 @@ import {
 import {
   assertRequiredParams,
   CLAUDE_PARAM_GROUPS,
-  createOpenClawReadTool,
+  createNeerReadTool,
   createSandboxedEditTool,
   createSandboxedReadTool,
   createSandboxedWriteTool,
@@ -86,7 +99,7 @@ function isApplyPatchAllowedForModel(params: {
   });
 }
 
-function resolveExecConfig(cfg: OpenClawConfig | undefined) {
+function resolveExecConfig(cfg: NeerConfig | undefined) {
   const globalExec = cfg?.tools?.exec;
   return {
     host: globalExec?.host,
@@ -112,7 +125,7 @@ export const __testing = {
   assertRequiredParams,
 } as const;
 
-export function createOpenClawCodingTools(options?: {
+export function createNeerCodingTools(options?: {
   exec?: ExecToolDefaults & ProcessToolDefaults;
   messageProvider?: string;
   agentAccountId?: string;
@@ -122,7 +135,7 @@ export function createOpenClawCodingTools(options?: {
   sessionKey?: string;
   agentDir?: string;
   workspaceDir?: string;
-  config?: OpenClawConfig;
+  config?: NeerConfig;
   abortSignal?: AbortSignal;
   /**
    * Provider of the currently selected model (used for provider-specific tool quirks).
@@ -251,7 +264,7 @@ export function createOpenClawCodingTools(options?: {
         return [createSandboxedReadTool(sandboxRoot)];
       }
       const freshReadTool = createReadTool(workspaceRoot);
-      return [createOpenClawReadTool(freshReadTool)];
+      return [createNeerReadTool(freshReadTool)];
     }
     if (tool.name === "bash" || tool.name === execToolName) {
       return [];
@@ -296,11 +309,11 @@ export function createOpenClawCodingTools(options?: {
     notifyOnExit: options?.exec?.notifyOnExit ?? execConfig.notifyOnExit,
     sandbox: sandbox
       ? {
-          containerName: sandbox.containerName,
-          workspaceDir: sandbox.workspaceDir,
-          containerWorkdir: sandbox.containerWorkdir,
-          env: sandbox.docker.env,
-        }
+        containerName: sandbox.containerName,
+        workspaceDir: sandbox.workspaceDir,
+        containerWorkdir: sandbox.containerWorkdir,
+        env: sandbox.docker.env,
+      }
       : undefined,
   });
   const processTool = createProcessTool({
@@ -311,9 +324,9 @@ export function createOpenClawCodingTools(options?: {
     !applyPatchEnabled || (sandboxRoot && !allowWorkspaceWrites)
       ? null
       : createApplyPatchTool({
-          cwd: sandboxRoot ?? workspaceRoot,
-          sandboxRoot: sandboxRoot && allowWorkspaceWrites ? sandboxRoot : undefined,
-        });
+        cwd: sandboxRoot ?? workspaceRoot,
+        sandboxRoot: sandboxRoot && allowWorkspaceWrites ? sandboxRoot : undefined,
+      });
   const tools: AnyAgentTool[] = [
     ...base,
     ...(sandboxRoot
@@ -326,7 +339,16 @@ export function createOpenClawCodingTools(options?: {
     processTool as unknown as AnyAgentTool,
     // Channel docking: include channel-defined agent tools (login, etc.).
     ...listChannelAgentTools({ cfg: options?.config }),
-    ...createOpenClawTools({
+    createGoalTool,
+    listGoalsTool,
+    completeGoalTool,
+    deleteGoalTool,
+    recordExperienceTool,
+    recallExperiencesTool,
+    generateImageTool,
+    uploadToTikTokTool,
+    generateInfluencerContentTool,
+    ...createNeerTools({
       sandboxBrowserBridgeUrl: sandbox?.browser?.bridgeUrl,
       allowHostBrowserControl: sandbox ? sandbox.browserAllowHostControl : true,
       agentSessionKey: options?.sessionKey,

@@ -1,6 +1,6 @@
-# @openclaw/voice-call
+# @neer/voice-call
 
-Official Voice Call plugin for **OpenClaw**.
+Official Voice Call plugin for **Neer**.
 
 Providers:
 
@@ -9,15 +9,15 @@ Providers:
 - **Plivo** (Voice API + XML transfer + GetInput speech)
 - **Mock** (dev/no network)
 
-Docs: `https://docs.openclaw.ai/plugins/voice-call`
-Plugin system: `https://docs.openclaw.ai/plugin`
+Docs: `https://docs.neer.ai/plugins/voice-call`
+Plugin system: `https://docs.neer.ai/plugin`
 
 ## Install (local dev)
 
-### Option A: install via OpenClaw (recommended)
+### Option A: install via Neer (recommended)
 
 ```bash
-openclaw plugins install @openclaw/voice-call
+neer plugins install @neer/voice-call
 ```
 
 Restart the Gateway afterwards.
@@ -25,9 +25,9 @@ Restart the Gateway afterwards.
 ### Option B: copy into your global extensions folder (dev)
 
 ```bash
-mkdir -p ~/.openclaw/extensions
-cp -R extensions/voice-call ~/.openclaw/extensions/voice-call
-cd ~/.openclaw/extensions/voice-call && pnpm install
+mkdir -p ~/.neer/extensions
+cp -R extensions/voice-call ~/.neer/extensions/voice-call
+cd ~/.neer/extensions/voice-call && pnpm install
 ```
 
 ## Config
@@ -103,13 +103,13 @@ Notes:
 ## CLI
 
 ```bash
-openclaw voicecall call --to "+15555550123" --message "Hello from OpenClaw"
-openclaw voicecall continue --call-id <id> --message "Any questions?"
-openclaw voicecall speak --call-id <id> --message "One moment"
-openclaw voicecall end --call-id <id>
-openclaw voicecall status --call-id <id>
-openclaw voicecall tail
-openclaw voicecall expose --mode funnel
+neer voicecall call --to "+15555550123" --message "Hello from Neer"
+neer voicecall continue --call-id <id> --message "Any questions?"
+neer voicecall speak --call-id <id> --message "One moment"
+neer voicecall end --call-id <id>
+neer voicecall status --call-id <id>
+neer voicecall tail
+neer voicecall expose --mode funnel
 ```
 
 ## Tool

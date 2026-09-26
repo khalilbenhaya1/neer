@@ -1,0 +1,12 @@
+
+> neer-desktop@0.0.1 start
+> tsc && electron .
+
+
+Starting Neer Core on port 52424...
+Failed to start Neer: Error: gateway auth mode is token, but no token was configured (set gateway.auth.token or NEER_GATEWAY_TOKEN)
+    at assertGatewayAuthConfigured (file:///C:/Users/khali/OneDrive/Desktop/Neer-folder/neer/dist/auth-D2vbibM9.js:360:9)
+    at resolveGatewayRuntimeConfig (file:///C:/Users/khali/OneDrive/Desktop/Neer-folder/neer/dist/server.impl-kzV0Kslw.js:17653:2)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async startGatewayServer (file:///C:/Users/khali/OneDrive/Desktop/Neer-folder/neer/dist/server.impl-kzV0Kslw.js:22272:24)
+    at async startApp (file:///C:/Users/khali/OneDrive/Desktop/Neer-folder/neer/apps/neer-desktop/dist/main.js:43:25)

@@ -38,6 +38,7 @@ export type SessionEntry = {
   systemSent?: boolean;
   abortedLastRun?: boolean;
   chatType?: SessionChatType;
+  channelType?: "voice" | "text";
   thinkingLevel?: string;
   verboseLevel?: string;
   reasoningLevel?: string;
@@ -57,13 +58,13 @@ export type SessionEntry = {
   groupActivationNeedsSystemIntro?: boolean;
   sendPolicy?: "allow" | "deny";
   queueMode?:
-    | "steer"
-    | "followup"
-    | "collect"
-    | "steer-backlog"
-    | "steer+backlog"
-    | "queue"
-    | "interrupt";
+  | "steer"
+  | "followup"
+  | "collect"
+  | "steer-backlog"
+  | "steer+backlog"
+  | "queue"
+  | "interrupt";
   queueDebounceMs?: number;
   queueCap?: number;
   queueDrop?: "old" | "new" | "summarize";

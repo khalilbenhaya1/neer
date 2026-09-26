@@ -1,0 +1,5 @@
+
+> neer-desktop@0.0.1 start
+> tsc && electron .
+
+src/main.ts(57,13): error TS2353: Object literal may only specify known properties, and 'gatewayAuthMode' does not exist in type 'GatewayServerOptions'.

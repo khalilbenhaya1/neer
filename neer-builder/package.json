@@ -1,0 +1,15 @@
+{
+    "name": "neer-builder",
+    "version": "1.0.0",
+    "description": "Isolated production build system for NEER",
+    "type": "module",
+    "private": true,
+    "scripts": {
+        "install-deps": "npm install"
+    },
+    "dependencies": {
+        "esbuild": "^0.25.0",
+        "javascript-obfuscator": "^4.1.1",
+        "pkg": "^5.8.1"
+    }
+}

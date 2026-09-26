@@ -39,40 +39,45 @@ export function formatCliBannerLine(version: string, options: BannerOptions = {}
   const commitLabel = commit ?? "unknown";
   const tagline = pickTagline(options);
   const rich = options.richTty ?? isRich();
-  const title = "🦞 OpenClaw";
-  const prefix = "🦞 ";
+  const title = "✨ neer";
+  const prefix = "✨ ";
   const columns = options.columns ?? process.stdout.columns ?? 120;
-  const plainFullLine = `${title} ${version} (${commitLabel}) — ${tagline}`;
-  const fitsOnOneLine = visibleWidth(plainFullLine) <= columns;
+  const designedBy = "Designed & Engineered by Khalil Benhaya";
+  const plainFullLine = `${title} ${version} (${commitLabel}) — ${tagline}\n${designedBy}`;
+  const fitsOnOneLine = visibleWidth(`${title} ${version} (${commitLabel}) — ${tagline}`) <= columns;
   if (rich) {
     if (fitsOnOneLine) {
       return `${theme.heading(title)} ${theme.info(version)} ${theme.muted(
         `(${commitLabel})`,
-      )} ${theme.muted("—")} ${theme.accentDim(tagline)}`;
+      )} ${theme.muted("—")} ${theme.accentDim(tagline)}\n${theme.muted(designedBy)}`;
     }
     const line1 = `${theme.heading(title)} ${theme.info(version)} ${theme.muted(
       `(${commitLabel})`,
     )}`;
     const line2 = `${" ".repeat(prefix.length)}${theme.accentDim(tagline)}`;
-    return `${line1}\n${line2}`;
+    const line3 = `${theme.muted(designedBy)}`;
+    return `${line1}\n${line2}\n${line3}`;
   }
   if (fitsOnOneLine) {
     return plainFullLine;
   }
   const line1 = `${title} ${version} (${commitLabel})`;
   const line2 = `${" ".repeat(prefix.length)}${tagline}`;
-  return `${line1}\n${line2}`;
+  const line3 = designedBy;
+  return `${line1}\n${line2}\n${line3}`;
 }
 
-const LOBSTER_ASCII = [
-  "▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄",
-  "██░▄▄▄░██░▄▄░██░▄▄▄██░▀██░██░▄▄▀██░████░▄▄▀██░███░██",
-  "██░███░██░▀▀░██░▄▄▄██░█░█░██░█████░████░▀▀░██░█░█░██",
-  "██░▀▀▀░██░█████░▀▀▀██░██▄░██░▀▀▄██░▀▀░█░██░██▄▀▄▀▄██",
-  "▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀",
-  "                  🦞 OPENCLAW 🦞                    ",
-  " ",
+const NEER_ASCII = [
+  "███╗   ██╗███████╗███████╗██████╗ ",
+  "████╗  ██║██╔════╝██╔════╝██╔══██╗",
+  "██╔██╗ ██║█████╗  █████╗  ██████╔╝",
+  "██║╚██╗██║██╔══╝  ██╔══╝  ██╔══██╗",
+  "██║ ╚████║███████╗███████╗██║  ██║",
+  "╚═╝  ╚═══╝╚══════╝╚══════╝╚═╝  ╚═╝",
+  "",
+  "   ✨ clarity in automation ✨",
 ];
+const LOBSTER_ASCII = NEER_ASCII;
 
 export function formatCliBannerArt(options: BannerOptions = {}): string {
   const rich = options.richTty ?? isRich();
@@ -94,12 +99,12 @@ export function formatCliBannerArt(options: BannerOptions = {}): string {
   };
 
   const colored = LOBSTER_ASCII.map((line) => {
-    if (line.includes("OPENCLAW")) {
+    if (line.includes("NEER")) {
       return (
         theme.muted("              ") +
-        theme.accent("🦞") +
-        theme.info(" OPENCLAW ") +
-        theme.accent("🦞")
+        theme.accent("✨") +
+        theme.info(" NEER ") +
+        theme.accent("✨")
       );
     }
     return splitGraphemes(line).map(colorChar).join("");

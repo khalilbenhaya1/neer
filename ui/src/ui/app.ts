@@ -27,6 +27,7 @@ import type {
   SkillStatusReport,
   StatusSummary,
   NostrProfile,
+  VoiceState,
 } from "./types.ts";
 import type { NostrProfileFormState } from "./views/channels.nostr-profile-form.ts";
 import {
@@ -42,6 +43,9 @@ import {
   handleWhatsAppStart as handleWhatsAppStartInternal,
   handleWhatsAppWait as handleWhatsAppWaitInternal,
 } from "./app-channels.ts";
+import {
+  handleToggleVoiceMode as handleToggleVoiceModeInternal,
+} from "./app-voice.ts";
 import {
   handleAbortChat as handleAbortChatInternal,
   handleSendChat as handleSendChatInternal,
@@ -77,13 +81,14 @@ import {
   type CompactionStatus,
 } from "./app-tool-stream.ts";
 import { resolveInjectedAssistantIdentity } from "./assistant-identity.ts";
+import { VoiceCallController } from "./controllers/voice-call.ts";
 import { loadAssistantIdentity as loadAssistantIdentityInternal } from "./controllers/assistant-identity.ts";
 import { loadSettings, type UiSettings } from "./storage.ts";
 import { type ChatAttachment, type ChatQueueItem, type CronFormState } from "./ui-types.ts";
 
 declare global {
   interface Window {
-    __OPENCLAW_CONTROL_UI_BASE_PATH__?: string;
+    __NEER_CONTROL_UI_BASE_PATH__?: string;
   }
 }
 
@@ -102,8 +107,8 @@ function resolveOnboardingMode(): boolean {
   return normalized === "1" || normalized === "true" || normalized === "yes" || normalized === "on";
 }
 
-@customElement("openclaw-app")
-export class OpenClawApp extends LitElement {
+@customElement("neer-app")
+export class NeerApp extends LitElement {
   @state() settings: UiSettings = loadSettings();
   @state() password = "";
   @state() tab: Tab = "chat";
@@ -121,6 +126,8 @@ export class OpenClawApp extends LitElement {
   @state() assistantName = injectedAssistantIdentity.name;
   @state() assistantAvatar = injectedAssistantIdentity.avatar;
   @state() assistantAgentId = injectedAssistantIdentity.agentId ?? null;
+  @state() gpuWorkload = 0;
+  @state() currentTask: string | null = null;
 
   @state() sessionKey = this.settings.sessionKey;
   @state() chatLoading = false;
@@ -137,6 +144,14 @@ export class OpenClawApp extends LitElement {
   @state() chatQueue: ChatQueueItem[] = [];
   @state() chatAttachments: ChatAttachment[] = [];
   @state() chatManualRefreshInFlight = false;
+  @state() chatRecording = false;
+  @state() chatTranscribing = false;
+  @state() chatVoiceMode = false;
+  @state() chatVoiceState: VoiceState = "idle";
+  @state() chatVoiceCallMode = false;
+  private mediaRecorder: MediaRecorder | null = null;
+  private audioChunks: Blob[] = [];
+  private recordingMaxTimer: number | null = null;
   // Sidebar state for tool output viewing
   @state() sidebarOpen = false;
   @state() sidebarContent: string | null = null;
@@ -431,6 +446,110 @@ export class OpenClawApp extends LitElement {
 
   async handleAbortChat() {
     await handleAbortChatInternal(this as unknown as Parameters<typeof handleAbortChatInternal>[0]);
+  }
+
+  async handleStartRecording() {
+    if (!this.connected || !this.client) {
+      this.lastError = "Connect to the gateway before recording.";
+      return;
+    }
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+      // Prefer webm/opus (Chromium), fall back to whatever the browser supports
+      const mimeType = MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
+        ? "audio/webm;codecs=opus"
+        : MediaRecorder.isTypeSupported("audio/webm")
+          ? "audio/webm"
+          : "audio/ogg";
+
+      this.mediaRecorder = new MediaRecorder(stream, { mimeType });
+      this.audioChunks = [];
+
+      this.mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          this.audioChunks.push(event.data);
+        }
+      };
+
+      this.mediaRecorder.onstop = async () => {
+        // Stop microphone tracks immediately
+        stream.getTracks().forEach((track) => track.stop());
+
+        const audioBlob = new Blob(this.audioChunks, { type: mimeType });
+        this.audioChunks = [];
+
+        // Browser-side size guard: 10 MB
+        if (audioBlob.size > 10 * 1024 * 1024) {
+          this.lastError = "Recording too large (max 10 MB). Please record a shorter clip.";
+          this.chatTranscribing = false;
+          return;
+        }
+
+        // Convert to base64
+        const reader = new FileReader();
+        reader.onloadend = async () => {
+          const b64 = (reader.result as string).split(",")[1] ?? "";
+          this.chatTranscribing = true;
+
+          try {
+            const resp = await this.client!.request("voice.transcribe", {
+              audioData: b64,
+              mimeType: mimeType.split(";")[0] ?? mimeType,
+              filename: "recording.webm",
+            }) as { text?: string; language?: string };
+
+            const transcribed = (resp?.text ?? "").trim();
+            if (!transcribed) {
+              this.lastError = "Whisper returned empty transcription. Speak clearly and try again.";
+              return;
+            }
+
+            // Inject as normal user message
+            this.chatMessage = transcribed;
+            await this.handleSendChat();
+          } catch (err) {
+            this.lastError = `Transcription failed: ${String(err)}`;
+          } finally {
+            this.chatTranscribing = false;
+          }
+        };
+        reader.readAsDataURL(audioBlob);
+      };
+
+      // Collect data in 250 ms chunks
+      this.mediaRecorder.start(250);
+      this.chatRecording = true;
+
+      // 2-minute safety limit
+      this.recordingMaxTimer = window.setTimeout(() => {
+        if (this.chatRecording) {
+          this.handleStopRecording();
+        }
+      }, 2 * 60 * 1000);
+    } catch (err) {
+      console.error("Microphone error:", err);
+      this.lastError = "Could not access microphone. Check browser permissions.";
+    }
+  }
+
+  handleStopRecording() {
+    if (this.recordingMaxTimer != null) {
+      window.clearTimeout(this.recordingMaxTimer);
+      this.recordingMaxTimer = null;
+    }
+    if (this.mediaRecorder && this.mediaRecorder.state !== "inactive") {
+      this.mediaRecorder.stop();
+      this.chatRecording = false;
+    }
+  }
+
+  handleToggleVoiceMode() {
+    handleToggleVoiceModeInternal(this as unknown as Parameters<typeof handleToggleVoiceModeInternal>[0]);
+  }
+
+  handleToggleVoiceCall() {
+    VoiceCallController.handleToggleVoiceCall(this);
   }
 
   removeQueuedMessage(id: string) {

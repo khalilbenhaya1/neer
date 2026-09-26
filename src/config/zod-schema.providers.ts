@@ -14,8 +14,48 @@ import {
 } from "./zod-schema.providers-core.js";
 import { WhatsAppConfigSchema } from "./zod-schema.providers-whatsapp.js";
 
-export * from "./zod-schema.providers-core.js";
-export * from "./zod-schema.providers-whatsapp.js";
+export {
+  TelegramTopicSchema,
+  TelegramGroupSchema,
+  TelegramAccountSchemaBase,
+  TelegramAccountSchema,
+  TelegramConfigSchema,
+  DiscordDmSchema,
+  DiscordGuildChannelSchema,
+  DiscordGuildSchema,
+  DiscordAccountSchema,
+  DiscordConfigSchema,
+  GoogleChatDmSchema,
+  GoogleChatGroupSchema,
+  GoogleChatAccountSchema,
+  GoogleChatConfigSchema,
+  SlackDmSchema,
+  SlackChannelSchema,
+  SlackThreadSchema,
+  SlackAccountSchema,
+  SlackConfigSchema,
+  SignalAccountSchemaBase,
+  SignalAccountSchema,
+  SignalConfigSchema,
+  IrcGroupSchema,
+  IrcNickServSchema,
+  IrcAccountSchemaBase,
+  IrcAccountSchema,
+  IrcConfigSchema,
+  IMessageAccountSchemaBase,
+  IMessageAccountSchema,
+  IMessageConfigSchema,
+  BlueBubblesAccountSchemaBase,
+  BlueBubblesAccountSchema,
+  BlueBubblesConfigSchema,
+  MSTeamsChannelSchema,
+  MSTeamsTeamSchema,
+  MSTeamsConfigSchema,
+} from "./zod-schema.providers-core.js";
+export {
+  WhatsAppAccountSchema,
+  WhatsAppConfigSchema,
+} from "./zod-schema.providers-whatsapp.js";
 export { ChannelHeartbeatVisibilitySchema } from "./zod-schema.channels.js";
 
 export const ChannelsSchema = z

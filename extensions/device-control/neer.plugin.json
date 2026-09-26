@@ -1,0 +1,8 @@
+{
+    "id": "device-control",
+    "configSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+    }
+}

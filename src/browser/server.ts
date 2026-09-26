@@ -61,7 +61,7 @@ function isAuthorizedBrowserRequest(
   }
 
   if (auth.password) {
-    const passwordHeader = firstHeaderValue(req.headers["x-openclaw-password"]).trim();
+    const passwordHeader = firstHeaderValue(req.headers["x-neer-password"]).trim();
     if (passwordHeader && safeEqualSecret(passwordHeader, auth.password)) {
       return true;
     }
@@ -132,7 +132,7 @@ export async function startBrowserControlServerFromConfig(): Promise<BrowserServ
     const s = app.listen(port, "127.0.0.1", () => resolve(s));
     s.once("error", reject);
   }).catch((err) => {
-    logServer.error(`openclaw browser server failed to bind 127.0.0.1:${port}: ${String(err)}`);
+    logServer.error(`neer browser server failed to bind 127.0.0.1:${port}: ${String(err)}`);
     return null;
   });
 
@@ -186,7 +186,7 @@ export async function stopBrowserControlServer(): Promise<void> {
       }
     }
   } catch (err) {
-    logServer.warn(`openclaw browser stop failed: ${String(err)}`);
+    logServer.warn(`neer browser stop failed: ${String(err)}`);
   }
 
   if (current.server) {

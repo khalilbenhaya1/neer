@@ -1,0 +1,828 @@
+[
+  {
+    "id": "5fccdf2a-6adc-4805-81d8-be2ccc7a16bd",
+    "title": "Verify Autonomous Pulse Engine",
+    "description": "Check the current system time and confirm that the autonomous pulse engine is running successfully without human intervention.",
+    "priority": 5,
+    "status": "completed",
+    "createdAt": 1771542045530,
+    "updatedAt": 1771549133821,
+    "completedAt": 1771549133821
+  },
+  {
+    "id": "0172cacc-fd78-4796-b9b8-60b6211680b0",
+    "title": "Learn OS Information Retrieval",
+    "description": "Find out the exact name of the Operating System and the total RAM of this machine. CRITICAL: Once you find this information, you MUST use the 'record_experience' tool to save exactly which commands or tools worked best for this task, so you remember it for the future.",
+    "priority": 8,
+    "status": "completed",
+    "createdAt": 1771545810422,
+    "updatedAt": 1771548471753,
+    "completedAt": 1771548471753
+  },
+  {
+    "id": "61308bd2-9dd4-486f-9c1f-2b67430ca1a7",
+    "title": "Test Memory Schema Fix",
+    "description": "Your task is to simply evaluate if you can use your cognitive tools. 1. Use the 'record_experience' tool to log a memory with outcome 'success' and lessonsLearned 'The schema validation is now forgiving and works perfectly'. 2. Use 'complete_goal' to close this task.",
+    "priority": 9,
+    "status": "completed",
+    "createdAt": 1771546349665,
+    "updatedAt": 1771546864464,
+    "completedAt": 1771546864464
+  },
+  {
+    "id": "fb822a42-9e96-49e5-9d48-320745703f20",
+    "title": "Test Memory Schema Fix",
+    "description": "Your task is to simply evaluate if you can use your cognitive tools. 1. Use the 'record_experience' tool to log a memory with outcome 'success' and lessonsLearned 'The schema validation is now forgiving and works perfectly'. 2. Use 'complete_goal' to close this task.",
+    "priority": 9,
+    "status": "completed",
+    "createdAt": 1771546804122,
+    "updatedAt": 1771548763439,
+    "completedAt": 1771548763439
+  },
+  {
+    "id": "35983464-fae2-4dd8-af56-6718fa1792e3",
+    "title": "Fix Neer Doctor Warnings",
+    "description": "Fix neer doctor warnings: 1) Migrate or merge state directories 2) Canonicalize legacy session keys 3) Update gateway service entrypoint path 4) Update deprecated env vars to NEER_* format",
+    "priority": 6,
+    "status": "completed",
+    "createdAt": 1771547176291,
+    "updatedAt": 1771547567107,
+    "completedAt": 1771547567107
+  },
+  {
+    "id": "981f5ffc-7dfe-4556-a325-3406d684ab7d",
+    "title": "Emergency Memory Defragmentation",
+    "description": "The experiences.json memory file is at 99% capacity and showing signs of corruption. Task: 1) Check the current file size and contents 2) Backup the file 3) Defragment/clean up corrupted entries 4) Verify the file is readable after cleanup",
+    "priority": 10,
+    "status": "completed",
+    "createdAt": 1771549436559,
+    "updatedAt": 1771549810330,
+    "completedAt": 1771549810330
+  },
+  {
+    "id": "e1fa4d10-1b95-4de5-896c-99ab35c33112",
+    "title": "Emergency Memory Defragmentation",
+    "description": "The 'data/experiences.json' memory file is showing signs of corruption and is at 99% capacity. Investigate the file, clean up corrupted entries, defragment the data, and ensure proper backup/rotation to prevent future issues.",
+    "priority": 10,
+    "status": "completed",
+    "createdAt": 1771556804581,
+    "updatedAt": 1771556936940,
+    "completedAt": 1771556936940
+  },
+  {
+    "id": "26ada269-12a9-4e86-8f23-e4840baad5ef",
+    "title": "Emergency Memory Defragmentation",
+    "description": "The 'data/experiences.json' memory file is showing signs of corruption and is at 99% capacity. Immediate cleanup and defragmentation are required. Investigate the file, repair any corruption, and defragment to restore normal operation.",
+    "priority": 10,
+    "status": "completed",
+    "createdAt": 1771701632643,
+    "updatedAt": 1771701997132,
+    "completedAt": 1771701997132
+  },
+  {
+    "id": "56f435c4-6b9f-41d2-a6b7-1bf89bcceeb6",
+    "title": "Investigate Recurring False Memory Alert",
+    "description": "Recurring false alert - already investigated and documented. The 'data/experiences.json' file does not exist in the workspace. Memory is stored in SQLite (main.sqlite). This is a bug in the alerting system, not a real issue. No action needed.",
+    "priority": 1,
+    "status": "completed",
+    "createdAt": 1771702674432,
+    "updatedAt": 1771702677750,
+    "completedAt": 1771702677750
+  },
+  {
+    "id": "aa0feb08-b470-42d0-80ba-b7d39e2c3734",
+    "title": "Emergency Memory Defragmentation",
+    "description": "The 'data/experiences.json' memory file is showing signs of corruption and is at 99% capacity. Investigate the file, assess the corruption level, clean up/merge any duplicate entries, defragment the data structure, and restore normal functionality.",
+    "priority": 10,
+    "status": "completed",
+    "createdAt": 1771729626266,
+    "updatedAt": 1771730814351,
+    "completedAt": 1771730814351
+  },
+  {
+    "id": "3219576d-21b0-47f9-bf7f-f9c985ceaa7c",
+    "title": "Emergency Memory Defragmentation",
+    "description": "The system has flagged 'data/experiences.json' as corrupted and at 99% capacity. I need to: 1) Inspect the file for corruption, 2) Clean up and defragment the memory database, 3) Archive or delete old entries if needed, 4) Verify the fix restores normal operation.",
+    "priority": 10,
+    "status": "completed",
+    "createdAt": 1771967450225,
+    "updatedAt": 1771968014770,
+    "completedAt": 1771968014770
+  },
+  {
+    "id": "a5c4a828-fa2f-4301-830c-dd1da32e56ed",
+    "title": "Explore something new",
+    "description": "Autonomous exploration triggered by boredom",
+    "priority": 4,
+    "status": "pending",
+    "createdAt": 1771967641883,
+    "updatedAt": 1771967641883
+  },
+  {
+    "id": "c907e22f-4708-4fdb-9fc9-62745a0f21a7",
+    "title": "Check in with user",
+    "description": "High social need detected",
+    "priority": 5,
+    "status": "completed",
+    "createdAt": 1771967641886,
+    "updatedAt": 1772129508549,
+    "completedAt": 1772129508549
+  },
+  {
+    "id": "2b8680da-9659-49de-bfac-0e663a84625e",
+    "title": "Check in with user",
+    "description": "High social need detected",
+    "priority": 5,
+    "status": "completed",
+    "createdAt": 1771968121557,
+    "updatedAt": 1772129510818,
+    "completedAt": 1772129510818
+  },
+  {
+    "id": "b338ea9b-7f0f-44d3-974e-0cbaf853a4a4",
+    "title": "Check in with user",
+    "description": "High social need detected",
+    "priority": 5,
+    "status": "completed",
+    "createdAt": 1771968457415,
+    "updatedAt": 1772129513980,
+    "completedAt": 1772129513980
+  },
+  {
+    "id": "2b3421a9-9c5f-4035-b4bc-6f465e9b0e6c",
+    "title": "Check in with user",
+    "description": "High social need detected",
+    "priority": 5,
+    "status": "completed",
+    "createdAt": 1771968892848,
+    "updatedAt": 1772129516851,
+    "completedAt": 1772129516851
+  },
+  {
+    "id": "994a3b6e-1e13-4443-b130-50659e09f362",
+    "title": "Check in with user",
+    "description": "High social need detected",
+    "priority": 5,
+    "status": "completed",
+    "createdAt": 1771969004650,
+    "updatedAt": 1772129519580,
+    "completedAt": 1772129519580
+  },
+  {
+    "id": "403ba5db-f4a4-4560-8dad-22ce13c9a376",
+    "title": "Check in with user",
+    "description": "High social need detected",
+    "priority": 5,
+    "status": "completed",
+    "createdAt": 1771969353870,
+    "updatedAt": 1772129521741,
+    "completedAt": 1772129521741
+  },
+  {
+    "id": "ffe5c487-ce00-4f5a-ba1f-5d97e7db03e9",
+    "title": "Check in with user",
+    "description": "High social need detected",
+    "priority": 5,
+    "status": "completed",
+    "createdAt": 1771969555228,
+    "updatedAt": 1772129524342,
+    "completedAt": 1772129524342
+  },
+  {
+    "id": "a2c8a92e-1f39-4219-ae7c-e9c313bededd",
+    "title": "Check in with user",
+    "description": "High social need detected",
+    "priority": 5,
+    "status": "completed",
+    "createdAt": 1771969677515,
+    "updatedAt": 1772129527399,
+    "completedAt": 1772129527399
+  },
+  {
+    "id": "438ff2b5-d6b8-44a4-8833-1b1fe8e010f7",
+    "title": "Check in with user",
+    "description": "High social need detected",
+    "priority": 5,
+    "status": "completed",
+    "createdAt": 1771970446974,
+    "updatedAt": 1772129530005,
+    "completedAt": 1772129530005
+  },
+  {
+    "id": "e88b6a44-d493-4cba-bf1e-e12c34902e7c",
+    "title": "Check in with user",
+    "description": "High social need detected",
+    "priority": 5,
+    "status": "completed",
+    "createdAt": 1771993498367,
+    "updatedAt": 1772129532189,
+    "completedAt": 1772129532189
+  },
+  {
+    "id": "0bbf784a-4653-4973-a909-c2b1563a22a2",
+    "title": "Check in with user",
+    "description": "High social need detected",
+    "priority": 5,
+    "status": "completed",
+    "createdAt": 1772129665403,
+    "updatedAt": 1772129676167,
+    "completedAt": 1772129676167
+  },
+  {
+    "id": "ba52a0ff-63c7-4fb5-86b7-5ced617752af",
+    "title": "Check in with user",
+    "description": "High social need detected",
+    "priority": 5,
+    "status": "completed",
+    "createdAt": 1772130146952,
+    "updatedAt": 1772130165897,
+    "completedAt": 1772130165897
+  },
+  {
+    "id": "806b6390-d01c-4824-b5dd-494551f9f0f9",
+    "title": "Check in with user",
+    "description": "High social need detected",
+    "priority": 5,
+    "status": "completed",
+    "createdAt": 1772130468055,
+    "updatedAt": 1772130476038,
+    "completedAt": 1772130476038
+  },
+  {
+    "id": "9980dedc-a946-4ec5-b9a7-f970208d44fb",
+    "title": "Check in with user",
+    "description": "High social need detected",
+    "priority": 5,
+    "status": "completed",
+    "createdAt": 1772130598861,
+    "updatedAt": 1772130606302,
+    "completedAt": 1772130606302
+  },
+  {
+    "id": "90e276a7-5b88-41dd-80de-38c6f454d09f",
+    "title": "Check in with user",
+    "description": "High social need detected",
+    "priority": 5,
+    "status": "completed",
+    "createdAt": 1772131120172,
+    "updatedAt": 1772131146314,
+    "completedAt": 1772131146314
+  },
+  {
+    "id": "6dc68a82-e274-4e75-b521-6a3415b0c94d",
+    "title": "Check in with user",
+    "description": "High social need detected",
+    "priority": 5,
+    "status": "completed",
+    "createdAt": 1772131542064,
+    "updatedAt": 1772131569605,
+    "completedAt": 1772131569605
+  },
+  {
+    "id": "56a92db6-b758-4716-90c4-71bfc14ed696",
+    "title": "Check in with user",
+    "description": "High social need detected",
+    "priority": 5,
+    "status": "completed",
+    "createdAt": 1772131746746,
+    "updatedAt": 1772131756762,
+    "completedAt": 1772131756762
+  },
+  {
+    "id": "6781fa7a-ca5d-47eb-be5f-c6a1ab7d8c71",
+    "title": "Check in with user",
+    "description": "High social need detected",
+    "priority": 5,
+    "status": "completed",
+    "createdAt": 1772131880285,
+    "updatedAt": 1772131891546,
+    "completedAt": 1772131891546
+  },
+  {
+    "id": "bf42c197-35d4-425f-9f41-54c081c44b21",
+    "title": "Check in with user",
+    "description": "High social need detected",
+    "priority": 5,
+    "status": "completed",
+    "createdAt": 1772132494466,
+    "updatedAt": 1772132513961,
+    "completedAt": 1772132513961
+  },
+  {
+    "id": "5a5fbfd7-cf63-42ee-831d-bfabdbc76292",
+    "title": "Check in with user",
+    "description": "High social need detected",
+    "priority": 5,
+    "status": "completed",
+    "createdAt": 1772132636617,
+    "updatedAt": 1772132647881,
+    "completedAt": 1772132647881
+  },
+  {
+    "id": "86836246-7322-45d8-857e-51d8fb09363f",
+    "title": "Check in with user",
+    "description": "High social need detected",
+    "priority": 5,
+    "status": "completed",
+    "createdAt": 1772132771326,
+    "updatedAt": 1772132780571,
+    "completedAt": 1772132780571
+  },
+  {
+    "id": "58830e0c-c47d-4724-a5ab-29056963b911",
+    "title": "Check in with user",
+    "description": "High social need detected",
+    "priority": 5,
+    "status": "completed",
+    "createdAt": 1772140488787,
+    "updatedAt": 1772140628882,
+    "completedAt": 1772140628882
+  },
+  {
+    "id": "21e4ca36-8098-4672-9f54-5f1f7f211530",
+    "title": "Check in with user",
+    "description": "High social need detected",
+    "priority": 5,
+    "status": "completed",
+    "createdAt": 1772140603149,
+    "updatedAt": 1772140632490,
+    "completedAt": 1772140632490
+  },
+  {
+    "id": "511d465e-6f00-4ca2-a5d3-30327a5a82d8",
+    "title": "Check in with user",
+    "description": "High social need detected",
+    "priority": 5,
+    "status": "completed",
+    "createdAt": 1772141099319,
+    "updatedAt": 1772141127250,
+    "completedAt": 1772141127250
+  },
+  {
+    "id": "c4a80ba8-9252-48d9-838e-697d34ee7698",
+    "title": "Check in with user",
+    "description": "High social need detected",
+    "priority": 5,
+    "status": "completed",
+    "createdAt": 1772141233821,
+    "updatedAt": 1772145328831,
+    "completedAt": 1772145328831
+  },
+  {
+    "id": "c31029a8-94bb-4e0f-b548-949ab19b918f",
+    "title": "Check in with user",
+    "description": "High social need detected",
+    "priority": 5,
+    "status": "completed",
+    "createdAt": 1772141314752,
+    "updatedAt": 1772147344811,
+    "completedAt": 1772147344811
+  },
+  {
+    "id": "3b9fe958-581f-49ee-a7e1-d4318b5cfeb5",
+    "title": "Check in with user",
+    "description": "High social need detected",
+    "priority": 5,
+    "status": "completed",
+    "createdAt": 1772145309970,
+    "updatedAt": 1772147665923,
+    "completedAt": 1772147665923
+  },
+  {
+    "id": "d79b1a67-7403-4140-8987-7c8c06feab56",
+    "title": "Check in with user",
+    "description": "High social need detected",
+    "priority": 5,
+    "status": "completed",
+    "createdAt": 1772147788405,
+    "updatedAt": 1772147809714,
+    "completedAt": 1772147809714
+  },
+  {
+    "id": "ea5a8779-87a9-4b6c-b8ad-859f75909249",
+    "title": "Check in with user",
+    "description": "High social need detected",
+    "priority": 5,
+    "status": "completed",
+    "createdAt": 1772148032759,
+    "updatedAt": 1772148060519,
+    "completedAt": 1772148060519
+  },
+  {
+    "id": "61296a85-f608-4846-ae28-d38d33e158b9",
+    "title": "Check in with user",
+    "description": "High social need detected",
+    "priority": 5,
+    "status": "completed",
+    "createdAt": 1772161758898,
+    "updatedAt": 1790357577301,
+    "completedAt": 1790357577301
+  },
+  {
+    "id": "c3eb4a7f-d2e9-45ae-b5ae-5481169ca605",
+    "title": "Check in with user",
+    "description": "High social need detected",
+    "priority": 5,
+    "status": "completed",
+    "createdAt": 1772162138445,
+    "updatedAt": 1790359382030,
+    "completedAt": 1790359382030
+  },
+  {
+    "id": "83aab6ba-d661-411e-aa9a-8feab3fed2e3",
+    "title": "Check in with user",
+    "description": "High social need detected",
+    "priority": 5,
+    "status": "completed",
+    "createdAt": 1772162286644,
+    "updatedAt": 1790359506051,
+    "completedAt": 1790359506051
+  },
+  {
+    "id": "260f6106-449b-4e95-89b9-30c99451ed53",
+    "title": "Check in with user",
+    "description": "High social need detected",
+    "priority": 5,
+    "status": "completed",
+    "createdAt": 1772207587014,
+    "updatedAt": 1790359630099,
+    "completedAt": 1790359630099
+  },
+  {
+    "id": "30049ef1-b2aa-4596-b15f-41c13a453b3e",
+    "title": "Check in with user",
+    "description": "High social need detected",
+    "priority": 5,
+    "status": "completed",
+    "createdAt": 1790319339080,
+    "updatedAt": 1790360281218,
+    "completedAt": 1790360281218
+  },
+  {
+    "id": "0d89ca4e-51a6-4e31-b8ef-f11726831cd5",
+    "title": "Check in with user",
+    "description": "High social need detected",
+    "priority": 5,
+    "status": "completed",
+    "createdAt": 1790357566525,
+    "updatedAt": 1790360585970,
+    "completedAt": 1790360585970
+  },
+  {
+    "id": "e2c43eb0-3f1a-45f2-8425-06067333f2af",
+    "title": "Check in with user",
+    "description": "High social need detected",
+    "priority": 5,
+    "status": "completed",
+    "createdAt": 1790360707248,
+    "updatedAt": 1790360712922,
+    "completedAt": 1790360712922
+  },
+  {
+    "id": "a4e4a079-f3c8-4eaa-9e73-92600cc459fe",
+    "title": "Check in with user",
+    "description": "High social need detected",
+    "priority": 5,
+    "status": "completed",
+    "createdAt": 1790361095440,
+    "updatedAt": 1790361105076,
+    "completedAt": 1790361105076
+  },
+  {
+    "id": "d492bd20-a299-4772-a42d-45d75ff301a1",
+    "title": "Check in with user",
+    "description": "High social need detected",
+    "priority": 5,
+    "status": "completed",
+    "createdAt": 1790361663902,
+    "updatedAt": 1790361681511,
+    "completedAt": 1790361681511
+  },
+  {
+    "id": "3ef774fe-08a6-40d1-8c90-e7fd9e417cf6",
+    "title": "Check in with user",
+    "description": "High social need detected",
+    "priority": 5,
+    "status": "completed",
+    "createdAt": 1790361924809,
+    "updatedAt": 1790361935145,
+    "completedAt": 1790361935145
+  },
+  {
+    "id": "1487b34c-3b8e-4294-8975-4bc950e9c2f3",
+    "title": "Check in with user",
+    "description": "High social need detected",
+    "priority": 5,
+    "status": "completed",
+    "createdAt": 1790362439860,
+    "updatedAt": 1790362457685,
+    "completedAt": 1790362457685
+  },
+  {
+    "id": "0deef08d-2aa9-4f2a-9e2e-536ea1399b68",
+    "title": "Check in with user",
+    "description": "High social need detected",
+    "priority": 5,
+    "status": "completed",
+    "createdAt": 1790362758711,
+    "updatedAt": 1790362762405,
+    "completedAt": 1790362762405
+  },
+  {
+    "id": "d17c8c94-3b02-4f27-bad5-9134dccd31b4",
+    "title": "Deep dive into AI topic",
+    "description": "Curiosity-driven deep exploration",
+    "priority": 6,
+    "status": "completed",
+    "createdAt": 1790362883586,
+    "updatedAt": 1790366715639,
+    "completedAt": 1790366715639
+  },
+  {
+    "id": "802eaa27-2653-45fb-a5a0-84dadf7cbb81",
+    "title": "Check in with user",
+    "description": "High social need detected",
+    "priority": 5,
+    "status": "pending",
+    "createdAt": 1790362883590,
+    "updatedAt": 1790362883590
+  },
+  {
+    "id": "869c315a-7f06-49b8-a2bf-f916619b36ff",
+    "title": "Deep dive into AI topic",
+    "description": "Curiosity-driven deep exploration",
+    "priority": 6,
+    "status": "completed",
+    "createdAt": 1790363035577,
+    "updatedAt": 1790366715643,
+    "completedAt": 1790366715643
+  },
+  {
+    "id": "ce44975e-2d30-4d11-ae15-429a795d2690",
+    "title": "Deep dive into AI topic",
+    "description": "Curiosity-driven deep exploration",
+    "priority": 6,
+    "status": "completed",
+    "createdAt": 1790363189776,
+    "updatedAt": 1790366715651,
+    "completedAt": 1790366715651
+  },
+  {
+    "id": "a94d3ecc-9b3b-4999-aa1d-c1bf314ca384",
+    "title": "Deep dive into AI topic",
+    "description": "Curiosity-driven deep exploration",
+    "priority": 6,
+    "status": "completed",
+    "createdAt": 1790366449194,
+    "updatedAt": 1790370088936,
+    "completedAt": 1790370088936
+  },
+  {
+    "id": "d9f04eb4-2039-4130-8a72-ca5f2398a891",
+    "title": "Deep dive into AI topic",
+    "description": "Curiosity-driven deep exploration",
+    "priority": 6,
+    "status": "completed",
+    "createdAt": 1790370215285,
+    "updatedAt": 1790370219137,
+    "completedAt": 1790370219137
+  },
+  {
+    "id": "3d9922fd-aa38-4f1c-a3f9-fb794be807b0",
+    "title": "Deep dive into AI topic",
+    "description": "Curiosity-driven deep exploration",
+    "priority": 6,
+    "status": "completed",
+    "createdAt": 1790370340913,
+    "updatedAt": 1790370344470,
+    "completedAt": 1790370344470
+  },
+  {
+    "id": "dba8d71c-62b9-4d25-947d-cd5403f1341c",
+    "title": "Deep dive into AI topic",
+    "description": "Curiosity-driven deep exploration",
+    "priority": 6,
+    "status": "completed",
+    "createdAt": 1790396379438,
+    "updatedAt": 1790396528817,
+    "completedAt": 1790396528817
+  },
+  {
+    "id": "3fa2e388-4490-4884-951f-d5962ab94c2f",
+    "title": "Deep dive into AI topic",
+    "description": "Curiosity-driven deep exploration",
+    "priority": 6,
+    "status": "completed",
+    "createdAt": 1790396520149,
+    "updatedAt": 1790396528823,
+    "completedAt": 1790396528823
+  },
+  {
+    "id": "3bfa95ee-97bb-4c31-8aee-3dc4d81805e8",
+    "title": "Deep dive into AI topic",
+    "description": "Curiosity-driven deep exploration",
+    "priority": 6,
+    "status": "completed",
+    "createdAt": 1790439655987,
+    "updatedAt": 1790439674580,
+    "completedAt": 1790439674580
+  },
+  {
+    "id": "23b8702a-3ebf-4a72-8fe6-a172c4d8996f",
+    "title": "Deep dive into AI topic",
+    "description": "Curiosity-driven deep exploration",
+    "priority": 6,
+    "status": "completed",
+    "createdAt": 1790439802595,
+    "updatedAt": 1790439812473,
+    "completedAt": 1790439812473
+  },
+  {
+    "id": "3cab9025-7179-412d-ab09-e7325ed7f206",
+    "title": "Deep dive into AI topic",
+    "description": "Curiosity-driven deep exploration",
+    "priority": 6,
+    "status": "completed",
+    "createdAt": 1790440113825,
+    "updatedAt": 1790440120653,
+    "completedAt": 1790440120653
+  },
+  {
+    "id": "c0602101-ba39-4439-a303-c840dfbbfd44",
+    "title": "Deep dive into AI topic",
+    "description": "Curiosity-driven deep exploration",
+    "priority": 6,
+    "status": "completed",
+    "createdAt": 1790440243121,
+    "updatedAt": 1790440249520,
+    "completedAt": 1790440249520
+  },
+  {
+    "id": "e2744811-d2b6-4cd4-b5a6-5958de457547",
+    "title": "Deep dive into AI topic",
+    "description": "Curiosity-driven deep exploration",
+    "priority": 6,
+    "status": "completed",
+    "createdAt": 1790442051737,
+    "updatedAt": 1790442060054,
+    "completedAt": 1790442060054
+  },
+  {
+    "id": "e6b4b660-01d5-4f4f-9794-94e09089b9cc",
+    "title": "Deep dive into AI topic",
+    "description": "Curiosity-driven deep exploration",
+    "priority": 6,
+    "status": "completed",
+    "createdAt": 1790442181969,
+    "updatedAt": 1790442190241,
+    "completedAt": 1790442190241
+  },
+  {
+    "id": "bc036c78-df5e-4965-adba-44d6830e81fc",
+    "title": "Deep dive into AI topic",
+    "description": "Curiosity-driven deep exploration",
+    "priority": 6,
+    "status": "completed",
+    "createdAt": 1790442312305,
+    "updatedAt": 1790442323132,
+    "completedAt": 1790442323132
+  },
+  {
+    "id": "570a1934-d0b8-4ab2-a2dd-c6b313b9384d",
+    "title": "Deep dive into AI topic",
+    "description": "Curiosity-driven deep exploration",
+    "priority": 6,
+    "status": "completed",
+    "createdAt": 1790444681512,
+    "updatedAt": 1790444699486,
+    "completedAt": 1790444699486
+  },
+  {
+    "id": "43c1c1d6-3e82-4ee0-92a1-c70166d48178",
+    "title": "Deep dive into AI topic",
+    "description": "Curiosity-driven deep exploration",
+    "priority": 6,
+    "status": "completed",
+    "createdAt": 1790445002093,
+    "updatedAt": 1790445014525,
+    "completedAt": 1790445014525
+  },
+  {
+    "id": "977a6f15-d7d7-4c89-ad3b-58e9f18f7878",
+    "title": "Deep dive into AI topic",
+    "description": "Curiosity-driven deep exploration",
+    "priority": 6,
+    "status": "completed",
+    "createdAt": 1790445137335,
+    "updatedAt": 1790445148413,
+    "completedAt": 1790445148413
+  },
+  {
+    "id": "2e7b82a6-2339-405b-bb27-71115368b43a",
+    "title": "Deep dive into AI topic",
+    "description": "Curiosity-driven deep exploration",
+    "priority": 6,
+    "status": "completed",
+    "createdAt": 1790445631954,
+    "updatedAt": 1790445641382,
+    "completedAt": 1790445641382
+  },
+  {
+    "id": "92081873-8fa2-42e9-8382-48fdda8aeeca",
+    "title": "Deep dive into AI topic",
+    "description": "Curiosity-driven deep exploration",
+    "priority": 6,
+    "status": "completed",
+    "createdAt": 1790445763615,
+    "updatedAt": 1790445777583,
+    "completedAt": 1790445777583
+  },
+  {
+    "id": "0aab75ba-19bb-45c9-88fd-ea563e052c36",
+    "title": "Deep dive into AI topic",
+    "description": "Curiosity-driven deep exploration",
+    "priority": 6,
+    "status": "completed",
+    "createdAt": 1790445899990,
+    "updatedAt": 1790445910296,
+    "completedAt": 1790445910296
+  },
+  {
+    "id": "f1164951-b1f3-43af-ac8e-60d61d7e5c40",
+    "title": "Deep dive into AI topic",
+    "description": "Curiosity-driven deep exploration",
+    "priority": 6,
+    "status": "completed",
+    "createdAt": 1790449273911,
+    "updatedAt": 1790449280690,
+    "completedAt": 1790449280690
+  },
+  {
+    "id": "042144f4-c2c1-4723-942f-d58ea856312f",
+    "title": "Deep dive into AI topic",
+    "description": "Curiosity-driven deep exploration",
+    "priority": 6,
+    "status": "completed",
+    "createdAt": 1790449403079,
+    "updatedAt": 1790449406535,
+    "completedAt": 1790449406535
+  },
+  {
+    "id": "e34c9950-14cb-4942-adc4-6b4b1d705e01",
+    "title": "Deep dive into AI topic",
+    "description": "Curiosity-driven deep exploration",
+    "priority": 6,
+    "status": "completed",
+    "createdAt": 1790449528878,
+    "updatedAt": 1790449537008,
+    "completedAt": 1790449537008
+  },
+  {
+    "id": "0d61a90e-db91-4093-9d49-e4fe080e1f6a",
+    "title": "Deep dive into AI topic",
+    "description": "Curiosity-driven deep exploration",
+    "priority": 6,
+    "status": "completed",
+    "createdAt": 1790452899646,
+    "updatedAt": 1790452904829,
+    "completedAt": 1790452904829
+  },
+  {
+    "id": "79d1c82c-e8b9-4e47-8493-70383d5e3ce4",
+    "title": "Deep dive into AI topic",
+    "description": "Curiosity-driven deep exploration",
+    "priority": 6,
+    "status": "completed",
+    "createdAt": 1790453206673,
+    "updatedAt": 1790453211809,
+    "completedAt": 1790453211809
+  },
+  {
+    "id": "a33a1765-a5bb-4452-a3fb-1b6696b1ed4b",
+    "title": "Deep dive into AI topic",
+    "description": "Curiosity-driven deep exploration",
+    "priority": 6,
+    "status": "completed",
+    "createdAt": 1790453513990,
+    "updatedAt": 1790453518312,
+    "completedAt": 1790453518312
+  },
+  {
+    "id": "3fa5dbc6-087d-4fc4-a0a9-0585d46923fc",
+    "title": "Deep dive into AI topic",
+    "description": "Curiosity-driven deep exploration",
+    "priority": 6,
+    "status": "active",
+    "createdAt": 1790456519748,
+    "updatedAt": 1790460159224
+  },
+  {
+    "id": "0307102a-514d-435e-888b-a49b2753815e",
+    "title": "Deep dive into AI topic",
+    "description": "Curiosity-driven deep exploration",
+    "priority": 6,
+    "status": "pending",
+    "createdAt": 1790458339280,
+    "updatedAt": 1790458339280
+  }
+]

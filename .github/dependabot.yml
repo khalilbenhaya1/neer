@@ -50,7 +50,7 @@ updates:
 
   # Swift Package Manager - macOS app
   - package-ecosystem: swift
-    directory: /apps/macos
+    directory: /apps/neer-macos
     schedule:
       interval: weekly
     cooldown:
@@ -98,7 +98,7 @@ updates:
 
   # Gradle - Android app
   - package-ecosystem: gradle
-    directory: /apps/android
+    directory: /apps/neer-android
     schedule:
       interval: weekly
     cooldown:

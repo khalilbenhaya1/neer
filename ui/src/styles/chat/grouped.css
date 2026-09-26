@@ -1,15 +1,14 @@
 /* =============================================
-   GROUPED CHAT LAYOUT (Slack-style)
+   GROUPED CHAT LAYOUT — ChatGPT-style bubbles
    ============================================= */
 
-/* Chat Group Layout - default (assistant/other on left) */
+/* Chat Group Layout — assistant/other on left */
 .chat-group {
   display: flex;
   gap: 12px;
   align-items: flex-start;
-  margin-bottom: 16px;
-  margin-left: 4px;
-  margin-right: 16px;
+  margin-bottom: 8px;
+  padding: 0 8px;
 }
 
 /* User messages on right */
@@ -22,7 +21,7 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
-  max-width: min(900px, calc(100% - 60px));
+  max-width: min(680px, calc(100% - 56px));
 }
 
 /* User messages align content right */
@@ -37,21 +36,23 @@
 /* Footer at bottom of message group (role + time) */
 .chat-group-footer {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   align-items: baseline;
-  margin-top: 6px;
+  margin-top: 4px;
+  padding: 0 4px;
 }
 
 .chat-sender-name {
-  font-weight: 500;
-  font-size: 12px;
+  font-weight: 600;
+  font-size: 11px;
   color: var(--muted);
+  letter-spacing: 0.02em;
 }
 
 .chat-group-timestamp {
-  font-size: 11px;
+  font-size: 10px;
   color: var(--muted);
-  opacity: 0.7;
+  opacity: 0.5;
 }
 
 /* Chat divider (e.g., compaction marker) */
@@ -59,10 +60,10 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  margin: 18px 8px;
+  margin: 24px 12px;
   color: var(--muted);
-  font-size: 11px;
-  letter-spacing: 0.08em;
+  font-size: 10px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   user-select: none;
 }
@@ -71,7 +72,7 @@
   flex: 1 1 0;
   height: 1px;
   background: var(--border);
-  opacity: 0.9;
+  opacity: 0.6;
 }
 
 .chat-divider__label {
@@ -79,40 +80,42 @@
   border: 1px solid var(--border);
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.02);
+  font-size: 10px;
 }
 
-/* Avatar Styles */
+/* ── Avatar ── */
 .chat-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  border-radius: 50%;
   background: var(--panel-strong);
   display: grid;
   place-items: center;
-  font-weight: 600;
-  font-size: 14px;
+  font-weight: 700;
+  font-size: 13px;
   flex-shrink: 0;
-  align-self: flex-end; /* Align with last message in group */
-  margin-bottom: 4px; /* Optical alignment */
+  align-self: flex-end;
+  margin-bottom: 6px;
+  border: 1.5px solid var(--border);
 }
 
 .chat-avatar.user {
-  background: var(--accent-subtle);
-  color: var(--accent);
+  background: rgba(124, 58, 237, 0.2);
+  border-color: rgba(124, 58, 237, 0.4);
+  color: #a78bfa;
 }
 
 .chat-avatar.assistant {
-  background: var(--secondary);
-  color: var(--muted);
+  background: rgba(16, 185, 129, 0.12);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: #34d399;
 }
 
-.chat-avatar.other {
-  background: var(--secondary);
-  color: var(--muted);
-}
-
+.chat-avatar.other,
 .chat-avatar.tool {
-  background: var(--secondary);
+  background: var(--panel-strong);
+  border-color: var(--border);
   color: var(--muted);
 }
 
@@ -123,26 +126,44 @@ img.chat-avatar {
   object-position: center;
 }
 
-/* Minimal Bubble Design - dynamic width based on content */
+/* ── Bubbles — ChatGPT style ── */
 .chat-bubble {
   position: relative;
   display: inline-block;
-  border: 1px solid transparent;
-  background: var(--card);
-  border-radius: var(--radius-lg);
-  padding: 10px 14px;
-  box-shadow: none;
-  transition:
-    background 150ms ease-out,
-    border-color 150ms ease-out;
+  border-radius: 18px;
+  padding: 10px 16px;
   max-width: 100%;
   word-wrap: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.6;
+  font-size: 14px;
+  border: 1px solid transparent;
+  transition: background 150ms ease-out;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Assistant bubble — left, subtle glass */
+.chat-group.assistant .chat-bubble,
+.chat-group.other .chat-bubble {
+  background: rgba(20, 20, 30, 0.65);
+  border-color: rgba(255, 255, 255, 0.07);
+  border-radius: 4px 18px 18px 18px;
+}
+
+/* User bubble — right, purple glass */
+.chat-group.user .chat-bubble {
+  background: rgba(124, 58, 237, 0.18);
+  border-color: rgba(124, 58, 237, 0.3);
+  color: #e2d9f3;
+  border-radius: 18px 4px 18px 18px;
 }
 
 .chat-bubble.has-copy {
   padding-right: 36px;
 }
 
+/* ── Copy button ── */
 .chat-copy-btn {
   position: absolute;
   top: 6px;
@@ -157,9 +178,7 @@ img.chat-avatar {
   cursor: pointer;
   opacity: 0;
   pointer-events: none;
-  transition:
-    opacity 120ms ease-out,
-    background 120ms ease-out;
+  transition: opacity 120ms ease-out, background 120ms ease-out;
 }
 
 .chat-copy-btn__icon {
@@ -243,58 +262,113 @@ img.chat-avatar {
   }
 }
 
-/* Light mode: restore borders */
-:root[data-theme="light"] .chat-bubble {
-  border-color: var(--border);
-  box-shadow: inset 0 1px 0 var(--card-highlight);
-}
-
-.chat-bubble:hover {
-  background: var(--bg-hover);
-}
-
-/* User bubbles have different styling */
-.chat-group.user .chat-bubble {
-  background: var(--accent-subtle);
-  border-color: transparent;
-}
-
-:root[data-theme="light"] .chat-group.user .chat-bubble {
-  border-color: rgba(234, 88, 12, 0.2);
-  background: rgba(251, 146, 60, 0.12);
+/* ── Hover states ── */
+.chat-group.assistant .chat-bubble:hover,
+.chat-group.other .chat-bubble:hover {
+  background: rgba(30, 30, 45, 0.75);
 }
 
 .chat-group.user .chat-bubble:hover {
-  background: rgba(255, 77, 77, 0.15);
+  background: rgba(124, 58, 237, 0.25);
 }
 
-/* Streaming animation */
+/* ── Light theme ── */
+:root[data-theme="light"] .chat-group.assistant .chat-bubble,
+:root[data-theme="light"] .chat-group.other .chat-bubble {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+}
+
+:root[data-theme="light"] .chat-group.user .chat-bubble {
+  background: rgba(124, 58, 237, 0.08);
+  border-color: rgba(124, 58, 237, 0.2);
+  color: #4c1d95;
+}
+
+/* ── Streaming animation ── */
 .chat-bubble.streaming {
   animation: pulsing-border 1.5s ease-out infinite;
 }
 
 @keyframes pulsing-border {
+
   0%,
   100% {
     border-color: var(--border);
   }
+
   50% {
-    border-color: var(--accent);
+    border-color: rgba(124, 58, 237, 0.6);
+    box-shadow: 0 0 12px rgba(124, 58, 237, 0.2);
   }
 }
 
-/* Fade-in animation for new messages */
+/* ── Fade-in for new messages ── */
 .chat-bubble.fade-in {
-  animation: fade-in 200ms ease-out;
+  animation: chat-fade-in 250ms ease-out;
 }
 
-@keyframes fade-in {
+@keyframes chat-fade-in {
   from {
     opacity: 0;
-    transform: translateY(4px);
+    transform: translateY(6px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* ── Reading indicator (three dots) ── */
+.chat-reading-indicator {
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 16px;
+  min-width: 60px;
+  background: rgba(20, 20, 30, 0.65);
+  border-color: rgba(255, 255, 255, 0.07);
+  border-radius: 4px 18px 18px 18px;
+}
+
+.chat-reading-indicator__dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.chat-reading-indicator__dots span {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(124, 58, 237, 0.7);
+  animation: typing-dot 1.4s ease-in-out infinite;
+}
+
+.chat-reading-indicator__dots span:nth-child(1) {
+  animation-delay: 0ms;
+}
+
+.chat-reading-indicator__dots span:nth-child(2) {
+  animation-delay: 200ms;
+}
+
+.chat-reading-indicator__dots span:nth-child(3) {
+  animation-delay: 400ms;
+}
+
+@keyframes typing-dot {
+
+  0%,
+  80%,
+  100% {
+    opacity: 0.25;
+    transform: scale(0.8);
+  }
+
+  40% {
+    opacity: 1;
+    transform: scale(1);
   }
 }

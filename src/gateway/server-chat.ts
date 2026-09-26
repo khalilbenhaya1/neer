@@ -2,6 +2,7 @@ import { normalizeVerboseLevel } from "../auto-reply/thinking.js";
 import { loadConfig } from "../config/config.js";
 import { type AgentEventPayload, getAgentRunContext } from "../infra/agent-events.js";
 import { resolveHeartbeatVisibility } from "../infra/heartbeat-visibility.js";
+import { activityTracker } from "../cognition/activity.js";
 import { loadSessionEntry } from "./session-utils.js";
 import { formatForLog } from "./ws-log.js";
 
@@ -271,10 +272,10 @@ export function createAgentEventHandler({
         state: "final" as const,
         message: text
           ? {
-              role: "assistant",
-              content: [{ type: "text", text }],
-              timestamp: Date.now(),
-            }
+            role: "assistant",
+            content: [{ type: "text", text }],
+            timestamp: Date.now(),
+          }
           : undefined,
       };
       // Suppress webchat broadcast for heartbeat runs when showOk is false
@@ -332,11 +333,11 @@ export function createAgentEventHandler({
     const toolPayload =
       isToolEvent && toolVerbose !== "full"
         ? (() => {
-            const data = evt.data ? { ...evt.data } : {};
-            delete data.result;
-            delete data.partialResult;
-            return sessionKey ? { ...evt, sessionKey, data } : { ...evt, data };
-          })()
+          const data = evt.data ? { ...evt.data } : {};
+          delete data.result;
+          delete data.partialResult;
+          return sessionKey ? { ...evt, sessionKey, data } : { ...evt, data };
+        })()
         : agentPayload;
     if (evt.seq !== last + 1) {
       broadcast("agent", {
@@ -353,6 +354,7 @@ export function createAgentEventHandler({
     }
     agentRunSeq.set(evt.runId, evt.seq);
     if (isToolEvent) {
+      activityTracker.registerActivity(2);
       // Always broadcast tool events to registered WS recipients with
       // tool-events capability, regardless of verboseLevel. The verbose
       // setting only controls whether tool details are sent as channel
@@ -374,11 +376,36 @@ export function createAgentEventHandler({
       if (!isToolEvent || toolVerbose !== "off") {
         nodeSendToSession(sessionKey, "agent", isToolEvent ? toolPayload : agentPayload);
       }
+
+      // Inject Avatar Emotion Updates based on Lifecycle
+      if (lifecyclePhase === "start") {
+        broadcast("avatar_emotion_update", {
+          emotional_bias: "focused",
+          stress: 0.3
+        });
+      }
+
       if (!isAborted && evt.stream === "assistant" && typeof evt.data?.text === "string") {
         emitChatDelta(sessionKey, clientRunId, evt.seq, evt.data.text);
       } else if (!isAborted && (lifecyclePhase === "end" || lifecyclePhase === "error")) {
+
+        // Broadcast Completion/Error Emotion
+        if (lifecyclePhase === "end") {
+          broadcast("avatar_emotion_update", {
+            emotional_bias: "playful",
+            confidence: 0.8,
+            stress: 0.1
+          });
+        } else {
+          broadcast("avatar_emotion_update", {
+            emotional_bias: "concerned",
+            stress: 0.6
+          });
+        }
+
         if (chatLink) {
           const finished = chatRunState.registry.shift(evt.runId);
+          // ...
           if (!finished) {
             clearAgentRunContext(evt.runId);
             return;

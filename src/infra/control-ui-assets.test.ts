@@ -10,7 +10,7 @@ import {
   resolveControlUiRootOverrideSync,
   resolveControlUiRootSync,
 } from "./control-ui-assets.js";
-import { resolveOpenClawPackageRoot } from "./openclaw-root.js";
+import { resolveNeerPackageRoot } from "./neer-root.js";
 
 /** Try to create a symlink; returns false if the OS denies it (Windows CI without Developer Mode). */
 async function trySymlink(target: string, linkPath: string): Promise<boolean> {
@@ -32,7 +32,7 @@ async function canonicalPath(p: string): Promise<string> {
 
 describe("control UI assets helpers", () => {
   it("resolves repo root from src argv1", async () => {
-    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-ui-"));
+    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "neer-ui-"));
     try {
       await fs.mkdir(path.join(tmp, "ui"), { recursive: true });
       await fs.writeFile(path.join(tmp, "ui", "vite.config.ts"), "export {};\n");
@@ -47,7 +47,7 @@ describe("control UI assets helpers", () => {
   });
 
   it("resolves repo root from dist argv1", async () => {
-    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-ui-"));
+    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "neer-ui-"));
     try {
       await fs.mkdir(path.join(tmp, "ui"), { recursive: true });
       await fs.writeFile(path.join(tmp, "ui", "vite.config.ts"), "export {};\n");
@@ -70,7 +70,7 @@ describe("control UI assets helpers", () => {
   });
 
   it("resolves control-ui root for dist bundle argv1", async () => {
-    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-ui-"));
+    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "neer-ui-"));
     try {
       await fs.mkdir(path.join(tmp, "dist", "control-ui"), { recursive: true });
       await fs.writeFile(path.join(tmp, "dist", "bundle.js"), "export {};\n");
@@ -85,9 +85,9 @@ describe("control UI assets helpers", () => {
   });
 
   it("resolves control-ui root for dist/gateway bundle argv1", async () => {
-    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-ui-"));
+    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "neer-ui-"));
     try {
-      await fs.writeFile(path.join(tmp, "package.json"), JSON.stringify({ name: "openclaw" }));
+      await fs.writeFile(path.join(tmp, "package.json"), JSON.stringify({ name: "neer" }));
       await fs.mkdir(path.join(tmp, "dist", "gateway"), { recursive: true });
       await fs.mkdir(path.join(tmp, "dist", "control-ui"), { recursive: true });
       await fs.writeFile(path.join(tmp, "dist", "gateway", "control-ui.js"), "export {};\n");
@@ -102,7 +102,7 @@ describe("control UI assets helpers", () => {
   });
 
   it("resolves control-ui root from override directory or index.html", async () => {
-    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-ui-"));
+    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "neer-ui-"));
     try {
       const uiDir = path.join(tmp, "dist", "control-ui");
       await fs.mkdir(uiDir, { recursive: true });
@@ -117,14 +117,14 @@ describe("control UI assets helpers", () => {
   });
 
   it("resolves dist control-ui index path from package root argv1", async () => {
-    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-ui-"));
+    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "neer-ui-"));
     try {
-      await fs.writeFile(path.join(tmp, "package.json"), JSON.stringify({ name: "openclaw" }));
-      await fs.writeFile(path.join(tmp, "openclaw.mjs"), "export {};\n");
+      await fs.writeFile(path.join(tmp, "package.json"), JSON.stringify({ name: "neer" }));
+      await fs.writeFile(path.join(tmp, "neer.mjs"), "export {};\n");
       await fs.mkdir(path.join(tmp, "dist", "control-ui"), { recursive: true });
       await fs.writeFile(path.join(tmp, "dist", "control-ui", "index.html"), "<html></html>\n");
 
-      expect(await resolveControlUiDistIndexPath(path.join(tmp, "openclaw.mjs"))).toBe(
+      expect(await resolveControlUiDistIndexPath(path.join(tmp, "neer.mjs"))).toBe(
         path.join(tmp, "dist", "control-ui", "index.html"),
       );
     } finally {
@@ -133,14 +133,14 @@ describe("control UI assets helpers", () => {
   });
 
   it("resolves control-ui root for package entrypoint argv1", async () => {
-    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-ui-"));
+    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "neer-ui-"));
     try {
-      await fs.writeFile(path.join(tmp, "package.json"), JSON.stringify({ name: "openclaw" }));
-      await fs.writeFile(path.join(tmp, "openclaw.mjs"), "export {};\n");
+      await fs.writeFile(path.join(tmp, "package.json"), JSON.stringify({ name: "neer" }));
+      await fs.writeFile(path.join(tmp, "neer.mjs"), "export {};\n");
       await fs.mkdir(path.join(tmp, "dist", "control-ui"), { recursive: true });
       await fs.writeFile(path.join(tmp, "dist", "control-ui", "index.html"), "<html></html>\n");
 
-      expect(resolveControlUiRootSync({ argv1: path.join(tmp, "openclaw.mjs") })).toBe(
+      expect(resolveControlUiRootSync({ argv1: path.join(tmp, "neer.mjs") })).toBe(
         path.join(tmp, "dist", "control-ui"),
       );
     } finally {
@@ -149,17 +149,17 @@ describe("control UI assets helpers", () => {
   });
 
   it("resolves dist control-ui index path from .bin argv1", async () => {
-    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-ui-"));
+    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "neer-ui-"));
     try {
       const binDir = path.join(tmp, "node_modules", ".bin");
-      const pkgRoot = path.join(tmp, "node_modules", "openclaw");
+      const pkgRoot = path.join(tmp, "node_modules", "neer");
       await fs.mkdir(binDir, { recursive: true });
       await fs.mkdir(path.join(pkgRoot, "dist", "control-ui"), { recursive: true });
-      await fs.writeFile(path.join(binDir, "openclaw"), "#!/usr/bin/env node\n");
-      await fs.writeFile(path.join(pkgRoot, "package.json"), JSON.stringify({ name: "openclaw" }));
+      await fs.writeFile(path.join(binDir, "neer"), "#!/usr/bin/env node\n");
+      await fs.writeFile(path.join(pkgRoot, "package.json"), JSON.stringify({ name: "neer" }));
       await fs.writeFile(path.join(pkgRoot, "dist", "control-ui", "index.html"), "<html></html>\n");
 
-      expect(await resolveControlUiDistIndexPath(path.join(binDir, "openclaw"))).toBe(
+      expect(await resolveControlUiDistIndexPath(path.join(binDir, "neer"))).toBe(
         path.join(pkgRoot, "dist", "control-ui", "index.html"),
       );
     } finally {
@@ -168,15 +168,15 @@ describe("control UI assets helpers", () => {
   });
 
   it("resolves via fallback when package root resolution fails but package name matches", async () => {
-    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-ui-"));
+    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "neer-ui-"));
     try {
-      // Package named "openclaw" but resolveOpenClawPackageRoot failed for other reasons
-      await fs.writeFile(path.join(tmp, "package.json"), JSON.stringify({ name: "openclaw" }));
-      await fs.writeFile(path.join(tmp, "openclaw.mjs"), "export {};\n");
+      // Package named "neer" but resolveNeerPackageRoot failed for other reasons
+      await fs.writeFile(path.join(tmp, "package.json"), JSON.stringify({ name: "neer" }));
+      await fs.writeFile(path.join(tmp, "neer.mjs"), "export {};\n");
       await fs.mkdir(path.join(tmp, "dist", "control-ui"), { recursive: true });
       await fs.writeFile(path.join(tmp, "dist", "control-ui", "index.html"), "<html></html>\n");
 
-      expect(await resolveControlUiDistIndexPath(path.join(tmp, "openclaw.mjs"))).toBe(
+      expect(await resolveControlUiDistIndexPath(path.join(tmp, "neer.mjs"))).toBe(
         path.join(tmp, "dist", "control-ui", "index.html"),
       );
     } finally {
@@ -184,8 +184,8 @@ describe("control UI assets helpers", () => {
     }
   });
 
-  it("returns null when package name does not match openclaw", async () => {
-    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-ui-"));
+  it("returns null when package name does not match neer", async () => {
+    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "neer-ui-"));
     try {
       // Package with different name should not be resolved
       await fs.writeFile(path.join(tmp, "package.json"), JSON.stringify({ name: "malicious-pkg" }));
@@ -200,7 +200,7 @@ describe("control UI assets helpers", () => {
   });
 
   it("returns null when no control-ui assets exist", async () => {
-    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-ui-"));
+    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "neer-ui-"));
     try {
       // Just a package.json, no dist/control-ui
       await fs.writeFile(path.join(tmp, "package.json"), JSON.stringify({ name: "some-pkg" }));
@@ -213,7 +213,7 @@ describe("control UI assets helpers", () => {
   });
 
   it("reports health for existing control-ui assets at a known root", async () => {
-    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-ui-"));
+    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "neer-ui-"));
     try {
       const indexPath = resolveControlUiDistIndexPathForRoot(tmp);
       await fs.mkdir(path.dirname(indexPath), { recursive: true });
@@ -229,7 +229,7 @@ describe("control UI assets helpers", () => {
   });
 
   it("reports health for missing control-ui assets at a known root", async () => {
-    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-ui-"));
+    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "neer-ui-"));
     try {
       const indexPath = resolveControlUiDistIndexPathForRoot(tmp);
       await expect(resolveControlUiDistIndexHealth({ root: tmp })).resolves.toEqual({
@@ -242,25 +242,25 @@ describe("control UI assets helpers", () => {
   });
 
   it("resolves control-ui root when argv1 is a symlink (nvm scenario)", async () => {
-    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-ui-"));
+    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "neer-ui-"));
     try {
       const realPkg = path.join(tmp, "real-pkg");
       const bin = path.join(tmp, "bin");
       await fs.mkdir(realPkg, { recursive: true });
       await fs.mkdir(bin, { recursive: true });
-      await fs.writeFile(path.join(realPkg, "package.json"), JSON.stringify({ name: "openclaw" }));
-      await fs.writeFile(path.join(realPkg, "openclaw.mjs"), "export {};\n");
+      await fs.writeFile(path.join(realPkg, "package.json"), JSON.stringify({ name: "neer" }));
+      await fs.writeFile(path.join(realPkg, "neer.mjs"), "export {};\n");
       await fs.mkdir(path.join(realPkg, "dist", "control-ui"), { recursive: true });
       await fs.writeFile(path.join(realPkg, "dist", "control-ui", "index.html"), "<html></html>\n");
       const ok = await trySymlink(
-        path.join("..", "real-pkg", "openclaw.mjs"),
-        path.join(bin, "openclaw"),
+        path.join("..", "real-pkg", "neer.mjs"),
+        path.join(bin, "neer"),
       );
       if (!ok) {
         return; // symlinks not supported (Windows CI)
       }
 
-      const resolvedRoot = resolveControlUiRootSync({ argv1: path.join(bin, "openclaw") });
+      const resolvedRoot = resolveControlUiRootSync({ argv1: path.join(bin, "neer") });
       expect(resolvedRoot).not.toBeNull();
       expect(await canonicalPath(resolvedRoot ?? "")).toBe(
         await canonicalPath(path.join(realPkg, "dist", "control-ui")),
@@ -271,25 +271,25 @@ describe("control UI assets helpers", () => {
   });
 
   it("resolves package root via symlinked argv1", async () => {
-    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-ui-"));
+    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "neer-ui-"));
     try {
       const realPkg = path.join(tmp, "real-pkg");
       const bin = path.join(tmp, "bin");
       await fs.mkdir(realPkg, { recursive: true });
       await fs.mkdir(bin, { recursive: true });
-      await fs.writeFile(path.join(realPkg, "package.json"), JSON.stringify({ name: "openclaw" }));
-      await fs.writeFile(path.join(realPkg, "openclaw.mjs"), "export {};\n");
+      await fs.writeFile(path.join(realPkg, "package.json"), JSON.stringify({ name: "neer" }));
+      await fs.writeFile(path.join(realPkg, "neer.mjs"), "export {};\n");
       await fs.mkdir(path.join(realPkg, "dist", "control-ui"), { recursive: true });
       await fs.writeFile(path.join(realPkg, "dist", "control-ui", "index.html"), "<html></html>\n");
       const ok = await trySymlink(
-        path.join("..", "real-pkg", "openclaw.mjs"),
-        path.join(bin, "openclaw"),
+        path.join("..", "real-pkg", "neer.mjs"),
+        path.join(bin, "neer"),
       );
       if (!ok) {
         return; // symlinks not supported (Windows CI)
       }
 
-      const packageRoot = await resolveOpenClawPackageRoot({ argv1: path.join(bin, "openclaw") });
+      const packageRoot = await resolveNeerPackageRoot({ argv1: path.join(bin, "neer") });
       expect(packageRoot).not.toBeNull();
       expect(await canonicalPath(packageRoot ?? "")).toBe(await canonicalPath(realPkg));
     } finally {
@@ -298,25 +298,25 @@ describe("control UI assets helpers", () => {
   });
 
   it("resolves dist index path via symlinked argv1 (async)", async () => {
-    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-ui-"));
+    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "neer-ui-"));
     try {
       const realPkg = path.join(tmp, "real-pkg");
       const bin = path.join(tmp, "bin");
       await fs.mkdir(realPkg, { recursive: true });
       await fs.mkdir(bin, { recursive: true });
-      await fs.writeFile(path.join(realPkg, "package.json"), JSON.stringify({ name: "openclaw" }));
-      await fs.writeFile(path.join(realPkg, "openclaw.mjs"), "export {};\n");
+      await fs.writeFile(path.join(realPkg, "package.json"), JSON.stringify({ name: "neer" }));
+      await fs.writeFile(path.join(realPkg, "neer.mjs"), "export {};\n");
       await fs.mkdir(path.join(realPkg, "dist", "control-ui"), { recursive: true });
       await fs.writeFile(path.join(realPkg, "dist", "control-ui", "index.html"), "<html></html>\n");
       const ok = await trySymlink(
-        path.join("..", "real-pkg", "openclaw.mjs"),
-        path.join(bin, "openclaw"),
+        path.join("..", "real-pkg", "neer.mjs"),
+        path.join(bin, "neer"),
       );
       if (!ok) {
         return; // symlinks not supported (Windows CI)
       }
 
-      const indexPath = await resolveControlUiDistIndexPath(path.join(bin, "openclaw"));
+      const indexPath = await resolveControlUiDistIndexPath(path.join(bin, "neer"));
       expect(indexPath).not.toBeNull();
       expect(await canonicalPath(indexPath ?? "")).toBe(
         await canonicalPath(path.join(realPkg, "dist", "control-ui", "index.html")),

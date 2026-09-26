@@ -153,7 +153,7 @@ describe("runReplyAgent messaging tool suppression", () => {
 
   it("persists usage fields even when replies are suppressed", async () => {
     const storePath = path.join(
-      await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-session-store-")),
+      await fs.mkdtemp(path.join(os.tmpdir(), "neer-session-store-")),
       "sessions.json",
     );
     const sessionKey = "main";
@@ -186,7 +186,7 @@ describe("runReplyAgent messaging tool suppression", () => {
 
   it("persists totalTokens from promptTokens when snapshot is available", async () => {
     const storePath = path.join(
-      await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-session-store-")),
+      await fs.mkdtemp(path.join(os.tmpdir(), "neer-session-store-")),
       "sessions.json",
     );
     const sessionKey = "main";

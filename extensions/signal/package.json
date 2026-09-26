@@ -1,13 +1,13 @@
 {
-  "name": "@openclaw/signal",
+  "name": "@neer/signal",
   "version": "2026.2.13",
   "private": true,
-  "description": "OpenClaw Signal channel plugin",
+  "description": "Neer Signal channel plugin",
   "type": "module",
   "devDependencies": {
-    "openclaw": "workspace:*"
+    "neer": "workspace:*"
   },
-  "openclaw": {
+  "neer": {
     "extensions": [
       "./index.ts"
     ]

@@ -3,11 +3,11 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import type { BrowserRouteContext } from "../server-context.js";
 import type { BrowserRouteRegistrar } from "./types.js";
-import { resolvePreferredOpenClawTmpDir } from "../../infra/tmp-openclaw-dir.js";
+import { resolvePreferredNeerTmpDir } from "../../infra/tmp-neer-dir.js";
 import { handleRouteError, readBody, requirePwAi, resolveProfileContext } from "./agent.shared.js";
 import { toBoolean, toStringOrEmpty } from "./utils.js";
 
-const DEFAULT_TRACE_DIR = resolvePreferredOpenClawTmpDir();
+const DEFAULT_TRACE_DIR = resolvePreferredNeerTmpDir();
 
 export function registerBrowserAgentDebugRoutes(
   app: BrowserRouteRegistrar,

@@ -19,7 +19,7 @@ describe("session store lock (Promise chain mutex)", () => {
   async function makeTmpStore(
     initial: Record<string, unknown> = {},
   ): Promise<{ dir: string; storePath: string }> {
-    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-lock-test-"));
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "neer-lock-test-"));
     tmpDirs.push(dir);
     const storePath = path.join(dir, "sessions.json");
     if (Object.keys(initial).length > 0) {

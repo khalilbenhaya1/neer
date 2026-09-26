@@ -13,6 +13,7 @@ import { enqueueSystemEvent } from "../infra/system-events.js";
 import { getChildLogger } from "../logging.js";
 import { normalizeAgentId } from "../routing/session-key.js";
 import { defaultRuntime } from "../runtime.js";
+import { setCronPending } from "../cognition/live-loop.js";
 
 export type GatewayCronState = {
   cron: CronService;
@@ -27,7 +28,7 @@ export function buildGatewayCronService(params: {
 }): GatewayCronState {
   const cronLogger = getChildLogger({ module: "cron" });
   const storePath = resolveCronStorePath(params.cfg.cron?.store);
-  const cronEnabled = process.env.OPENCLAW_SKIP_CRON !== "1" && params.cfg.cron?.enabled !== false;
+  const cronEnabled = process.env.NEER_SKIP_CRON !== "1" && params.cfg.cron?.enabled !== false;
 
   const resolveCronAgent = (requested?: string | null) => {
     const runtimeConfig = loadConfig();
@@ -79,20 +80,28 @@ export function buildGatewayCronService(params: {
     },
     runIsolatedAgentJob: async ({ job, message }) => {
       const { agentId, cfg: runtimeConfig } = resolveCronAgent(job.agentId);
-      return await runCronIsolatedAgentTurn({
-        cfg: runtimeConfig,
-        deps: params.deps,
-        job,
-        message,
-        agentId,
-        sessionKey: `cron:${job.id}`,
-        lane: "cron",
-      });
+      console.log("[CRON EXEC] Isolated agent job starting:", job.id);
+      setCronPending(true);
+      try {
+        return await runCronIsolatedAgentTurn({
+          cfg: runtimeConfig,
+          deps: params.deps,
+          job,
+          message,
+          agentId,
+          sessionKey: `cron:${job.id}`,
+          lane: "cron",
+        });
+      } finally {
+        setCronPending(false);
+      }
     },
     log: getChildLogger({ module: "cron", storePath }),
     onEvent: (evt) => {
       params.broadcast("cron", evt, { dropIfSlow: true });
       if (evt.action === "finished") {
+        console.log("[CRON BROADCAST] Cron event finished:", evt.jobId);
+        setCronPending(false);
         const logPath = resolveCronRunLogPath({
           storePath,
           jobId: evt.jobId,

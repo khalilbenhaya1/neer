@@ -1,5 +1,5 @@
 ---
-summary: "Menu bar icon states and animations for OpenClaw on macOS"
+summary: "Menu bar icon states and animations for Neer on macOS"
 read_when:
   - Changing menu bar icon behavior
 title: "Menu Bar Icon"
@@ -7,7 +7,7 @@ title: "Menu Bar Icon"
 
 # Menu Bar Icon States
 
-Author: steipete · Updated: 2025-12-06 · Scope: macOS app (`apps/macos`)
+Author: steipete · Updated: 2025-12-06 · Scope: macOS app (`apps/neer-macos`)
 
 - **Idle:** Normal icon animation (blink, occasional wiggle).
 - **Paused:** Status item uses `appearsDisabled`; no motion.

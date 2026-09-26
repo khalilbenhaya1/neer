@@ -1,0 +1,30 @@
+{
+    "target": "node18-win-x64",
+    "entryPoint": "neer.mjs",
+    "distSource": "dist",
+    "uiSource": "ui",
+    "uiBuildOutput": "ui/dist",
+    "assetsSource": "assets",
+    "extensionsSource": "extensions",
+    "skillsSource": "skills",
+    "outputDir": "./release",
+    "outputExe": "NEER.exe",
+    "stagingDir": "./.staging",
+    "obfuscate": true,
+    "stripSourceMaps": true,
+    "stripTestFiles": true,
+    "stripDevLogs": true,
+    "versionStamp": true,
+    "license": {
+        "enabled": false,
+        "placeholder": "LICENSE_SYSTEM_NOT_YET_ACTIVE",
+        "comment": "Set enabled=true and implement validate() in license.mjs when ready"
+    },
+    "digitalSignature": {
+        "enabled": false,
+        "placeholder": "CODESIGN_NOT_YET_CONFIGURED",
+        "comment": "Set enabled=true and configure signtool path + certificate thumbprint when ready",
+        "signtoolPath": "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\x64\\signtool.exe",
+        "certificateThumbprint": ""
+    }
+}

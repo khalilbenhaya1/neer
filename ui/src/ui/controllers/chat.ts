@@ -108,18 +108,22 @@ export async function sendChatMessage(
   // Convert attachments to API format
   const apiAttachments = hasAttachments
     ? attachments
-        .map((att) => {
-          const parsed = dataUrlToBase64(att.dataUrl);
-          if (!parsed) {
-            return null;
-          }
-          return {
-            type: "image",
-            mimeType: parsed.mimeType,
-            content: parsed.content,
-          };
-        })
-        .filter((a): a is NonNullable<typeof a> => a !== null)
+      .map((att) => {
+        const parsed = dataUrlToBase64(att.dataUrl);
+        if (!parsed) {
+          console.warn("Failed to parse attachment data URI", att.id);
+          return null;
+        }
+        const isAudio = parsed.mimeType.startsWith("audio/");
+        const isImage = parsed.mimeType.startsWith("image/");
+
+        return {
+          type: isAudio ? "audio" : isImage ? "image" : "file",
+          mimeType: parsed.mimeType,
+          content: parsed.content,
+        };
+      })
+      .filter((a): a is NonNullable<typeof a> => a !== null)
     : undefined;
 
   try {
@@ -177,7 +181,7 @@ export function handleChatEvent(state: ChatState, payload?: ChatEventPayload) {
   }
 
   // Final from another run (e.g. sub-agent announce): refresh history to show new message.
-  // See https://github.com/openclaw/openclaw/issues/1909
+  // See https://github.com/neer/neer/issues/1909
   if (payload.runId && state.chatRunId && payload.runId !== state.chatRunId) {
     if (payload.state === "final") {
       return "final";

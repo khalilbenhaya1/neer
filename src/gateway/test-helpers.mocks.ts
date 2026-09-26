@@ -189,12 +189,12 @@ export const resetTestPluginRegistry = () => {
 };
 
 const testConfigRoot = {
-  value: path.join(os.tmpdir(), `openclaw-gateway-test-${process.pid}-${crypto.randomUUID()}`),
+  value: path.join(os.tmpdir(), `neer-gateway-test-${process.pid}-${crypto.randomUUID()}`),
 };
 
 export const setTestConfigRoot = (root: string) => {
   testConfigRoot.value = root;
-  process.env.OPENCLAW_CONFIG_PATH = path.join(root, "openclaw.json");
+  process.env.NEER_CONFIG_PATH = path.join(root, "neer.json");
 };
 
 export const testTailnetIPv4 = hoisted.testTailnetIPv4;
@@ -229,10 +229,10 @@ export const testIsNixMode = hoisted.testIsNixMode;
 export const sessionStoreSaveDelayMs = hoisted.sessionStoreSaveDelayMs;
 export const embeddedRunMock = hoisted.embeddedRunMock;
 
+import * as piModelDiscovery from "../agents/pi-model-discovery.js";
+
 vi.mock("../agents/pi-model-discovery.js", async () => {
-  const actual = await vi.importActual<typeof import("../agents/pi-model-discovery.js")>(
-    "../agents/pi-model-discovery.js",
-  );
+  const actual = await vi.importActual<typeof piModelDiscovery>("../agents/pi-model-discovery.js");
 
   class MockModelRegistry extends actual.ModelRegistry {
     override getAll(): ReturnType<typeof actual.ModelRegistry.prototype.getAll> {
@@ -287,7 +287,7 @@ vi.mock("../config/sessions.js", async () => {
 
 vi.mock("../config/config.js", async () => {
   const actual = await vi.importActual<typeof import("../config/config.js")>("../config/config.js");
-  const resolveConfigPath = () => path.join(testConfigRoot.value, "openclaw.json");
+  const resolveConfigPath = () => path.join(testConfigRoot.value, "neer.json");
   const hashConfigRaw = (raw: string | null) =>
     crypto
       .createHash("sha256")
@@ -393,19 +393,19 @@ vi.mock("../config/config.js", async () => {
 
       const fileAgents =
         fileConfig.agents &&
-        typeof fileConfig.agents === "object" &&
-        !Array.isArray(fileConfig.agents)
+          typeof fileConfig.agents === "object" &&
+          !Array.isArray(fileConfig.agents)
           ? (fileConfig.agents as Record<string, unknown>)
           : {};
       const fileDefaults =
         fileAgents.defaults &&
-        typeof fileAgents.defaults === "object" &&
-        !Array.isArray(fileAgents.defaults)
+          typeof fileAgents.defaults === "object" &&
+          !Array.isArray(fileAgents.defaults)
           ? (fileAgents.defaults as Record<string, unknown>)
           : {};
       const defaults = {
         model: { primary: "anthropic/claude-opus-4-6" },
-        workspace: path.join(os.tmpdir(), "openclaw-gateway-test"),
+        workspace: path.join(os.tmpdir(), "neer-gateway-test"),
         ...fileDefaults,
         ...testState.agentConfig,
       };
@@ -419,8 +419,8 @@ vi.mock("../config/config.js", async () => {
 
       const fileChannels =
         fileConfig.channels &&
-        typeof fileConfig.channels === "object" &&
-        !Array.isArray(fileConfig.channels)
+          typeof fileConfig.channels === "object" &&
+          !Array.isArray(fileConfig.channels)
           ? ({ ...(fileConfig.channels as Record<string, unknown>) } as Record<string, unknown>)
           : {};
       const overrideChannels =
@@ -431,8 +431,8 @@ vi.mock("../config/config.js", async () => {
       if (testState.allowFrom !== undefined) {
         const existing =
           mergedChannels.whatsapp &&
-          typeof mergedChannels.whatsapp === "object" &&
-          !Array.isArray(mergedChannels.whatsapp)
+            typeof mergedChannels.whatsapp === "object" &&
+            !Array.isArray(mergedChannels.whatsapp)
             ? (mergedChannels.whatsapp as Record<string, unknown>)
             : {};
         mergedChannels.whatsapp = {
@@ -444,8 +444,8 @@ vi.mock("../config/config.js", async () => {
 
       const fileSession =
         fileConfig.session &&
-        typeof fileConfig.session === "object" &&
-        !Array.isArray(fileConfig.session)
+          typeof fileConfig.session === "object" &&
+          !Array.isArray(fileConfig.session)
           ? (fileConfig.session as Record<string, unknown>)
           : {};
       const session: Record<string, unknown> = {
@@ -461,8 +461,8 @@ vi.mock("../config/config.js", async () => {
 
       const fileGateway =
         fileConfig.gateway &&
-        typeof fileConfig.gateway === "object" &&
-        !Array.isArray(fileConfig.gateway)
+          typeof fileConfig.gateway === "object" &&
+          !Array.isArray(fileConfig.gateway)
           ? ({ ...(fileConfig.gateway as Record<string, unknown>) } as Record<string, unknown>)
           : {};
       if (testState.gatewayBind) {
@@ -478,8 +478,8 @@ vi.mock("../config/config.js", async () => {
 
       const fileCanvasHost =
         fileConfig.canvasHost &&
-        typeof fileConfig.canvasHost === "object" &&
-        !Array.isArray(fileConfig.canvasHost)
+          typeof fileConfig.canvasHost === "object" &&
+          !Array.isArray(fileConfig.canvasHost)
           ? ({ ...(fileConfig.canvasHost as Record<string, unknown>) } as Record<string, unknown>)
           : {};
       if (typeof testState.canvasHostPort === "number") {
@@ -595,11 +595,11 @@ vi.mock("../plugins/loader.js", async () => {
     await vi.importActual<typeof import("../plugins/loader.js")>("../plugins/loader.js");
   return {
     ...actual,
-    loadOpenClawPlugins: () => pluginRegistryState.registry,
+    loadNeerPlugins: () => pluginRegistryState.registry,
   };
 });
 
-process.env.OPENCLAW_SKIP_CHANNELS = "1";
-process.env.OPENCLAW_SKIP_CRON = "1";
-process.env.OPENCLAW_SKIP_CHANNELS = "1";
-process.env.OPENCLAW_SKIP_CRON = "1";
+process.env.NEER_SKIP_CHANNELS = "1";
+process.env.NEER_SKIP_CRON = "1";
+process.env.NEER_SKIP_CHANNELS = "1";
+process.env.NEER_SKIP_CRON = "1";

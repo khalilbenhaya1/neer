@@ -1,17 +1,17 @@
 ---
-summary: "CLI reference for `openclaw uninstall` (remove gateway service + local data)"
+summary: "CLI reference for `neer uninstall` (remove gateway service + local data)"
 read_when:
   - You want to remove the gateway service and/or local state
   - You want a dry-run first
 title: "uninstall"
 ---
 
-# `openclaw uninstall`
+# `neer uninstall`
 
 Uninstall the gateway service + local data (CLI remains).
 
 ```bash
-openclaw uninstall
-openclaw uninstall --all --yes
-openclaw uninstall --dry-run
+neer uninstall
+neer uninstall --all --yes
+neer uninstall --dry-run
 ```

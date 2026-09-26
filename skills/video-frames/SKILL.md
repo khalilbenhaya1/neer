@@ -4,7 +4,7 @@ description: Extract frames or short clips from videos using ffmpeg.
 homepage: https://ffmpeg.org
 metadata:
   {
-    "openclaw":
+    "neer":
       {
         "emoji": "🎞️",
         "requires": { "bins": ["ffmpeg"] },
@@ -17,6 +17,12 @@ metadata:
               "bins": ["ffmpeg"],
               "label": "Install ffmpeg (brew)",
             },
+            {
+               "id": "manual",
+                "kind": "manual",
+                "label": "Install ffmpeg manually (Windows)",
+                "bins": ["ffmpeg"]
+            }
           ],
       },
   }

@@ -2,7 +2,7 @@ import { spawn } from "node:child_process";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import type { OpenClawConfig } from "../config/config.js";
+import type { NeerConfig } from "../config/config.js";
 import type {
   MemoryEmbeddingProbeResult,
   MemoryProviderStatus,
@@ -44,7 +44,7 @@ type SessionExporterConfig = {
 
 export class QmdMemoryManager implements MemorySearchManager {
   static async create(params: {
-    cfg: OpenClawConfig;
+    cfg: NeerConfig;
     agentId: string;
     resolved: ResolvedMemoryBackendConfig;
   }): Promise<QmdMemoryManager | null> {
@@ -57,7 +57,7 @@ export class QmdMemoryManager implements MemorySearchManager {
     return manager;
   }
 
-  private readonly cfg: OpenClawConfig;
+  private readonly cfg: NeerConfig;
   private readonly agentId: string;
   private readonly qmd: ResolvedQmdConfig;
   private readonly workspaceDir: string;
@@ -85,7 +85,7 @@ export class QmdMemoryManager implements MemorySearchManager {
   private lastEmbedAt: number | null = null;
 
   private constructor(params: {
-    cfg: OpenClawConfig;
+    cfg: NeerConfig;
     agentId: string;
     resolved: ResolvedQmdConfig;
   }) {

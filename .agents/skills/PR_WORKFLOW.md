@@ -107,7 +107,7 @@ Before any substantive review or prep work, **always rebase the PR branch onto c
 
 - In normal `prepare-pr` runs, commits are created via `scripts/committer "<msg>" <file...>`. Use it manually only when operating outside the skill flow; avoid manual `git add`/`git commit` so staging stays scoped.
 - Follow concise, action-oriented commit messages (e.g., `CLI: add verbose flag to send`).
-- During `prepare-pr`, use this commit subject format: `fix: <summary> (openclaw#<PR>) thanks @<pr-author>`.
+- During `prepare-pr`, use this commit subject format: `fix: <summary> (neer#<PR>) thanks @<pr-author>`.
 - Group related changes; avoid bundling unrelated refactors.
 - Changelog workflow: keep the latest released version at the top (no `Unreleased`); after publishing, bump the version and start a new top section.
 - When working on a PR: add a changelog entry with the PR number and thank the contributor (mandatory in this workflow).
@@ -147,7 +147,7 @@ Gate set:
 - Before starting a review when a GH Issue/PR is pasted: `review-pr`/`scripts/pr-review` should create and use an isolated `.worktrees/pr-<PR>` checkout from `origin/main` automatically. Do not require a clean main checkout, and do not run `git pull` in a dirty main checkout.
 - PR review calls: prefer a single `gh pr view --json ...` to batch metadata/comments; run `gh pr diff` only when needed.
 - PRs should summarize scope, note testing performed, and mention any user-facing changes or new flags.
-- Read `docs/help/submitting-a-pr.md` ([Submitting a PR](https://docs.openclaw.ai/help/submitting-a-pr)) for what we expect from contributors.
+- Read `docs/help/submitting-a-pr.md` ([Submitting a PR](https://docs.neer.ai/help/submitting-a-pr)) for what we expect from contributors.
 
 ## Unified workflow
 

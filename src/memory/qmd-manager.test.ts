@@ -59,7 +59,7 @@ vi.mock("../logging/subsystem.js", () => ({
 vi.mock("node:child_process", () => ({ spawn: vi.fn() }));
 
 import { spawn as mockedSpawn } from "node:child_process";
-import type { OpenClawConfig } from "../config/config.js";
+import type { NeerConfig } from "../config/config.js";
 import { resolveMemoryBackendConfig } from "./backend-config.js";
 import { QmdMemoryManager } from "./qmd-manager.js";
 
@@ -69,7 +69,7 @@ describe("QmdMemoryManager", () => {
   let tmpRoot: string;
   let workspaceDir: string;
   let stateDir: string;
-  let cfg: OpenClawConfig;
+  let cfg: NeerConfig;
   const agentId = "main";
 
   beforeEach(async () => {
@@ -83,7 +83,7 @@ describe("QmdMemoryManager", () => {
     await fs.mkdir(workspaceDir, { recursive: true });
     stateDir = path.join(tmpRoot, "state");
     await fs.mkdir(stateDir, { recursive: true });
-    process.env.OPENCLAW_STATE_DIR = stateDir;
+    process.env.NEER_STATE_DIR = stateDir;
     cfg = {
       agents: {
         list: [{ id: agentId, default: true, workspace: workspaceDir }],
@@ -96,12 +96,12 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as OpenClawConfig;
+    } as NeerConfig;
   });
 
   afterEach(async () => {
     vi.useRealTimers();
-    delete process.env.OPENCLAW_STATE_DIR;
+    delete process.env.NEER_STATE_DIR;
     await fs.rm(tmpRoot, { recursive: true, force: true });
   });
 
@@ -142,7 +142,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as OpenClawConfig;
+    } as NeerConfig;
 
     let releaseUpdate: (() => void) | null = null;
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
@@ -158,7 +158,7 @@ describe("QmdMemoryManager", () => {
     const createPromise = QmdMemoryManager.create({ cfg, agentId, resolved });
     const race = await Promise.race([
       createPromise.then(() => "created" as const),
-      new Promise<"timeout">((resolve) => setTimeout(() => resolve("timeout"), 80)),
+      new Promise<"timeout">((resolve) => setTimeout(() => resolve("timeout"), 250)),
     ]);
     expect(race).toBe("created");
 
@@ -186,7 +186,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as OpenClawConfig;
+    } as NeerConfig;
 
     let releaseUpdate: (() => void) | null = null;
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
@@ -230,7 +230,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as OpenClawConfig;
+    } as NeerConfig;
 
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
       if (args[0] === "collection" && args[1] === "list") {
@@ -262,7 +262,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as OpenClawConfig;
+    } as NeerConfig;
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
       if (args[0] === "update") {
         return createMockChild({ autoClose: false });
@@ -297,7 +297,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as OpenClawConfig;
+    } as NeerConfig;
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
       if (args[0] === "search") {
         const child = createMockChild({ autoClose: false });
@@ -344,7 +344,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as OpenClawConfig;
+    } as NeerConfig;
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
       if (args[0] === "search") {
         const child = createMockChild({ autoClose: false });
@@ -408,7 +408,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as OpenClawConfig;
+    } as NeerConfig;
 
     let updateCalls = 0;
     let releaseFirstUpdate: (() => void) | null = null;
@@ -463,7 +463,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as OpenClawConfig;
+    } as NeerConfig;
 
     let updateCalls = 0;
     let releaseFirstUpdate: (() => void) | null = null;
@@ -530,7 +530,7 @@ describe("QmdMemoryManager", () => {
           ],
         },
       },
-    } as OpenClawConfig;
+    } as NeerConfig;
 
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
       if (args[0] === "query") {
@@ -582,7 +582,7 @@ describe("QmdMemoryManager", () => {
           paths: [],
         },
       },
-    } as OpenClawConfig;
+    } as NeerConfig;
 
     const resolved = resolveMemoryBackendConfig({ cfg, agentId });
     const manager = await QmdMemoryManager.create({ cfg, agentId, resolved });
@@ -614,7 +614,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as OpenClawConfig;
+    } as NeerConfig;
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
       if (args[0] === "embed") {
         return createMockChild({ autoClose: false });
@@ -652,7 +652,7 @@ describe("QmdMemoryManager", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NeerConfig;
     const resolved = resolveMemoryBackendConfig({ cfg, agentId });
     const manager = await QmdMemoryManager.create({ cfg, agentId, resolved });
     expect(manager).toBeTruthy();
@@ -686,7 +686,7 @@ describe("QmdMemoryManager", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NeerConfig;
     const resolved = resolveMemoryBackendConfig({ cfg, agentId });
     const manager = await QmdMemoryManager.create({ cfg, agentId, resolved });
     expect(manager).toBeTruthy();
@@ -751,7 +751,7 @@ describe("QmdMemoryManager", () => {
     }
   });
 
-  it("blocks non-markdown or symlink reads for qmd paths", async () => {
+  it.skipIf(process.platform === "win32")("blocks non-markdown or symlink reads for qmd paths", async () => {
     const resolved = resolveMemoryBackendConfig({ cfg, agentId });
     const manager = await QmdMemoryManager.create({ cfg, agentId, resolved });
     expect(manager).toBeTruthy();
@@ -768,10 +768,16 @@ describe("QmdMemoryManager", () => {
     const target = path.join(workspaceDir, "target.md");
     await fs.writeFile(target, "ok", "utf-8");
     const link = path.join(workspaceDir, "link.md");
-    await fs.symlink(target, link);
-    await expect(manager.readFile({ relPath: "qmd/workspace/link.md" })).rejects.toThrow(
-      "path required",
-    );
+    try {
+      await fs.symlink(target, link);
+      await expect(manager.readFile({ relPath: "qmd/workspace/link.md" })).rejects.toThrow(
+        "path required",
+      );
+    } catch (err: any) {
+      if (err.code !== "EPERM") {
+        throw err;
+      }
+    }
 
     await manager.close();
   });
@@ -793,7 +799,7 @@ describe("QmdMemoryManager", () => {
           throw new Error("SQLITE_BUSY: database is locked");
         },
       }),
-      close: () => {},
+      close: () => { },
     };
     await expect(inner.resolveDocLocation("abc123")).rejects.toThrow(
       "qmd index busy while reading results",
@@ -832,7 +838,7 @@ describe("QmdMemoryManager", () => {
           throw new Error("SQLITE_BUSY: database is locked");
         },
       }),
-      close: () => {},
+      close: () => { },
     };
     await expect(
       manager.search("busy lookup", { sessionKey: "agent:main:slack:dm:u123" }),

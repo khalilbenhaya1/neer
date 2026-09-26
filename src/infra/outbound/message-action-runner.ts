@@ -6,7 +6,7 @@ import type {
   ChannelMessageActionName,
   ChannelThreadingToolContext,
 } from "../../channels/plugins/types.js";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { NeerConfig } from "../../config/config.js";
 import type { OutboundSendDeps } from "./deliver.js";
 import type { MessagePollResult, MessageSendResult } from "./message.js";
 import { resolveSessionAgentId } from "../../agents/agent-scope.js";
@@ -56,7 +56,7 @@ export type MessageActionRunnerGateway = {
 };
 
 export type RunMessageActionParams = {
-  cfg: OpenClawConfig;
+  cfg: NeerConfig;
   action: ChannelMessageActionName;
   params: Record<string, unknown>;
   defaultAccountId?: string;
@@ -173,7 +173,7 @@ function applyCrossContextMessageDecoration({
 }
 
 async function maybeApplyCrossContextMarker(params: {
-  cfg: OpenClawConfig;
+  cfg: NeerConfig;
   channel: ChannelId;
   action: ChannelMessageActionName;
   target: string;
@@ -276,7 +276,7 @@ function resolveTelegramAutoThreadId(params: {
 }
 
 function resolveAttachmentMaxBytes(params: {
-  cfg: OpenClawConfig;
+  cfg: NeerConfig;
   channel: ChannelId;
   accountId?: string | null;
 }): number | undefined {
@@ -404,7 +404,7 @@ async function normalizeSandboxMediaList(params: {
 }
 
 async function hydrateSetGroupIconParams(params: {
-  cfg: OpenClawConfig;
+  cfg: NeerConfig;
   channel: ChannelId;
   accountId?: string | null;
   args: Record<string, unknown>;
@@ -464,7 +464,7 @@ async function hydrateSetGroupIconParams(params: {
 }
 
 async function hydrateSendAttachmentParams(params: {
-  cfg: OpenClawConfig;
+  cfg: NeerConfig;
   channel: ChannelId;
   accountId?: string | null;
   args: Record<string, unknown>;
@@ -562,7 +562,7 @@ function parseCardParam(params: Record<string, unknown>): void {
   }
 }
 
-async function resolveChannel(cfg: OpenClawConfig, params: Record<string, unknown>) {
+async function resolveChannel(cfg: NeerConfig, params: Record<string, unknown>) {
   const channelHint = readStringParam(params, "channel");
   const selection = await resolveMessageChannelSelection({
     cfg,
@@ -572,7 +572,7 @@ async function resolveChannel(cfg: OpenClawConfig, params: Record<string, unknow
 }
 
 async function resolveActionTarget(params: {
-  cfg: OpenClawConfig;
+  cfg: NeerConfig;
   channel: ChannelId;
   action: ChannelMessageActionName;
   args: Record<string, unknown>;
@@ -617,7 +617,7 @@ async function resolveActionTarget(params: {
 }
 
 type ResolvedActionContext = {
-  cfg: OpenClawConfig;
+  cfg: NeerConfig;
   params: Record<string, unknown>;
   channel: ChannelId;
   accountId?: string | null;

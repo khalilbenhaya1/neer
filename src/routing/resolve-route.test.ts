@@ -1,11 +1,11 @@
 import { describe, expect, test } from "vitest";
 import type { ChatType } from "../channels/chat-type.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { NeerConfig } from "../config/config.js";
 import { resolveAgentRoute } from "./resolve-route.js";
 
 describe("resolveAgentRoute", () => {
   test("defaults to main/default when no bindings exist", () => {
-    const cfg: OpenClawConfig = {};
+    const cfg: NeerConfig = {};
     const route = resolveAgentRoute({
       cfg,
       channel: "whatsapp",
@@ -19,7 +19,7 @@ describe("resolveAgentRoute", () => {
   });
 
   test("dmScope=per-peer isolates DM sessions by sender id", () => {
-    const cfg: OpenClawConfig = {
+    const cfg: NeerConfig = {
       session: { dmScope: "per-peer" },
     };
     const route = resolveAgentRoute({
@@ -32,7 +32,7 @@ describe("resolveAgentRoute", () => {
   });
 
   test("dmScope=per-channel-peer isolates DM sessions per channel and sender", () => {
-    const cfg: OpenClawConfig = {
+    const cfg: NeerConfig = {
       session: { dmScope: "per-channel-peer" },
     };
     const route = resolveAgentRoute({
@@ -45,7 +45,7 @@ describe("resolveAgentRoute", () => {
   });
 
   test("identityLinks collapses per-peer DM sessions across providers", () => {
-    const cfg: OpenClawConfig = {
+    const cfg: NeerConfig = {
       session: {
         dmScope: "per-peer",
         identityLinks: {
@@ -63,7 +63,7 @@ describe("resolveAgentRoute", () => {
   });
 
   test("identityLinks applies to per-channel-peer DM sessions", () => {
-    const cfg: OpenClawConfig = {
+    const cfg: NeerConfig = {
       session: {
         dmScope: "per-channel-peer",
         identityLinks: {
@@ -81,7 +81,7 @@ describe("resolveAgentRoute", () => {
   });
 
   test("peer binding wins over account binding", () => {
-    const cfg: OpenClawConfig = {
+    const cfg: NeerConfig = {
       bindings: [
         {
           agentId: "a",
@@ -109,7 +109,7 @@ describe("resolveAgentRoute", () => {
   });
 
   test("discord channel peer binding wins over guild binding", () => {
-    const cfg: OpenClawConfig = {
+    const cfg: NeerConfig = {
       bindings: [
         {
           agentId: "chan",
@@ -142,7 +142,7 @@ describe("resolveAgentRoute", () => {
   });
 
   test("guild binding wins over account binding when peer not bound", () => {
-    const cfg: OpenClawConfig = {
+    const cfg: NeerConfig = {
       bindings: [
         {
           agentId: "guild",
@@ -170,7 +170,7 @@ describe("resolveAgentRoute", () => {
   });
 
   test("missing accountId in binding matches default account only", () => {
-    const cfg: OpenClawConfig = {
+    const cfg: NeerConfig = {
       bindings: [{ agentId: "defaultAcct", match: { channel: "whatsapp" } }],
     };
 
@@ -193,7 +193,7 @@ describe("resolveAgentRoute", () => {
   });
 
   test("accountId=* matches any account as a channel fallback", () => {
-    const cfg: OpenClawConfig = {
+    const cfg: NeerConfig = {
       bindings: [
         {
           agentId: "any",
@@ -212,9 +212,9 @@ describe("resolveAgentRoute", () => {
   });
 
   test("defaultAgentId is used when no binding matches", () => {
-    const cfg: OpenClawConfig = {
+    const cfg: NeerConfig = {
       agents: {
-        list: [{ id: "home", default: true, workspace: "~/openclaw-home" }],
+        list: [{ id: "home", default: true, workspace: "~/neer-home" }],
       },
     };
     const route = resolveAgentRoute({
@@ -229,7 +229,7 @@ describe("resolveAgentRoute", () => {
 });
 
 test("dmScope=per-account-channel-peer isolates DM sessions per account, channel and sender", () => {
-  const cfg: OpenClawConfig = {
+  const cfg: NeerConfig = {
     session: { dmScope: "per-account-channel-peer" },
   };
   const route = resolveAgentRoute({
@@ -242,7 +242,7 @@ test("dmScope=per-account-channel-peer isolates DM sessions per account, channel
 });
 
 test("dmScope=per-account-channel-peer uses default accountId when not provided", () => {
-  const cfg: OpenClawConfig = {
+  const cfg: NeerConfig = {
     session: { dmScope: "per-account-channel-peer" },
   };
   const route = resolveAgentRoute({
@@ -413,7 +413,7 @@ describe("parentPeer binding inheritance (thread support)", () => {
 
 describe("backward compatibility: peer.kind dm → direct", () => {
   test("legacy dm in config matches runtime direct peer", () => {
-    const cfg: OpenClawConfig = {
+    const cfg: NeerConfig = {
       bindings: [
         {
           agentId: "alex",
@@ -439,7 +439,7 @@ describe("backward compatibility: peer.kind dm → direct", () => {
 
 describe("role-based agent routing", () => {
   test("guild+roles binding matches when member has matching role", () => {
-    const cfg: OpenClawConfig = {
+    const cfg: NeerConfig = {
       bindings: [{ agentId: "opus", match: { channel: "discord", guildId: "g1", roles: ["r1"] } }],
     };
     const route = resolveAgentRoute({
@@ -454,7 +454,7 @@ describe("role-based agent routing", () => {
   });
 
   test("guild+roles binding skipped when no matching role", () => {
-    const cfg: OpenClawConfig = {
+    const cfg: NeerConfig = {
       bindings: [{ agentId: "opus", match: { channel: "discord", guildId: "g1", roles: ["r1"] } }],
     };
     const route = resolveAgentRoute({
@@ -469,7 +469,7 @@ describe("role-based agent routing", () => {
   });
 
   test("guild+roles is more specific than guild-only", () => {
-    const cfg: OpenClawConfig = {
+    const cfg: NeerConfig = {
       bindings: [
         { agentId: "opus", match: { channel: "discord", guildId: "g1", roles: ["r1"] } },
         { agentId: "sonnet", match: { channel: "discord", guildId: "g1" } },
@@ -487,7 +487,7 @@ describe("role-based agent routing", () => {
   });
 
   test("peer binding still beats guild+roles", () => {
-    const cfg: OpenClawConfig = {
+    const cfg: NeerConfig = {
       bindings: [
         {
           agentId: "peer-agent",
@@ -508,7 +508,7 @@ describe("role-based agent routing", () => {
   });
 
   test("parent peer binding still beats guild+roles", () => {
-    const cfg: OpenClawConfig = {
+    const cfg: NeerConfig = {
       bindings: [
         {
           agentId: "parent-agent",
@@ -530,7 +530,7 @@ describe("role-based agent routing", () => {
   });
 
   test("no memberRoleIds means guild+roles doesn't match", () => {
-    const cfg: OpenClawConfig = {
+    const cfg: NeerConfig = {
       bindings: [{ agentId: "opus", match: { channel: "discord", guildId: "g1", roles: ["r1"] } }],
     };
     const route = resolveAgentRoute({
@@ -544,7 +544,7 @@ describe("role-based agent routing", () => {
   });
 
   test("first matching binding wins with multiple role bindings", () => {
-    const cfg: OpenClawConfig = {
+    const cfg: NeerConfig = {
       bindings: [
         { agentId: "opus", match: { channel: "discord", guildId: "g1", roles: ["r1"] } },
         { agentId: "sonnet", match: { channel: "discord", guildId: "g1", roles: ["r2"] } },
@@ -562,7 +562,7 @@ describe("role-based agent routing", () => {
   });
 
   test("empty roles array treated as no role restriction", () => {
-    const cfg: OpenClawConfig = {
+    const cfg: NeerConfig = {
       bindings: [{ agentId: "opus", match: { channel: "discord", guildId: "g1", roles: [] } }],
     };
     const route = resolveAgentRoute({
@@ -577,7 +577,7 @@ describe("role-based agent routing", () => {
   });
 
   test("guild+roles binding does not match as guild-only when roles do not match", () => {
-    const cfg: OpenClawConfig = {
+    const cfg: NeerConfig = {
       bindings: [
         { agentId: "opus", match: { channel: "discord", guildId: "g1", roles: ["admin"] } },
       ],

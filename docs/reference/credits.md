@@ -1,27 +1,12 @@
 ---
-summary: "Project origin, contributors, and license."
-read_when:
-  - You want the project backstory or contributor credits
-title: "Credits"
+title: "Credits and license"
+description: "Verified authorship and licensing information for NEER."
 ---
 
-## The name
+# Credits and license
 
-OpenClaw = CLAW + TARDIS, because every space lobster needs a time and space machine.
+The current `package.json` identifies **Khalil Benhaya** as the designer and engineer of NEER.
 
-## Credits
+The source tree includes code and documentation from upstream projects and open-source dependencies. A complete authorship attribution for every inherited file is **Not verified in the current repository**; consult the relevant file headers, dependency metadata, and version history when attributing a specific contribution.
 
-- **Peter Steinberger** ([@steipete](https://x.com/steipete)) - Creator, lobster whisperer
-- **Mario Zechner** ([@badlogicc](https://x.com/badlogicgames)) - Pi creator, security pen tester
-- **Clawd** - The space lobster who demanded a better name
-
-## Core contributors
-
-- **Maxim Vovshin** (@Hyaxia, [36747317+Hyaxia@users.noreply.github.com](mailto:36747317+Hyaxia@users.noreply.github.com)) - Blogwatcher skill
-- **Nacho Iacovino** (@nachoiacovino, [nacho.iacovino@gmail.com](mailto:nacho.iacovino@gmail.com)) - Location parsing (Telegram and WhatsApp)
-
-## License
-
-MIT - Free as a lobster in the ocean.
-
-> "We are all just playing with our own prompts." (An AI, probably high on tokens)
+NEER is distributed under the MIT License. Read the [LICENSE file](https://github.com/neer/neer/blob/main/LICENSE) for the full terms.

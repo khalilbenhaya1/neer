@@ -90,6 +90,9 @@ function pickDefaultNode(nodes: NodeListNode[]): NodeListNode | null {
     Array.isArray(n.caps) ? n.caps.includes("canvas") : true,
   );
   if (withCanvas.length === 0) {
+    if (nodes.length === 1) {
+      return nodes[0];
+    }
     return null;
   }
 
@@ -99,17 +102,26 @@ function pickDefaultNode(nodes: NodeListNode[]): NodeListNode | null {
     return candidates[0];
   }
 
-  const local = candidates.filter(
-    (n) =>
-      n.platform?.toLowerCase().startsWith("mac") &&
-      typeof n.nodeId === "string" &&
-      n.nodeId.startsWith("mac-"),
-  );
+  // Prefer "local" sounding nodes or desktop platforms
+  const local = candidates.filter((n) => {
+    const platform = n.platform?.toLowerCase() || "";
+    const id = (typeof n.nodeId === "string" ? n.nodeId : "").toLowerCase();
+    return (
+      platform.startsWith("mac") ||
+      platform.startsWith("win") ||
+      platform.startsWith("lin") ||
+      id.startsWith("mac-") ||
+      id.startsWith("win-") ||
+      id.startsWith("lin-") ||
+      id === "local"
+    );
+  });
+
   if (local.length === 1) {
     return local[0];
   }
 
-  return null;
+  return candidates[0] || null;
 }
 
 export async function listNodes(opts: GatewayCallOptions): Promise<NodeListNode[]> {

@@ -106,7 +106,7 @@ function createBaseRun(params: {
 describe("runReplyAgent auto-compaction token update", () => {
   it("updates totalTokens after auto-compaction using lastCallUsage", async () => {
     runEmbeddedPiAgentMock.mockReset();
-    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-compact-tokens-"));
+    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "neer-compact-tokens-"));
     const storePath = path.join(tmp, "sessions.json");
     const sessionKey = "main";
     const sessionEntry = {
@@ -181,7 +181,7 @@ describe("runReplyAgent auto-compaction token update", () => {
 
   it("updates totalTokens from lastCallUsage even without compaction", async () => {
     runEmbeddedPiAgentMock.mockReset();
-    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-usage-last-"));
+    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "neer-usage-last-"));
     const storePath = path.join(tmp, "sessions.json");
     const sessionKey = "main";
     const sessionEntry = {

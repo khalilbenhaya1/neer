@@ -1,0 +1,117 @@
+/* Chat Compose Tools */
+.chat-compose__tools {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-right: auto;
+    /* Push start/send buttons to the right */
+}
+
+.btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--muted);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--duration-fast);
+}
+
+.btn-icon:hover:not(:disabled) {
+    background: var(--bg-hover);
+    color: var(--text);
+    border-color: var(--border);
+}
+
+.btn-icon:active:not(:disabled) {
+    background: var(--bg-active);
+    transform: translateY(1px);
+}
+
+.btn-icon:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-icon svg {
+    width: 20px;
+    height: 20px;
+    stroke-width: 2;
+}
+
+/* Voice call active state */
+.btn-icon--active {
+    color: var(--primary, #7c3aed);
+    background: color-mix(in srgb, var(--primary, #7c3aed) 12%, transparent);
+    border-color: color-mix(in srgb, var(--primary, #7c3aed) 30%, transparent);
+}
+
+/* Danger (End Call) state */
+.btn-icon--active.danger {
+    color: #ef4444;
+    background: color-mix(in srgb, #ef4444 12%, transparent);
+    border-color: color-mix(in srgb, #ef4444 35%, transparent);
+    animation: voice-call-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes voice-call-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, #ef4444 35%, transparent); }
+    50%       { box-shadow: 0 0 0 5px color-mix(in srgb, #ef4444 0%, transparent); }
+}
+
+/* Voice status indicator bar */
+.chat-voice-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--bg-card, #1a1a2e) 80%, transparent);
+    border: 1px solid var(--border, rgba(255,255,255,0.08));
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: 0.03em;
+    text-transform: capitalize;
+    white-space: nowrap;
+    user-select: none;
+}
+
+.chat-voice-status__dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--muted);
+    flex-shrink: 0;
+}
+
+/* State-specific dot colors */
+.chat-voice-status__dot--listening {
+    background: #22c55e; /* green */
+    animation: status-blink 1s ease-in-out infinite;
+}
+
+.chat-voice-status__dot--thinking {
+    background: #eab308; /* yellow */
+    animation: status-blink 0.7s ease-in-out infinite;
+}
+
+.chat-voice-status__dot--speaking {
+    background: #3b82f6; /* blue */
+    animation: status-blink 1.2s ease-in-out infinite;
+}
+
+.chat-voice-status__dot--idle {
+    background: var(--muted);
+}
+
+@keyframes status-blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.35; }
+}

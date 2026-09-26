@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { NeerConfig } from "../config/config.js";
 import { normalizeTestText } from "../../test/helpers/normalize-text.js";
 import { withTempHome } from "../../test/helpers/temp-home.js";
 import {
@@ -45,7 +45,7 @@ describe("buildStatusMessage", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NeerConfig,
       agent: {
         model: "anthropic/pi:opus",
         contextTokens: 32_000,
@@ -71,7 +71,7 @@ describe("buildStatusMessage", () => {
     });
     const normalized = normalizeTestText(text);
 
-    expect(normalized).toContain("OpenClaw");
+    expect(normalized).toContain("Neer");
     expect(normalized).toContain("Model: anthropic/pi:opus");
     expect(normalized).toContain("api-key");
     expect(normalized).toContain("Tokens: 1.2k in / 800 out");
@@ -96,7 +96,7 @@ describe("buildStatusMessage", () => {
             { id: "discord", sandbox: { mode: "all" } },
           ],
         },
-      } as OpenClawConfig,
+      } as NeerConfig,
       agent: {},
       sessionKey: "agent:discord:discord:channel:1456350065223270435",
       sessionScope: "per-sender",
@@ -352,7 +352,7 @@ describe("buildStatusMessage", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NeerConfig,
       agent: { model: "anthropic/claude-opus-4-5" },
       sessionEntry: { sessionId: "c1", updatedAt: 0, inputTokens: 10 },
       sessionKey: "agent:main:main",
@@ -373,7 +373,7 @@ describe("buildStatusMessage", () => {
         const sessionId = "sess-1";
         const logPath = path.join(
           dir,
-          ".openclaw",
+          ".neer",
           "agents",
           "main",
           "sessions",
@@ -422,7 +422,7 @@ describe("buildStatusMessage", () => {
 
         expect(normalizeTestText(text)).toContain("Context: 1.0k/32k");
       },
-      { prefix: "openclaw-status-" },
+      { prefix: "neer-status-" },
     );
   });
 
@@ -435,7 +435,7 @@ describe("buildStatusMessage", () => {
         const sessionId = "sess-worker1";
         const logPath = path.join(
           dir,
-          ".openclaw",
+          ".neer",
           "agents",
           "worker1",
           "sessions",
@@ -484,7 +484,7 @@ describe("buildStatusMessage", () => {
 
         expect(normalizeTestText(text)).toContain("Context: 1.0k/32k");
       },
-      { prefix: "openclaw-status-" },
+      { prefix: "neer-status-" },
     );
   });
 });
@@ -493,7 +493,7 @@ describe("buildCommandsMessage", () => {
   it("lists commands with aliases and hints", () => {
     const text = buildCommandsMessage({
       commands: { config: false, debug: false },
-    } as OpenClawConfig);
+    } as NeerConfig);
     expect(text).toContain("ℹ️ Slash commands");
     expect(text).toContain("Status");
     expect(text).toContain("/commands - List all slash commands.");
@@ -508,7 +508,7 @@ describe("buildCommandsMessage", () => {
     const text = buildCommandsMessage(
       {
         commands: { config: false, debug: false },
-      } as OpenClawConfig,
+      } as NeerConfig,
       [
         {
           name: "demo_skill",
@@ -525,7 +525,7 @@ describe("buildHelpMessage", () => {
   it("hides config/debug when disabled", () => {
     const text = buildHelpMessage({
       commands: { config: false, debug: false },
-    } as OpenClawConfig);
+    } as NeerConfig);
     expect(text).toContain("Skills");
     expect(text).toContain("/skill <name> [input]");
     expect(text).not.toContain("/config");
@@ -538,7 +538,7 @@ describe("buildCommandsMessagePaginated", () => {
     const result = buildCommandsMessagePaginated(
       {
         commands: { config: false, debug: false },
-      } as OpenClawConfig,
+      } as NeerConfig,
       undefined,
       { surface: "telegram", page: 1 },
     );
@@ -554,7 +554,7 @@ describe("buildCommandsMessagePaginated", () => {
     const result = buildCommandsMessagePaginated(
       {
         commands: { config: false, debug: false },
-      } as OpenClawConfig,
+      } as NeerConfig,
       undefined,
       { surface: "telegram", page: 99 },
     );

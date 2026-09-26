@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import type { GatewayWsClient } from "./server/ws-types.js";
+import { activityTracker } from "../cognition/activity.js";
 
 export type NodeSession = {
   nodeId: string;
@@ -75,6 +76,10 @@ export class NodeRegistry {
     };
     this.nodesById.set(nodeId, session);
     this.nodesByConn.set(client.connId, nodeId);
+
+    // Register activity for node connection
+    activityTracker.registerActivity(5);
+
     return session;
   }
 

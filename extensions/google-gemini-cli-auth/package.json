@@ -1,13 +1,13 @@
 {
-  "name": "@openclaw/google-gemini-cli-auth",
+  "name": "@neer/google-gemini-cli-auth",
   "version": "2026.2.13",
   "private": true,
-  "description": "OpenClaw Gemini CLI OAuth provider plugin",
+  "description": "Neer Gemini CLI OAuth provider plugin",
   "type": "module",
   "devDependencies": {
-    "openclaw": "workspace:*"
+    "neer": "workspace:*"
   },
-  "openclaw": {
+  "neer": {
     "extensions": [
       "./index.ts"
     ]

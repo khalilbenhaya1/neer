@@ -1,15 +1,19 @@
 ---
-summary: "Research notes: offline memory system for Clawd workspaces (Markdown source-of-truth + derived index)"
+summary: "Unimplemented research proposal for a Markdown-based workspace memory index"
 read_when:
-  - Designing workspace memory (~/.openclaw/workspace) beyond daily Markdown logs
-  - Deciding: standalone CLI vs deep OpenClaw integration
+  - Designing workspace memory (~/.neer/workspace) beyond daily Markdown logs
+  - Deciding: standalone CLI vs deep Neer integration
   - Adding offline recall + reflection (retain/recall/reflect)
 title: "Workspace Memory Research"
 ---
 
 # Workspace Memory v2 (offline): research notes
 
-Target: Clawd-style workspace (`agents.defaults.workspace`, default `~/.openclaw/workspace`) where “memory” is stored as one Markdown file per day (`memory/YYYY-MM-DD.md`) plus a small set of stable files (e.g. `memory.md`, `SOUL.md`).
+<Warning>
+This page is a design proposal, not a description of the current memory implementation. The proposed Markdown source-of-truth and derived index are **Not verified in the current repository.** See [Memory](/concepts/memory) for implemented memory behavior.
+</Warning>
+
+Target: an agent workspace (`agents.defaults.workspace`, default `~/.neer/workspace`) where “memory” is stored as one Markdown file per day (`memory/YYYY-MM-DD.md`) plus a small set of stable files (e.g. `memory.md`, `SOUL.md`).
 
 This doc proposes an **offline-first** memory architecture that keeps Markdown as the canonical, reviewable source of truth, but adds **structured recall** (search, entity summaries, confidence updates) via a derived index.
 
@@ -58,12 +62,12 @@ Two pieces to blend:
 
 ### Canonical store (git-friendly)
 
-Keep `~/.openclaw/workspace` as canonical human-readable memory.
+Keep `~/.neer/workspace` as canonical human-readable memory.
 
 Suggested workspace layout:
 
 ```
-~/.openclaw/workspace/
+~/.neer/workspace/
   memory.md                    # small: durable facts + preferences (core-ish)
   memory/
     YYYY-MM-DD.md              # daily log (append; narrative)
@@ -72,9 +76,9 @@ Suggested workspace layout:
     experience.md              # what the agent did (first-person)
     opinions.md                # subjective prefs/judgments + confidence + evidence pointers
     entities/
-      Peter.md
-      The-Castle.md
-      warelay.md
+      person-1.md
+      project-1.md
+      service-1.md
       ...
 ```
 
@@ -82,14 +86,14 @@ Notes:
 
 - **Daily log stays daily log**. No need to turn it into JSON.
 - The `bank/` files are **curated**, produced by reflection jobs, and can still be edited by hand.
-- `memory.md` remains “small + core-ish”: the things you want Clawd to see every session.
+- `memory.md` remains “small + core-ish”: the durable notes you want an agent to see every session.
 
 ### Derived store (machine recall)
 
 Add a derived index under the workspace (not necessarily git tracked):
 
 ```
-~/.openclaw/workspace/.memory/index.sqlite
+~/.neer/workspace/.memory/index.sqlite
 ```
 
 Back it with:
@@ -117,15 +121,15 @@ Example:
 
 ```
 ## Retain
-- W @Peter: Currently in Marrakech (Nov 27–Dec 1, 2025) for Andy’s birthday.
-- B @warelay: I fixed the Baileys WS crash by wrapping connection.update handlers in try/catch (see memory/2025-11-27.md).
-- O(c=0.95) @Peter: Prefers concise replies (&lt;1500 chars) on WhatsApp; long content goes into files.
+- W @person-1: Is attending a scheduled event during a date range.
+- B @service-1: The agent recorded a fix for a connection error in a dated log.
+- O(c=0.95) @person-1: Prefers concise replies; long content should be saved in a file.
 ```
 
 Minimal parsing:
 
 - Type prefix: `W` (world), `B` (experience/biographical), `O` (opinion), `S` (observation/summary; usually generated)
-- Entities: `@Peter`, `@warelay`, etc (slugs map to `bank/entities/*.md`)
+- Entities: `@person-1`, `@service-1`, etc. (slugs map to `bank/entities/*.md`)
 - Opinion confidence: `O(c=0.0..1.0)` optional
 
 If you don’t want authors to think about it: the reflect job can infer these bullets from the rest of the log, but having an explicit `## Retain` section is the easiest “quality lever”.
@@ -137,13 +141,13 @@ Recall should support:
 - **lexical**: “find exact terms / names / commands” (FTS5)
 - **entity**: “tell me about X” (entity pages + entity-linked facts)
 - **temporal**: “what happened around Nov 27” / “since last week”
-- **opinion**: “what does Peter prefer?” (with confidence + evidence)
+- **opinion**: “what does this person prefer?” (with confidence + evidence)
 
 Return format should be agent-friendly and cite sources:
 
 - `kind` (`world|experience|opinion|observation`)
 - `timestamp` (source day, or extracted time range if present)
-- `entities` (`["Peter","warelay"]`)
+- `entities` (`["person-1","service-1"]`)
 - `content` (the narrative fact)
 - `source` (`memory/2025-11-27.md#L12` etc)
 
@@ -168,17 +172,17 @@ Opinion evolution (simple, explainable):
 
 ## CLI integration: standalone vs deep integration
 
-Recommendation: **deep integration in OpenClaw**, but keep a separable core library.
+Recommendation: **deep integration in Neer**, but keep a separable core library.
 
-### Why integrate into OpenClaw?
+### Why integrate into Neer?
 
-- OpenClaw already knows:
+- Neer already knows:
   - the workspace path (`agents.defaults.workspace`)
   - the session model + heartbeats
   - logging + troubleshooting patterns
 - You want the agent itself to call the tools:
-  - `openclaw memory recall "…" --k 25 --since 30d`
-  - `openclaw memory reflect --since 7d`
+  - `neer memory recall "…" --k 25 --since 30d`
+  - `neer memory reflect --since 7d`
 
 ### Why still split a library?
 
@@ -192,7 +196,7 @@ The memory tooling is intended to be a small CLI + library layer, but this is ex
 
 If “S-Collide” refers to **SuCo (Subspace Collision)**: it’s an ANN retrieval approach that targets strong recall/latency tradeoffs by using learned/structured collisions in subspaces (paper: arXiv 2411.14754, 2024).
 
-Pragmatic take for `~/.openclaw/workspace`:
+Pragmatic take for `~/.neer/workspace`:
 
 - **don’t start** with SuCo.
 - start with SQLite FTS + (optional) simple embeddings; you’ll get most UX wins immediately.

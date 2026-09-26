@@ -78,13 +78,13 @@ jq -r '.docs' .local/review.json
 
 Required commit subject format:
 
-- `fix: <summary> (openclaw#<PR>) thanks @<pr-author>`
+- `fix: <summary> (neer#<PR>) thanks @<pr-author>`
 
 Use explicit file list:
 
 ```sh
 source .local/pr-meta.env
-scripts/committer "fix: <summary> (openclaw#$PR_NUMBER) thanks @$PR_AUTHOR" <file1> <file2> ...
+scripts/committer "fix: <summary> (neer#$PR_NUMBER) thanks @$PR_AUTHOR" <file1> <file2> ...
 ```
 
 Validate commit subject:

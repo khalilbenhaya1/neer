@@ -12,7 +12,7 @@ import {
 
 describe("device pairing tokens", () => {
   test("preserves existing token scopes when rotating without scopes", async () => {
-    const baseDir = await mkdtemp(join(tmpdir(), "openclaw-device-pairing-"));
+    const baseDir = await mkdtemp(join(tmpdir(), "neer-device-pairing-"));
     const request = await requestDevicePairing(
       {
         deviceId: "device-1",
@@ -44,7 +44,7 @@ describe("device pairing tokens", () => {
   });
 
   test("verifies token and rejects mismatches", async () => {
-    const baseDir = await mkdtemp(join(tmpdir(), "openclaw-device-pairing-"));
+    const baseDir = await mkdtemp(join(tmpdir(), "neer-device-pairing-"));
     const request = await requestDevicePairing(
       {
         deviceId: "device-1",

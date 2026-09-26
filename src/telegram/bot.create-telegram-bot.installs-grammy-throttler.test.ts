@@ -5,7 +5,7 @@ import { createTelegramBot, getTelegramSequentialKey } from "./bot.js";
 import { resolveTelegramFetch } from "./fetch.js";
 
 const { sessionStorePath } = vi.hoisted(() => ({
-  sessionStorePath: `/tmp/openclaw-telegram-throttler-${Math.random().toString(16).slice(2)}.json`,
+  sessionStorePath: `/tmp/neer-telegram-throttler-${Math.random().toString(16).slice(2)}.json`,
 }));
 const { loadWebMedia } = vi.hoisted(() => ({
   loadWebMedia: vi.fn(),
@@ -294,7 +294,7 @@ describe("createTelegramBot", () => {
           message_id: 10,
         },
       },
-      me: { username: "openclaw_bot" },
+      me: { username: "neer_bot" },
       getFile: async () => ({ download: async () => new Uint8Array() }),
     });
 
@@ -328,7 +328,7 @@ describe("createTelegramBot", () => {
       };
       await handler({
         message,
-        me: { username: "openclaw_bot" },
+        me: { username: "neer_bot" },
         getFile: async () => ({ download: async () => new Uint8Array() }),
       });
 
@@ -371,7 +371,7 @@ describe("createTelegramBot", () => {
         date: 1736380800,
         from: { id: 999, username: "random" },
       },
-      me: { username: "openclaw_bot" },
+      me: { username: "neer_bot" },
       getFile: async () => ({ download: async () => new Uint8Array() }),
     });
 
@@ -382,7 +382,7 @@ describe("createTelegramBot", () => {
     expect(pairingText).toContain("Your Telegram user id: 999");
     expect(pairingText).toContain("Pairing code:");
     expect(pairingText).toContain("PAIRME12");
-    expect(pairingText).toContain("openclaw pairing approve telegram PAIRME12");
+    expect(pairingText).toContain("neer pairing approve telegram PAIRME12");
     expect(pairingText).not.toContain("<code>");
   });
   it("does not resend pairing code when a request is already pending", async () => {
@@ -411,12 +411,12 @@ describe("createTelegramBot", () => {
 
     await handler({
       message,
-      me: { username: "openclaw_bot" },
+      me: { username: "neer_bot" },
       getFile: async () => ({ download: async () => new Uint8Array() }),
     });
     await handler({
       message: { ...message, text: "hello again" },
-      me: { username: "openclaw_bot" },
+      me: { username: "neer_bot" },
       getFile: async () => ({ download: async () => new Uint8Array() }),
     });
 
@@ -431,7 +431,7 @@ describe("createTelegramBot", () => {
     const handler = getOnHandler("message") as (ctx: Record<string, unknown>) => Promise<void>;
     await handler({
       message: { chat: { id: 42, type: "private" }, text: "hi" },
-      me: { username: "openclaw_bot" },
+      me: { username: "neer_bot" },
       getFile: async () => ({ download: async () => new Uint8Array() }),
     });
 

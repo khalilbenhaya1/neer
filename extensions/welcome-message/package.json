@@ -1,0 +1,14 @@
+{
+    "name": "@neer/welcome-message",
+    "version": "1.0.0",
+    "description": "Neer Welcome Message plugin",
+    "type": "module",
+    "devDependencies": {
+        "neer": "workspace:*"
+    },
+    "neer": {
+        "extensions": [
+            "./index.ts"
+        ]
+    }
+}

@@ -1,18 +1,18 @@
 <?xml version="1.0" standalone="yes"?>
 <rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
     <channel>
-        <title>OpenClaw</title>
+        <title>Neer</title>
         <item>
             <title>2026.2.12</title>
             <pubDate>Fri, 13 Feb 2026 03:17:54 +0100</pubDate>
-            <link>https://raw.githubusercontent.com/openclaw/openclaw/main/appcast.xml</link>
+            <link>https://raw.githubusercontent.com/neer/neer/main/appcast.xml</link>
             <sparkle:version>9500</sparkle:version>
             <sparkle:shortVersionString>2026.2.12</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
-            <description><![CDATA[<h2>OpenClaw 2026.2.12</h2>
+            <description><![CDATA[<h2>Neer 2026.2.12</h2>
 <h3>Changes</h3>
 <ul>
-<li>CLI: add <code>openclaw logs --local-time</code> to display log timestamps in local timezone. (#13818) Thanks @xialonglee.</li>
+<li>CLI: add <code>neer logs --local-time</code> to display log timestamps in local timezone. (#13818) Thanks @xialonglee.</li>
 <li>Telegram: render blockquotes as native <code><blockquote></code> tags instead of stripping them. (#14608)</li>
 <li>Config: avoid redacting <code>maxTokens</code>-like fields during config snapshot redaction, preventing round-trip validation failures in <code>/config</code>. (#14006) Thanks @constansino.</li>
 </ul>
@@ -32,12 +32,12 @@
 <li>Security/Browser: require auth for loopback browser control HTTP routes, auto-generate <code>gateway.auth.token</code> when browser control starts without auth, and add a security-audit check for unauthenticated browser control. Thanks @tcusolle.</li>
 <li>Sessions/Gateway: harden transcript path resolution and reject unsafe session IDs/file paths so session operations stay within agent sessions directories. Thanks @akhmittra.</li>
 <li>Gateway: raise WS payload/buffer limits so 5,000,000-byte image attachments work reliably. (#14486) Thanks @0xRaini.</li>
-<li>Logging/CLI: use local timezone timestamps for console prefixing, and include <code>±HH:MM</code> offsets when using <code>openclaw logs --local-time</code> to avoid ambiguity. (#14771) Thanks @0xRaini.</li>
+<li>Logging/CLI: use local timezone timestamps for console prefixing, and include <code>±HH:MM</code> offsets when using <code>neer logs --local-time</code> to avoid ambiguity. (#14771) Thanks @0xRaini.</li>
 <li>Gateway: drain active turns before restart to prevent message loss. (#13931) Thanks @0xRaini.</li>
 <li>Gateway: auto-generate auth token during install to prevent launchd restart loops. (#13813) Thanks @cathrynlavery.</li>
 <li>Gateway: prevent <code>undefined</code>/missing token in auth config. (#13809) Thanks @asklee-klawd.</li>
 <li>Gateway: handle async <code>EPIPE</code> on stdout/stderr during shutdown. (#13414) Thanks @keshav55.</li>
-<li>Gateway/Control UI: resolve missing dashboard assets when <code>openclaw</code> is installed globally via symlink-based Node managers (nvm/fnm/n/Homebrew). (#14919) Thanks @aynorica.</li>
+<li>Gateway/Control UI: resolve missing dashboard assets when <code>neer</code> is installed globally via symlink-based Node managers (nvm/fnm/n/Homebrew). (#14919) Thanks @aynorica.</li>
 <li>Cron: use requested <code>agentId</code> for isolated job auth resolution. (#13983) Thanks @0xRaini.</li>
 <li>Cron: prevent cron jobs from skipping execution when <code>nextRunAtMs</code> advances. (#14068) Thanks @WalterSumbon.</li>
 <li>Cron: pass <code>agentId</code> to <code>runHeartbeatOnce</code> for main-session jobs. (#14140) Thanks @ishikawa-pro.</li>
@@ -47,7 +47,7 @@
 <li>Cron: prevent one-shot <code>at</code> jobs from re-firing on restart after skipped/errored runs. (#13878) Thanks @lailoo.</li>
 <li>Heartbeat: prevent scheduler stalls on unexpected run errors and avoid immediate rerun loops after <code>requests-in-flight</code> skips. (#14901) Thanks @joeykrug.</li>
 <li>Cron: honor stored session model overrides for isolated-agent runs while preserving <code>hooks.gmail.model</code> precedence for Gmail hook sessions. (#14983) Thanks @shtse8.</li>
-<li>Logging/Browser: fall back to <code>os.tmpdir()/openclaw</code> for default log, browser trace, and browser download temp paths when <code>/tmp/openclaw</code> is unavailable.</li>
+<li>Logging/Browser: fall back to <code>os.tmpdir()/neer</code> for default log, browser trace, and browser download temp paths when <code>/tmp/neer</code> is unavailable.</li>
 <li>WhatsApp: convert Markdown bold/strikethrough to WhatsApp formatting. (#14285) Thanks @Raikan10.</li>
 <li>WhatsApp: allow media-only sends and normalize leading blank payloads. (#14408) Thanks @karimnaguib.</li>
 <li>WhatsApp: default MIME type for voice messages when Baileys omits it. (#14444) Thanks @mcaxtr.</li>
@@ -60,7 +60,7 @@
 <li>Discord: process DM reactions instead of silently dropping them. (#10418) Thanks @mcaxtr.</li>
 <li>Discord: respect replyToMode in threads. (#11062) Thanks @cordx56.</li>
 <li>Heartbeat: filter noise-only system events so scheduled reminder notifications do not fire when cron runs carry only heartbeat markers. (#13317) Thanks @pvtclawn.</li>
-<li>Signal: render mention placeholders as <code>@uuid</code>/<code>@phone</code> so mention gating and Clawdbot targeting work. (#2013) Thanks @alexgleason.</li>
+<li>Signal: render mention placeholders as <code>@uuid</code>/<code>@phone</code> so mention gating and Neer targeting work. (#2013) Thanks @alexgleason.</li>
 <li>Discord: omit empty content fields for media-only messages while preserving caption whitespace. (#9507) Thanks @leszekszpunar.</li>
 <li>Onboarding/Providers: add Z.AI endpoint-specific auth choices (<code>zai-coding-global</code>, <code>zai-coding-cn</code>, <code>zai-global</code>, <code>zai-cn</code>) and expand default Z.AI model wiring. (#13456) Thanks @tomsun28.</li>
 <li>Onboarding/Providers: update MiniMax API default/recommended models from M2.1 to M2.5, add M2.5/M2.5-Lightning model entries, and include <code>minimax-m2.5</code> in modern model filtering. (#14865) Thanks @adao-max.</li>
@@ -70,7 +70,7 @@
 <li>Feishu: trigger mention-gated group handling only when the bot itself is mentioned (not just any mention). (#11088) Thanks @openperf.</li>
 <li>Feishu: probe status uses the resolved account context for multi-account credential checks. (#11233) Thanks @onevcat.</li>
 <li>Feishu DocX: preserve top-level converted block order using <code>firstLevelBlockIds</code> when writing/appending documents. (#13994) Thanks @Cynosure159.</li>
-<li>Feishu plugin packaging: remove <code>workspace:*</code> <code>openclaw</code> dependency from <code>extensions/feishu</code> and sync lockfile for install compatibility. (#14423) Thanks @jackcooper2015.</li>
+<li>Feishu plugin packaging: remove <code>workspace:*</code> <code>neer</code> dependency from <code>extensions/feishu</code> and sync lockfile for install compatibility. (#14423) Thanks @jackcooper2015.</li>
 <li>CLI/Wizard: exit with code 1 when <code>configure</code>, <code>agents add</code>, or interactive <code>onboard</code> wizards are canceled, so <code>set -e</code> automation stops correctly. (#14156) Thanks @0xRaini.</li>
 <li>Media: strip <code>MEDIA:</code> lines with local paths instead of leaking as visible text. (#14399) Thanks @0xRaini.</li>
 <li>Config/Cron: exclude <code>maxTokens</code> from config redaction and honor <code>deleteAfterRun</code> on skipped cron jobs. (#13342) Thanks @niceysam.</li>
@@ -94,18 +94,18 @@
 <li>Discord tests: use a partial @buape/carbon mock in slash command coverage. (#13262) Thanks @arosstale.</li>
 <li>Tests: update thread ID handling in Slack message collection tests. (#14108) Thanks @swizzmagik.</li>
 </ul>
-<p><a href="https://github.com/openclaw/openclaw/blob/main/CHANGELOG.md">View full changelog</a></p>
+<p><a href="https://github.com/neer/neer/blob/main/CHANGELOG.md">View full changelog</a></p>
 ]]></description>
-            <enclosure url="https://github.com/openclaw/openclaw/releases/download/v2026.2.12/OpenClaw-2026.2.12.zip" length="22877692" type="application/octet-stream" sparkle:edSignature="TGylTM4/7Lab+qp1nuPeOAmEVV1WkafXUPub8ws0z/0mYfbVygRuiev+u3zdPjQWhLnGYTgRgKVyW+kB2+Q2BQ=="/>
+            <enclosure url="https://github.com/neer/neer/releases/download/v2026.2.12/Neer-2026.2.12.zip" length="22877692" type="application/octet-stream" sparkle:edSignature="TGylTM4/7Lab+qp1nuPeOAmEVV1WkafXUPub8ws0z/0mYfbVygRuiev+u3zdPjQWhLnGYTgRgKVyW+kB2+Q2BQ=="/>
         </item>
         <item>
             <title>2026.2.9</title>
             <pubDate>Mon, 09 Feb 2026 13:23:25 -0600</pubDate>
-            <link>https://raw.githubusercontent.com/openclaw/openclaw/main/appcast.xml</link>
+            <link>https://raw.githubusercontent.com/neer/neer/main/appcast.xml</link>
             <sparkle:version>9194</sparkle:version>
             <sparkle:shortVersionString>2026.2.9</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
-            <description><![CDATA[<h2>OpenClaw 2026.2.9</h2>
+            <description><![CDATA[<h2>Neer 2026.2.9</h2>
 <h3>Added</h3>
 <ul>
 <li>iOS: alpha node app + setup-code onboarding. (#11756) Thanks @mbelinky.</li>
@@ -115,7 +115,7 @@
 <li>Gateway: add agent management RPC methods for the web UI (<code>agents.create</code>, <code>agents.update</code>, <code>agents.delete</code>). (#11045) Thanks @advaitpaliwal.</li>
 <li>Web UI: show a Compaction divider in chat history. (#11341) Thanks @Takhoffman.</li>
 <li>Agents: include runtime shell in agent envelopes. (#1835) Thanks @Takhoffman.</li>
-<li>Paths: add <code>OPENCLAW_HOME</code> for overriding the home directory used by internal path resolution. (#12091) Thanks @sebslight.</li>
+<li>Paths: add <code>NEER_HOME</code> for overriding the home directory used by internal path resolution. (#12091) Thanks @sebslight.</li>
 </ul>
 <h3>Fixes</h3>
 <ul>
@@ -144,24 +144,24 @@
 <li>Config: clamp <code>maxTokens</code> to <code>contextWindow</code> to prevent invalid model configs. (#5516) Thanks @lailoo.</li>
 <li>Thinking: allow xhigh for <code>github-copilot/gpt-5.2-codex</code> and <code>github-copilot/gpt-5.2</code>. (#11646) Thanks @LatencyTDH.</li>
 <li>Discord: support forum/media thread-create starter messages, wire <code>message thread create --message</code>, and harden routing. (#10062) Thanks @jarvis89757.</li>
-<li>Paths: structurally resolve <code>OPENCLAW_HOME</code>-derived home paths and fix Windows drive-letter handling in tool meta shortening. (#12125) Thanks @mcaxtr.</li>
+<li>Paths: structurally resolve <code>NEER_HOME</code>-derived home paths and fix Windows drive-letter handling in tool meta shortening. (#12125) Thanks @mcaxtr.</li>
 <li>Memory: set Voyage embeddings <code>input_type</code> for improved retrieval. (#10818) Thanks @mcinteerj.</li>
 <li>Memory/QMD: reuse default model cache across agents instead of re-downloading per agent. (#12114) Thanks @tyler6204.</li>
 <li>Media understanding: recognize <code>.caf</code> audio attachments for transcription. (#10982) Thanks @succ985.</li>
-<li>State dir: honor <code>OPENCLAW_STATE_DIR</code> for default device identity and canvas storage paths. (#4824) Thanks @kossoy.</li>
+<li>State dir: honor <code>NEER_STATE_DIR</code> for default device identity and canvas storage paths. (#4824) Thanks @kossoy.</li>
 </ul>
-<p><a href="https://github.com/openclaw/openclaw/blob/main/CHANGELOG.md">View full changelog</a></p>
+<p><a href="https://github.com/neer/neer/blob/main/CHANGELOG.md">View full changelog</a></p>
 ]]></description>
-            <enclosure url="https://github.com/openclaw/openclaw/releases/download/v2026.2.9/OpenClaw-2026.2.9.zip" length="22872529" type="application/octet-stream" sparkle:edSignature="zvgwqlgqI7J5Gsi9VSULIQTMKqLiGE5ulC6NnRLKtOPphQsHZVdYSWm0E90+Yq8mG4lpsvbxQOSSPxpl43QTAw=="/>
+            <enclosure url="https://github.com/neer/neer/releases/download/v2026.2.9/Neer-2026.2.9.zip" length="22872529" type="application/octet-stream" sparkle:edSignature="zvgwqlgqI7J5Gsi9VSULIQTMKqLiGE5ulC6NnRLKtOPphQsHZVdYSWm0E90+Yq8mG4lpsvbxQOSSPxpl43QTAw=="/>
         </item>
         <item>
             <title>2026.2.3</title>
             <pubDate>Wed, 04 Feb 2026 17:47:10 -0800</pubDate>
-            <link>https://raw.githubusercontent.com/openclaw/openclaw/main/appcast.xml</link>
+            <link>https://raw.githubusercontent.com/neer/neer/main/appcast.xml</link>
             <sparkle:version>8900</sparkle:version>
             <sparkle:shortVersionString>2026.2.3</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
-            <description><![CDATA[<h2>OpenClaw 2026.2.3</h2>
+            <description><![CDATA[<h2>Neer 2026.2.3</h2>
 <h3>Changes</h3>
 <ul>
 <li>Telegram: remove last <code>@ts-nocheck</code> from <code>bot-handlers.ts</code>, use Grammy types directly, deduplicate <code>StickerMetadata</code>. Zero <code>@ts-nocheck</code> remaining in <code>src/telegram/</code>. (#9206)</li>
@@ -200,9 +200,9 @@
 <li>Telegram: include forward_from_chat metadata in forwarded messages and harden cron delivery target checks. (#8392) Thanks @Glucksberg.</li>
 <li>macOS: fix cron payload summary rendering and ISO 8601 formatter concurrency safety.</li>
 </ul>
-<p><a href="https://github.com/openclaw/openclaw/blob/main/CHANGELOG.md">View full changelog</a></p>
+<p><a href="https://github.com/neer/neer/blob/main/CHANGELOG.md">View full changelog</a></p>
 ]]></description>
-            <enclosure url="https://github.com/openclaw/openclaw/releases/download/v2026.2.3/OpenClaw-2026.2.3.zip" length="22530161" type="application/octet-stream" sparkle:edSignature="7eHUaQC6cx87HWbcaPh9T437+LqfE9VtQBf4p9JBjIyBrqGYxxp9KPvI5unEjg55j9j2djCXhseSMeyyRmvYBg=="/>
+            <enclosure url="https://github.com/neer/neer/releases/download/v2026.2.3/Neer-2026.2.3.zip" length="22530161" type="application/octet-stream" sparkle:edSignature="7eHUaQC6cx87HWbcaPh9T437+LqfE9VtQBf4p9JBjIyBrqGYxxp9KPvI5unEjg55j9j2djCXhseSMeyyRmvYBg=="/>
         </item>
     </channel>
 </rss>

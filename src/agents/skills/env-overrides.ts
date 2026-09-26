@@ -1,9 +1,9 @@
-import type { OpenClawConfig } from "../../config/config.js";
+import type { NeerConfig } from "../../config/config.js";
 import type { SkillEntry, SkillSnapshot } from "./types.js";
 import { resolveSkillConfig } from "./config.js";
 import { resolveSkillKey } from "./frontmatter.js";
 
-export function applySkillEnvOverrides(params: { skills: SkillEntry[]; config?: OpenClawConfig }) {
+export function applySkillEnvOverrides(params: { skills: SkillEntry[]; config?: NeerConfig }) {
   const { skills, config } = params;
   const updates: Array<{ key: string; prev: string | undefined }> = [];
 
@@ -20,7 +20,7 @@ export function applySkillEnvOverrides(params: { skills: SkillEntry[]; config?: 
           continue;
         }
         updates.push({ key: envKey, prev: process.env[envKey] });
-        process.env[envKey] = envValue;
+        process.env[envKey] = String(envValue);
       }
     }
 
@@ -44,11 +44,11 @@ export function applySkillEnvOverrides(params: { skills: SkillEntry[]; config?: 
 
 export function applySkillEnvOverridesFromSnapshot(params: {
   snapshot?: SkillSnapshot;
-  config?: OpenClawConfig;
+  config?: NeerConfig;
 }) {
   const { snapshot, config } = params;
   if (!snapshot) {
-    return () => {};
+    return () => { };
   }
   const updates: Array<{ key: string; prev: string | undefined }> = [];
 
@@ -64,7 +64,7 @@ export function applySkillEnvOverridesFromSnapshot(params: {
           continue;
         }
         updates.push({ key: envKey, prev: process.env[envKey] });
-        process.env[envKey] = envValue;
+        process.env[envKey] = String(envValue);
       }
     }
 

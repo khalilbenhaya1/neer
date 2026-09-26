@@ -27,7 +27,7 @@ describe("discord audit", () => {
           },
         },
       },
-    } as unknown as import("../config/config.js").OpenClawConfig;
+    } as unknown as import("../config/config.js").NeerConfig;
 
     const collected = collectDiscordAuditChannelIds({
       cfg,

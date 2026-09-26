@@ -1,13 +1,14 @@
 import type { IconName } from "./icons.js";
 
 export const TAB_GROUPS = [
-  { label: "Chat", tabs: ["chat"] },
+  { label: "🧠 Core", tabs: ["overview", "instances"] },
   {
-    label: "Control",
-    tabs: ["overview", "channels", "instances", "sessions", "usage", "cron"],
+    label: "💬 Communication",
+    tabs: ["chat", "sessions", "channels"],
   },
-  { label: "Agent", tabs: ["agents", "skills", "nodes"] },
-  { label: "Settings", tabs: ["config", "debug", "logs"] },
+  { label: "🧰 Capabilities", tabs: ["skills", "cron", "agents"] },
+  { label: "📊 Intelligence", tabs: ["usage", "logs"] },
+  { label: "⚙ System", tabs: ["nodes", "config", "debug"] },
 ] as const;
 
 export type Tab =
@@ -160,25 +161,25 @@ export function titleForTab(tab: Tab) {
     case "agents":
       return "Agents";
     case "overview":
-      return "Overview";
+      return "Command Center";
     case "channels":
       return "Channels";
     case "instances":
       return "Instances";
     case "sessions":
-      return "Sessions";
+      return "Conversations";
     case "usage":
-      return "Usage";
+      return "Usage & Models";
     case "cron":
-      return "Cron Jobs";
+      return "Automation";
     case "skills":
       return "Skills";
     case "nodes":
-      return "Nodes";
+      return "Gateway Core";
     case "chat":
       return "Chat";
     case "config":
-      return "Config";
+      return "Configuration";
     case "debug":
       return "Debug";
     case "logs":
@@ -191,31 +192,31 @@ export function titleForTab(tab: Tab) {
 export function subtitleForTab(tab: Tab) {
   switch (tab) {
     case "agents":
-      return "Manage agent workspaces, tools, and identities.";
+      return "Manage cognitive agent workspaces, tools, and identities.";
     case "overview":
-      return "Gateway status, entry points, and a fast health read.";
+      return "Cognitive infrastructure status, active model, and system health at a glance.";
     case "channels":
-      return "Manage channels and settings.";
+      return "Configure and monitor communication channels and messaging integrations.";
     case "instances":
-      return "Presence beacons from connected clients and nodes.";
+      return "Live presence beacons from connected clients and execution nodes.";
     case "sessions":
-      return "Inspect active sessions and adjust per-session defaults.";
+      return "Inspect conversations, adjust per-session defaults, and manage context.";
     case "usage":
       return "";
     case "cron":
-      return "Schedule wakeups and recurring agent runs.";
+      return "Schedule autonomous wakeups and recurring cognitive runs.";
     case "skills":
-      return "Manage skill availability and API key injection.";
+      return "Manage installed skills, API key injection, and capability availability.";
     case "nodes":
-      return "Paired devices, capabilities, and command exposure.";
+      return "Gateway process health, WebSocket URL, port, memory, and uptime.";
     case "chat":
-      return "Direct gateway chat session for quick interventions.";
+      return "Direct gateway chat session for quick interventions and testing.";
     case "config":
-      return "Edit ~/.openclaw/openclaw.json safely.";
+      return "Edit gateway configuration safely — changes apply on save.";
     case "debug":
-      return "Gateway snapshots, events, and manual RPC calls.";
+      return "Gateway snapshots, event stream, and manual RPC execution.";
     case "logs":
-      return "Live tail of the gateway file logs.";
+      return "Live tail of the gateway file logs for real-time monitoring.";
     default:
       return "";
   }

@@ -1,7 +1,7 @@
 ---
 read_when:
   - 更改菜单栏图标行为
-summary: macOS 上 OpenClaw 菜单栏图标的状态和动画
+summary: macOS 上 Neer 菜单栏图标的状态和动画
 title: 菜单栏图标
 x-i18n:
   generated_at: "2026-02-01T21:32:49Z"
@@ -14,7 +14,7 @@ x-i18n:
 
 # 菜单栏图标状态
 
-作者：steipete · 更新时间：2025-12-06 · 范围：macOS 应用（`apps/macos`）
+作者：steipete · 更新时间：2025-12-06 · 范围：macOS 应用（`apps/neer-macos`）
 
 - **空闲：** 正常图标动画（眨眼、偶尔摆动）。
 - **暂停：** 状态项使用 `appearsDisabled`；无动画。

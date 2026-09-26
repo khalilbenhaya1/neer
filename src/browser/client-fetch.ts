@@ -25,7 +25,7 @@ function withLoopbackBrowserAuth(
   init: (RequestInit & { timeoutMs?: number }) | undefined,
 ): RequestInit & { timeoutMs?: number } {
   const headers = new Headers(init?.headers ?? {});
-  if (headers.has("authorization") || headers.has("x-openclaw-password")) {
+  if (headers.has("authorization") || headers.has("x-neer-password")) {
     return { ...init, headers };
   }
   if (!isLoopbackHttpUrl(url)) {
@@ -38,7 +38,7 @@ function withLoopbackBrowserAuth(
     if (auth.token) {
       headers.set("Authorization", `Bearer ${auth.token}`);
     } else if (auth.password) {
-      headers.set("x-openclaw-password", auth.password);
+      headers.set("x-neer-password", auth.password);
     }
   } catch {
     // ignore config/auth lookup failures and continue without auth headers
@@ -50,7 +50,7 @@ function withLoopbackBrowserAuth(
 function enhanceBrowserFetchError(url: string, err: unknown, timeoutMs: number): Error {
   const hint = isAbsoluteHttp(url)
     ? "If this is a sandboxed session, ensure the sandbox browser is running and try again."
-    : `Start (or restart) the OpenClaw gateway (OpenClaw.app menubar, or \`${formatCliCommand("openclaw gateway")}\`) and try again.`;
+    : `Start (or restart) the Neer gateway (Neer.app menubar, or \`${formatCliCommand("neer gateway")}\`) and try again.`;
   const msg = String(err);
   const msgLower = msg.toLowerCase();
   const looksLikeTimeout =
@@ -61,10 +61,10 @@ function enhanceBrowserFetchError(url: string, err: unknown, timeoutMs: number):
     msgLower.includes("aborterror");
   if (looksLikeTimeout) {
     return new Error(
-      `Can't reach the OpenClaw browser control service (timed out after ${timeoutMs}ms). ${hint}`,
+      `Can't reach the Neer browser control service (timed out after ${timeoutMs}ms). ${hint}`,
     );
   }
-  return new Error(`Can't reach the OpenClaw browser control service. ${hint} (${msg})`);
+  return new Error(`Can't reach the Neer browser control service. ${hint} (${msg})`);
 }
 
 async function fetchHttpJson<T>(

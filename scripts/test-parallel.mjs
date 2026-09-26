@@ -33,8 +33,8 @@ const isMacOS = process.platform === "darwin" || process.env.RUNNER_OS === "macO
 const isWindows = process.platform === "win32" || process.env.RUNNER_OS === "Windows";
 const isWindowsCi = isCI && isWindows;
 const useVmForks =
-  process.env.OPENCLAW_TEST_VM_FORKS === "1" ||
-  (process.env.OPENCLAW_TEST_VM_FORKS !== "0" && !isWindows);
+  process.env.NEER_TEST_VM_FORKS === "1" ||
+  (process.env.NEER_TEST_VM_FORKS !== "0" && !isWindows);
 const runs = [
   ...(useVmForks
     ? [
@@ -88,7 +88,7 @@ const runs = [
     ],
   },
 ];
-const shardOverride = Number.parseInt(process.env.OPENCLAW_TEST_SHARDS ?? "", 10);
+const shardOverride = Number.parseInt(process.env.NEER_TEST_SHARDS ?? "", 10);
 const shardCount = isWindowsCi
   ? Number.isFinite(shardOverride) && shardOverride > 1
     ? shardOverride
@@ -96,19 +96,19 @@ const shardCount = isWindowsCi
   : 1;
 const windowsCiArgs = isWindowsCi ? ["--dangerouslyIgnoreUnhandledErrors"] : [];
 const silentArgs =
-  process.env.OPENCLAW_TEST_SHOW_PASSED_LOGS === "1" ? [] : ["--silent=passed-only"];
+  process.env.NEER_TEST_SHOW_PASSED_LOGS === "1" ? [] : ["--silent=passed-only"];
 const rawPassthroughArgs = process.argv.slice(2);
 const passthroughArgs =
   rawPassthroughArgs[0] === "--" ? rawPassthroughArgs.slice(1) : rawPassthroughArgs;
-const overrideWorkers = Number.parseInt(process.env.OPENCLAW_TEST_WORKERS ?? "", 10);
+const overrideWorkers = Number.parseInt(process.env.NEER_TEST_WORKERS ?? "", 10);
 const resolvedOverride =
   Number.isFinite(overrideWorkers) && overrideWorkers > 0 ? overrideWorkers : null;
 // Keep gateway serial on Windows CI and CI by default; run in parallel locally
-// for lower wall-clock time. CI can opt in via OPENCLAW_TEST_PARALLEL_GATEWAY=1.
+// for lower wall-clock time. CI can opt in via NEER_TEST_PARALLEL_GATEWAY=1.
 const keepGatewaySerial =
   isWindowsCi ||
-  process.env.OPENCLAW_TEST_SERIAL_GATEWAY === "1" ||
-  (isCI && process.env.OPENCLAW_TEST_PARALLEL_GATEWAY !== "1");
+  process.env.NEER_TEST_SERIAL_GATEWAY === "1" ||
+  (isCI && process.env.NEER_TEST_PARALLEL_GATEWAY !== "1");
 const parallelRuns = keepGatewaySerial ? runs.filter((entry) => entry.name !== "gateway") : runs;
 const serialRuns = keepGatewaySerial ? runs.filter((entry) => entry.name === "gateway") : [];
 const localWorkers = Math.max(4, Math.min(16, os.cpus().length));
@@ -147,7 +147,7 @@ const WARNING_SUPPRESSION_FLAGS = [
 ];
 
 function resolveReportDir() {
-  const raw = process.env.OPENCLAW_VITEST_REPORT_DIR?.trim();
+  const raw = process.env.NEER_VITEST_REPORT_DIR?.trim();
   if (!raw) {
     return null;
   }

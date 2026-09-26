@@ -4,7 +4,7 @@ import { abortEmbeddedPiRun } from "../../agents/pi-embedded.js";
 import { updateSessionStore } from "../../config/sessions.js";
 import { logVerbose } from "../../globals.js";
 import { createInternalHookEvent, triggerInternalHook } from "../../hooks/internal-hooks.js";
-import { scheduleGatewaySigusr1Restart, triggerOpenClawRestart } from "../../infra/restart.js";
+import { scheduleGatewaySigusr1Restart, triggerNeerRestart } from "../../infra/restart.js";
 import { loadCostUsageSummary, loadSessionCostSummary } from "../../infra/session-cost-usage.js";
 import { formatTokenCount, formatUsd } from "../../utils/usage-format.js";
 import { parseActivationCommand } from "../group-activation.js";
@@ -262,11 +262,11 @@ export const handleRestartCommand: CommandHandler = async (params, allowTextComm
     return {
       shouldContinue: false,
       reply: {
-        text: "⚙️ Restarting OpenClaw in-process (SIGUSR1); back in a few seconds.",
+        text: "⚙️ Restarting Neer in-process (SIGUSR1); back in a few seconds.",
       },
     };
   }
-  const restartMethod = triggerOpenClawRestart();
+  const restartMethod = triggerNeerRestart();
   if (!restartMethod.ok) {
     const detail = restartMethod.detail ? ` Details: ${restartMethod.detail}` : "";
     return {
@@ -279,7 +279,7 @@ export const handleRestartCommand: CommandHandler = async (params, allowTextComm
   return {
     shouldContinue: false,
     reply: {
-      text: `⚙️ Restarting OpenClaw via ${restartMethod.method}; give me a few seconds to come back online.`,
+      text: `⚙️ Restarting Neer via ${restartMethod.method}; give me a few seconds to come back online.`,
     },
   };
 };
@@ -316,9 +316,10 @@ export const handleStopCommand: CommandHandler = async (params, allowTextCommand
     abortTarget.entry.abortedLastRun = true;
     abortTarget.entry.updatedAt = Date.now();
     params.sessionStore[abortTarget.key] = abortTarget.entry;
+    const keyToUpdate = abortTarget.key;
     if (params.storePath) {
       await updateSessionStore(params.storePath, (store) => {
-        store[abortTarget.key] = abortTarget.entry;
+        store[keyToUpdate] = abortTarget.entry!;
       });
     }
   } else if (params.command.abortKey) {
@@ -367,9 +368,10 @@ export const handleAbortTrigger: CommandHandler = async (params, allowTextComman
     abortTarget.entry.abortedLastRun = true;
     abortTarget.entry.updatedAt = Date.now();
     params.sessionStore[abortTarget.key] = abortTarget.entry;
+    const keyToUpdate = abortTarget.key;
     if (params.storePath) {
       await updateSessionStore(params.storePath, (store) => {
-        store[abortTarget.key] = abortTarget.entry;
+        store[keyToUpdate] = abortTarget.entry!;
       });
     }
   } else if (params.command.abortKey) {

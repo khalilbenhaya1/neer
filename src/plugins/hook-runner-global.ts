@@ -65,3 +65,24 @@ export function resetGlobalHookRunner(): void {
   globalHookRunner = null;
   globalRegistry = null;
 }
+
+/**
+ * Register a hook globally at runtime without needing a full plugin definition.
+ */
+export function registerGlobalHook<K extends Parameters<NonNullable<typeof globalHookRunner>["hasHooks"]>[0]>(
+  hookName: K,
+  handler: any, // using any to bypass strict type inference here, it is casted in registry
+  priority: number = 0
+): void {
+  if (!globalRegistry) {
+    log.warn(`Cannot register global hook ${hookName}: plugin registry not initialized`);
+    return;
+  }
+  globalRegistry.typedHooks.push({
+    pluginId: "core-gateway",
+    hookName,
+    handler,
+    priority,
+    source: "run-time",
+  } as any);
+}

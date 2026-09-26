@@ -7,6 +7,12 @@ export type ChatAttachment = {
   content?: unknown;
 };
 
+export type ChatAudioContent = {
+  type: "audio";
+  data: string;
+  mimeType: string;
+};
+
 export type ChatImageContent = {
   type: "image";
   data: string;
@@ -16,6 +22,7 @@ export type ChatImageContent = {
 export type ParsedMessageWithImages = {
   message: string;
   images: ChatImageContent[];
+  audios: ChatAudioContent[];
 };
 
 type AttachmentLog = {
@@ -54,10 +61,13 @@ function isImageMime(mime?: string): boolean {
   return typeof mime === "string" && mime.startsWith("image/");
 }
 
+function isAudioMime(mime?: string): boolean {
+  return typeof mime === "string" && mime.startsWith("audio/");
+}
+
 /**
- * Parse attachments and extract images as structured content blocks.
- * Returns the message text and an array of image content blocks
- * compatible with Claude API's image format.
+ * Parse attachments and extract images/audio as structured content blocks.
+ * Returns the message text and an array of image/audio content blocks.
  */
 export async function parseMessageWithAttachments(
   message: string,
@@ -67,10 +77,11 @@ export async function parseMessageWithAttachments(
   const maxBytes = opts?.maxBytes ?? 5_000_000; // decoded bytes (5,000,000)
   const log = opts?.log;
   if (!attachments || attachments.length === 0) {
-    return { message, images: [] };
+    return { message, images: [], audios: [] };
   }
 
   const images: ChatImageContent[] = [];
+  const audios: ChatAudioContent[] = [];
 
   for (const [idx, att] of attachments.entries()) {
     if (!att) {
@@ -106,28 +117,41 @@ export async function parseMessageWithAttachments(
 
     const providedMime = normalizeMime(mime);
     const sniffedMime = normalizeMime(await sniffMimeFromBase64(b64));
-    if (sniffedMime && !isImageMime(sniffedMime)) {
-      log?.warn(`attachment ${label}: detected non-image (${sniffedMime}), dropping`);
+
+    // Check for Image
+    if (isImageMime(sniffedMime) || (!sniffedMime && isImageMime(providedMime))) {
+      if (sniffedMime && providedMime && sniffedMime !== providedMime) {
+        log?.warn(
+          `attachment ${label}: mime mismatch (${providedMime} -> ${sniffedMime}), using sniffed`,
+        );
+      }
+      images.push({
+        type: "image",
+        data: b64,
+        mimeType: sniffedMime ?? providedMime ?? mime,
+      });
       continue;
-    }
-    if (!sniffedMime && !isImageMime(providedMime)) {
-      log?.warn(`attachment ${label}: unable to detect image mime type, dropping`);
-      continue;
-    }
-    if (sniffedMime && providedMime && sniffedMime !== providedMime) {
-      log?.warn(
-        `attachment ${label}: mime mismatch (${providedMime} -> ${sniffedMime}), using sniffed`,
-      );
     }
 
-    images.push({
-      type: "image",
-      data: b64,
-      mimeType: sniffedMime ?? providedMime ?? mime,
-    });
+    // Check for Audio
+    if (isAudioMime(sniffedMime) || (!sniffedMime && isAudioMime(providedMime))) {
+      if (sniffedMime && providedMime && sniffedMime !== providedMime) {
+        log?.warn(
+          `attachment ${label}: mime mismatch (${providedMime} -> ${sniffedMime}), using sniffed`,
+        );
+      }
+      audios.push({
+        type: "audio",
+        data: b64,
+        mimeType: sniffedMime ?? providedMime ?? mime,
+      });
+      continue;
+    }
+
+    log?.warn(`attachment ${label}: detected non-image/non-audio (${sniffedMime ?? providedMime}), dropping`);
   }
 
-  return { message, images };
+  return { message, images, audios };
 }
 
 /**

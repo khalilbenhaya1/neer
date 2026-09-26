@@ -1,13 +1,13 @@
 {
-  "name": "@openclaw/google-antigravity-auth",
+  "name": "@neer/google-antigravity-auth",
   "version": "2026.2.13",
   "private": true,
-  "description": "OpenClaw Google Antigravity OAuth provider plugin",
+  "description": "Neer Google Antigravity OAuth provider plugin",
   "type": "module",
   "devDependencies": {
-    "openclaw": "workspace:*"
+    "neer": "workspace:*"
   },
-  "openclaw": {
+  "neer": {
     "extensions": [
       "./index.ts"
     ]

@@ -1,12 +1,12 @@
 ---
-summary: "CLI reference for `openclaw logs` (tail gateway logs via RPC)"
+summary: "CLI reference for `neer logs` (tail gateway logs via RPC)"
 read_when:
   - You need to tail Gateway logs remotely (without SSH)
   - You want JSON log lines for tooling
 title: "logs"
 ---
 
-# `openclaw logs`
+# `neer logs`
 
 Tail Gateway file logs over RPC (works in remote mode).
 
@@ -17,12 +17,12 @@ Related:
 ## Examples
 
 ```bash
-openclaw logs
-openclaw logs --follow
-openclaw logs --json
-openclaw logs --limit 500
-openclaw logs --local-time
-openclaw logs --follow --local-time
+neer logs
+neer logs --follow
+neer logs --json
+neer logs --limit 500
+neer logs --local-time
+neer logs --follow --local-time
 ```
 
 Use `--local-time` to render timestamps in your local timezone.

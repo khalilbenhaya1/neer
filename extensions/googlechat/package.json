@@ -1,19 +1,19 @@
 {
-  "name": "@openclaw/googlechat",
+  "name": "@neer/googlechat",
   "version": "2026.2.13",
   "private": true,
-  "description": "OpenClaw Google Chat channel plugin",
+  "description": "Neer Google Chat channel plugin",
   "type": "module",
   "dependencies": {
     "google-auth-library": "^10.5.0"
   },
   "devDependencies": {
-    "openclaw": "workspace:*"
+    "neer": "workspace:*"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.1.26"
+    "neer": ">=2026.1.26"
   },
-  "openclaw": {
+  "neer": {
     "extensions": [
       "./index.ts"
     ],
@@ -32,7 +32,7 @@
       "order": 55
     },
     "install": {
-      "npmSpec": "@openclaw/googlechat",
+      "npmSpec": "@neer/googlechat",
       "localPath": "extensions/googlechat",
       "defaultChoice": "npm"
     }

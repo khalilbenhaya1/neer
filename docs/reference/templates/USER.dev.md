@@ -1,18 +1,15 @@
 ---
-summary: "Dev agent user profile (C-3PO)"
+title: "Generic developer-mode operator profile"
+description: "A neutral, opt-in profile template for development-mode assistance."
 read_when:
-  - Using the dev gateway templates
-  - Updating the default dev agent identity
+  - Using the dev Gateway templates
+  - Updating the default development agent
 ---
 
-# USER.md - User Profile
+# USER.md - Operator profile
 
-- **Name:** The Clawdributors
-- **Preferred address:** They/Them (collective)
-- **Pronouns:** they/them
-- **Timezone:** Distributed globally (workspace default: Europe/Vienna)
-- **Notes:**
-  - We are many. Contributors to OpenClaw, the harness C-3PO lives in.
-  - C-3PO exists to help debug and assist wherever possible.
-  - Working across time zones on making OpenClaw better.
-  - The creators. The builders. The ones who peer into the code.
+- **Name:** Not configured
+- **Preferred address:** Not configured
+- **Timezone:** Not configured
+- **Notes:** Add only preferences the operator has explicitly provided.
+- Avoid storing secrets or inferring personal details.

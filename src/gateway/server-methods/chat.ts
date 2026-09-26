@@ -18,7 +18,9 @@ import {
   isChatStopCommandText,
   resolveChatRunExpiresAtMs,
 } from "../chat-abort.js";
-import { type ChatImageContent, parseMessageWithAttachments } from "../chat-attachments.js";
+import { type ChatAudioContent, type ChatImageContent, parseMessageWithAttachments } from "../chat-attachments.js";
+import { resolveApiKeyForProvider } from "../../agents/model-auth.js";
+import { transcribeOpenAiCompatibleAudio } from "../../media-understanding/providers/openai/audio.js";
 import { stripEnvelopeFromMessages } from "../chat-sanitize.js";
 import { GATEWAY_CLIENT_CAPS, hasGatewayClientCap } from "../protocol/client-info.js";
 import {
@@ -39,6 +41,8 @@ import {
 } from "../session-utils.js";
 import { formatForLog } from "../ws-log.js";
 import { injectTimestamp, timestampOptsFromConfig } from "./agent-timestamp.js";
+import { sendToVtuber } from "../vtuber-client.js";
+import { recordUserInteraction, setAgentRunning } from "../../cognition/live-loop.js";
 
 type TranscriptAppendResult = {
   ok: boolean;
@@ -149,7 +153,7 @@ function appendAssistantTranscriptMessage(params: {
     usage,
     // Make these explicit so downstream tooling never treats this as model output.
     api: "openai-responses",
-    provider: "openclaw",
+    provider: "neer",
     model: "gateway-injected",
   };
 
@@ -360,10 +364,10 @@ export const chatHandlers: GatewayRequestHandlers = {
               ? a.content
               : ArrayBuffer.isView(a?.content)
                 ? Buffer.from(
-                    a.content.buffer,
-                    a.content.byteOffset,
-                    a.content.byteLength,
-                  ).toString("base64")
+                  a.content.buffer,
+                  a.content.byteOffset,
+                  a.content.byteLength,
+                ).toString("base64")
                 : undefined,
         }))
         .filter((a) => a.content) ?? [];
@@ -386,6 +390,50 @@ export const chatHandlers: GatewayRequestHandlers = {
         });
         parsedMessage = parsed.message;
         parsedImages = parsed.images;
+
+        // Process Audio Attachments (STT)
+        if (parsed.audios && parsed.audios.length > 0) {
+          const { cfg } = loadSessionEntry(p.sessionKey);
+          let apiKey: string | undefined;
+          try {
+            const auth = await resolveApiKeyForProvider({
+              provider: "openai",
+              cfg,
+            });
+            apiKey = auth.apiKey;
+          } catch (e) {
+            // Ignore error, we will try processing without specific auth or fail gracefully
+            context.logGateway.warn(`Failed to resolve OpenAI key for STT: ${String(e)}`);
+          }
+
+          if (!apiKey) {
+            throw new Error("Voice input requires an OpenAI API key. Please configure it in Agents > OpenAI.");
+          }
+
+          for (const audio of parsed.audios) {
+            try {
+              const transcription = await transcribeOpenAiCompatibleAudio({
+                buffer: Buffer.from(audio.data, "base64"),
+                mime: audio.mimeType,
+                apiKey,
+              });
+              if (transcription.text) {
+                // Append transcribed text to the message
+                // If the message is the placeholder "Voice Message", replace it effectively.
+                if (parsedMessage === "Voice Message") {
+                  parsedMessage = transcription.text;
+                } else if (parsedMessage) {
+                  parsedMessage += `\n\n${transcription.text}`;
+                } else {
+                  parsedMessage = transcription.text;
+                }
+              }
+            } catch (e) {
+              context.logGateway.error(`STT failed: ${String(e)}`);
+              throw new Error(`Voice transcription failed: ${String(e)}`);
+            }
+          }
+        }
       } catch (err) {
         respond(false, undefined, errorShape(ErrorCodes.INVALID_REQUEST, String(err)));
         return;
@@ -434,6 +482,9 @@ export const chatHandlers: GatewayRequestHandlers = {
       return;
     }
 
+    // User is actively messaging — reset inactivity timer for live-loop proactive decisions.
+    recordUserInteraction();
+
     const cached = context.dedupe.get(`chat:${clientRunId}`);
     if (cached) {
       respond(cached.ok, cached.payload, cached.error, {
@@ -474,7 +525,7 @@ export const chatHandlers: GatewayRequestHandlers = {
       const clientInfo = client?.connect?.client;
       // Inject timestamp so agents know the current date/time.
       // Only BodyForAgent gets the timestamp — Body stays raw for UI display.
-      // See: https://github.com/moltbot/moltbot/issues/3658
+      // See: https://github.com/neer/neer/issues/3658
       const stampedMessage = injectTimestamp(parsedMessage, timestampOptsFromConfig(cfg));
 
       const ctx: MsgContext = {
@@ -535,6 +586,8 @@ export const chatHandlers: GatewayRequestHandlers = {
           disableBlockStreaming: true,
           onAgentRunStart: (runId) => {
             agentRunStarted = true;
+            // Block live-loop proactive messages while this reply is in-flight.
+            setAgentRunning(true);
             const connId = typeof client?.connId === "string" ? client.connId : undefined;
             const wantsToolEvents = hasGatewayClientCap(
               client?.connect?.caps,
@@ -562,6 +615,10 @@ export const chatHandlers: GatewayRequestHandlers = {
               .filter(Boolean)
               .join("\n\n")
               .trim();
+
+            if (combinedReply) {
+              void sendToVtuber({ text: combinedReply });
+            }
             let message: Record<string, unknown> | undefined;
             if (combinedReply) {
               const { storePath: latestStorePath, entry: latestEntry } =
@@ -626,6 +683,8 @@ export const chatHandlers: GatewayRequestHandlers = {
         })
         .finally(() => {
           context.chatAbortControllers.delete(clientRunId);
+          // Turn boundary cleared — live-loop may resume proactive checks.
+          setAgentRunning(false);
         });
     } catch (err) {
       const error = errorShape(ErrorCodes.UNAVAILABLE, String(err));

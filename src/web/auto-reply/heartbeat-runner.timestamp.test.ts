@@ -2,12 +2,12 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { NeerConfig } from "../../config/config.js";
 import { runWebHeartbeatOnce } from "./heartbeat-runner.js";
 
 describe("runWebHeartbeatOnce (timestamp)", () => {
   it("injects a cron-style Current time line into the heartbeat prompt", async () => {
-    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-web-hb-"));
+    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "neer-web-hb-"));
     const storePath = path.join(tmpDir, "sessions.json");
     try {
       await fs.writeFile(storePath, JSON.stringify({}, null, 2));
@@ -23,7 +23,7 @@ describe("runWebHeartbeatOnce (timestamp)", () => {
         },
         session: { store: storePath },
         channels: { whatsapp: { allowFrom: ["*"] } },
-      } as unknown as OpenClawConfig;
+      } as unknown as NeerConfig;
 
       await runWebHeartbeatOnce({
         cfg,

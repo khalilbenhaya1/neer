@@ -145,7 +145,7 @@ export const agentHandlers: GatewayRequestHandlers = {
     // Inject timestamp into messages that don't already have one.
     // Channel messages (Discord, Telegram, etc.) get timestamps via envelope
     // formatting in a separate code path — they never reach this handler.
-    // See: https://github.com/moltbot/moltbot/issues/3658
+    // See: https://github.com/neer/neer/issues/3658
     message = injectTimestamp(message, timestampOptsFromConfig(cfg));
 
     const isKnownGatewayChannel = (value: string): boolean => isGatewayMessageChannel(value);

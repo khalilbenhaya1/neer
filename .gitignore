@@ -19,31 +19,31 @@ ui/playwright-report/
 ui/test-results/
 
 # Android build artifacts
-apps/android/.gradle/
-apps/android/app/build/
-apps/android/.cxx/
+apps/neer-android/.gradle/
+apps/neer-android/app/build/
+apps/neer-android/.cxx/
 
 # Bun build artifacts
 *.bun-build
-apps/macos/.build/
+apps/neer-macos/.build/
 apps/shared/MoltbotKit/.build/
 **/ModuleCache/
 bin/
-bin/clawdbot-mac
+bin/neer-mac
 bin/docs-list
-apps/macos/.build-local/
-apps/macos/.swiftpm/
+apps/neer-macos/.build-local/
+apps/neer-macos/.swiftpm/
 apps/shared/MoltbotKit/.swiftpm/
 Core/
-apps/ios/*.xcodeproj/
-apps/ios/*.xcworkspace/
-apps/ios/.swiftpm/
+apps/neer-ios/*.xcodeproj/
+apps/neer-ios/*.xcworkspace/
+apps/neer-ios/.swiftpm/
 vendor/
-apps/ios/Clawdbot.xcodeproj/
-apps/ios/Clawdbot.xcodeproj/**
-apps/macos/.build/**
+apps/neer-ios/Neer.xcodeproj/
+apps/neer-ios/Neer.xcodeproj/**
+apps/neer-macos/.build/**
 **/*.bun-build
-apps/ios/*.xcfilelist
+apps/neer-ios/*.xcfilelist
 
 # Vendor build artifacts
 vendor/a2ui/renderers/lit/dist/
@@ -52,20 +52,20 @@ src/canvas-host/a2ui/*.map
 .bundle.hash
 
 # fastlane (iOS)
-apps/ios/fastlane/README.md
-apps/ios/fastlane/report.xml
-apps/ios/fastlane/Preview.html
-apps/ios/fastlane/screenshots/
-apps/ios/fastlane/test_output/
-apps/ios/fastlane/logs/
-apps/ios/fastlane/.env
+apps/neer-ios/fastlane/README.md
+apps/neer-ios/fastlane/report.xml
+apps/neer-ios/fastlane/Preview.html
+apps/neer-ios/fastlane/screenshots/
+apps/neer-ios/fastlane/test_output/
+apps/neer-ios/fastlane/logs/
+apps/neer-ios/fastlane/.env
 
 # fastlane build artifacts (local)
-apps/ios/*.ipa
-apps/ios/*.dSYM.zip
+apps/neer-ios/*.ipa
+apps/neer-ios/*.dSYM.zip
 
 # provisioning profiles (local)
-apps/ios/*.mobileprovision
+apps/neer-ios/*.mobileprovision
 
 # Local untracked files
 .local/
@@ -83,3 +83,16 @@ USER.md
 .agent/*.json
 !.agent/workflows/
 local/
+# Neer build/release files
+apps/neer-desktop/release/
+*.exe
+
+# AI model files
+*.onnx
+*.onnx.json
+
+# Generated/local files
+structure.txt
+package-info.txt
+status.txt
+data/goals.json

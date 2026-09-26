@@ -7,7 +7,7 @@ import { isTruthyEnvValue, normalizeEnv } from "./infra/env.js";
 import { installProcessWarningFilter } from "./infra/warning-filter.js";
 import { attachChildProcessBridge } from "./process/child-process-bridge.js";
 
-process.title = "openclaw";
+process.title = "neer";
 installProcessWarningFilter();
 normalizeEnv();
 
@@ -32,10 +32,10 @@ function hasExperimentalWarningSuppressed(): boolean {
 }
 
 function ensureExperimentalWarningSuppressed(): boolean {
-  if (isTruthyEnvValue(process.env.OPENCLAW_NO_RESPAWN)) {
+  if (isTruthyEnvValue(process.env.NEER_NO_RESPAWN)) {
     return false;
   }
-  if (isTruthyEnvValue(process.env.OPENCLAW_NODE_OPTIONS_READY)) {
+  if (isTruthyEnvValue(process.env.NEER_NODE_OPTIONS_READY)) {
     return false;
   }
   if (hasExperimentalWarningSuppressed()) {
@@ -43,7 +43,7 @@ function ensureExperimentalWarningSuppressed(): boolean {
   }
 
   // Respawn guard (and keep recursion bounded if something goes wrong).
-  process.env.OPENCLAW_NODE_OPTIONS_READY = "1";
+  process.env.NEER_NODE_OPTIONS_READY = "1";
   // Pass flag as a Node CLI option, not via NODE_OPTIONS (--disable-warning is disallowed in NODE_OPTIONS).
   const child = spawn(
     process.execPath,
@@ -58,7 +58,8 @@ function ensureExperimentalWarningSuppressed(): boolean {
 
   child.once("exit", (code, signal) => {
     if (signal) {
-      process.exitCode = 1;
+      console.error(`[neer] CLI process terminated abruptly by signal: ${signal}`);
+      process.exit(1);
       return;
     }
     process.exit(code ?? 1);
@@ -66,7 +67,7 @@ function ensureExperimentalWarningSuppressed(): boolean {
 
   child.once("error", (error) => {
     console.error(
-      "[openclaw] Failed to respawn CLI:",
+      "[neer] Failed to respawn CLI:",
       error instanceof Error ? (error.stack ?? error.message) : error,
     );
     process.exit(1);
@@ -116,7 +117,7 @@ function normalizeWindowsArgv(argv: string[]): string[] {
     );
   };
   const next = [...argv];
-  for (let i = 1; i <= 3 && i < next.length; ) {
+  for (let i = 1; i <= 3 && i < next.length;) {
     if (isExecPath(next[i])) {
       next.splice(i, 1);
       continue;
@@ -128,7 +129,7 @@ function normalizeWindowsArgv(argv: string[]): string[] {
     return filtered;
   }
   const cleaned = [...filtered];
-  for (let i = 2; i < cleaned.length; ) {
+  for (let i = 2; i < cleaned.length;) {
     const arg = cleaned[i];
     if (!arg || arg.startsWith("-")) {
       i += 1;
@@ -149,7 +150,7 @@ if (!ensureExperimentalWarningSuppressed()) {
   const parsed = parseCliProfileArgs(process.argv);
   if (!parsed.ok) {
     // Keep it simple; Commander will handle rich help/errors after we strip flags.
-    console.error(`[openclaw] ${parsed.error}`);
+    console.error(`[neer] ${parsed.error}`);
     process.exit(2);
   }
 
@@ -163,7 +164,7 @@ if (!ensureExperimentalWarningSuppressed()) {
     .then(({ runCli }) => runCli(process.argv))
     .catch((error) => {
       console.error(
-        "[openclaw] Failed to start CLI:",
+        "[neer] Failed to start CLI:",
         error instanceof Error ? (error.stack ?? error.message) : error,
       );
       process.exitCode = 1;
