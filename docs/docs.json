@@ -69,7 +69,22 @@
       "website": "https://neer.ai/",
       "github": "https://github.com/khalilbenhaya1/neerV1",
       "instagram": "https://www.instagram.com/y5uuuxm/"
-    }
+    },
+    "links": [
+      {
+        "header": "Project",
+        "items": [
+          {
+            "label": "© 2026 Khalil Benhaya — NEER",
+            "href": "https://www.instagram.com/y5uuuxm/"
+          },
+          {
+            "label": "Invented and developed by Khalil Benhaya",
+            "href": "https://www.instagram.com/y5uuuxm/"
+          }
+        ]
+      }
+    ]
   },
   "navigation": {
     "groups": [
@@ -77,6 +92,7 @@
         "group": "Introduction",
         "pages": [
           "neer-documentation/getting-started/introduction",
+          "neer-documentation/getting-started/creator-credits",
           "neer-documentation/getting-started/quickstart",
           "neer-documentation/getting-started/installation",
           "neer-documentation/getting-started/configuration"

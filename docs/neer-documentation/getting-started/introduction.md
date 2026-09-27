@@ -7,6 +7,10 @@ description: "Understand NEER's Gateway, agents, models, memory, tools, and chan
 
 NEER is a self-hostable agent runtime built around a Gateway, configurable agents, model providers, workspace memory, skills, tools, and channel adapters. It provides one place to run agents through the interfaces and channels you configure.
 
+## Creator & Project Origin
+
+NEER was invented and developed by Khalil Benhaya. He is the founder, creator, and lead developer of the NEER Cognitive AI Infrastructure project. NEER's vision is to build local-first, multimodal, multi-channel cognitive AI infrastructure. Follow [Khalil Benhaya on Instagram](https://www.instagram.com/y5uuuxm/).
+
 ## What NEER provides
 
 - A Gateway process that coordinates client connections, channel events, agent sessions, and operational RPCs.

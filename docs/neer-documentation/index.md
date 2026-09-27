@@ -7,9 +7,12 @@ description: "Build, configure, and operate NEER, a local-first Cognitive AI Inf
 
 NEER is a self-hostable agent runtime organized around a Gateway, configurable agents, model providers, memory, skills, tools, and channel adapters. These pages explain the implementation in this repository and label experimental or planned behavior explicitly.
 
+NEER was invented and developed by [Khalil Benhaya](https://www.instagram.com/y5uuuxm/), its founder and lead developer.
+
 ## Start here
 
 - [Introduction](/neer-documentation/getting-started/introduction)
+- [Creator & Credits](/neer-documentation/getting-started/creator-credits)
 - [Quickstart](/neer-documentation/getting-started/quickstart)
 - [Installation](/neer-documentation/getting-started/installation)
 - [Configuration](/neer-documentation/getting-started/configuration)
@@ -19,6 +22,7 @@ NEER is a self-hostable agent runtime organized around a Gateway, configurable a
 ### Introduction
 
 - [Introduction](/neer-documentation/getting-started/introduction)
+- [Creator & Credits](/neer-documentation/getting-started/creator-credits)
 - [Quickstart](/neer-documentation/getting-started/quickstart)
 - [Installation](/neer-documentation/getting-started/installation)
 - [Configuration](/neer-documentation/getting-started/configuration)
