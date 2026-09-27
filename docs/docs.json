@@ -54,12 +54,12 @@
     "links": [
       {
         "label": "GitHub",
-        "href": "https://github.com/khalilbenhaya1",
+        "href": "https://github.com/khalilbenhaya1/neer",
         "icon": "github"
       },
       {
         "label": "Releases",
-        "href": "https://github.com/khalilbenhaya1/releases",
+        "href": "https://github.com/khalilbenhaya1/neer/releases",
         "icon": "package"
       }
     ]
