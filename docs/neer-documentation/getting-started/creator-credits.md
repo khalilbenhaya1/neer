@@ -5,18 +5,22 @@ description: "Learn who created NEER and the project's local-first cognitive AI 
 
 # Creator & Credits
 
-## Creator & Project Origin
+NEER is a local-first, multimodal, multi-channel Cognitive AI Infrastructure platform with agents, memory, tools, cognitive state, and autonomous capabilities.
 
-NEER was invented and developed by [Khalil Benhaya](https://www.instagram.com/y5uuuxm/). He is the founder, creator, and lead developer of the NEER Cognitive AI Infrastructure project.
+## Khalil Benhaya
 
-**Role:** Founder, Inventor & Lead Developer of NEER.
+**Founder · Inventor · Lead Developer**
 
-NEER's vision is to build local-first, multimodal, multi-channel cognitive AI infrastructure: a foundation for configured agents, models, memory, tools, channels, and autonomous capabilities that can run on infrastructure chosen by its operators.
+Khalil Benhaya is the inventor, founder, creator, and lead developer of NEER.
+
+## About NEER
+
+NEER's vision is to build extensible, local-first AI infrastructure that brings agents, memory, tools, multimodal capabilities, and cognitive systems into one platform.
 
 ## Project links
 
 - [Khalil Benhaya on Instagram](https://www.instagram.com/y5uuuxm/)
-- [NEER source repository](https://github.com/khalilbenhaya1/neerV1)
+- [NEER source repository](https://github.com/y5uxm/neer)
 
 ## Related
 

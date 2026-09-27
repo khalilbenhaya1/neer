@@ -12,20 +12,20 @@ NEER was invented and developed by [Khalil Benhaya](https://www.instagram.com/y5
 ## Start here
 
 - [Introduction](/neer-documentation/getting-started/introduction)
-- [Creator & Credits](/neer-documentation/getting-started/creator-credits)
 - [Quickstart](/neer-documentation/getting-started/quickstart)
 - [Installation](/neer-documentation/getting-started/installation)
 - [Configuration](/neer-documentation/getting-started/configuration)
+- [Creator & Credits](/neer-documentation/getting-started/creator-credits)
 
 ## Documentation map
 
 ### Introduction
 
 - [Introduction](/neer-documentation/getting-started/introduction)
-- [Creator & Credits](/neer-documentation/getting-started/creator-credits)
 - [Quickstart](/neer-documentation/getting-started/quickstart)
 - [Installation](/neer-documentation/getting-started/installation)
 - [Configuration](/neer-documentation/getting-started/configuration)
+- [Creator & Credits](/neer-documentation/getting-started/creator-credits)
 
 ### Core Concepts
 

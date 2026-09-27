@@ -16,8 +16,8 @@ This quickstart starts the development Gateway from a source checkout. It does n
 ## Start the Gateway
 
 ```sh
-git clone https://github.com/khalilbenhaya1/neerV1.git
-cd neerV1
+git clone https://github.com/y5uxm/neer.git
+cd neer
 pnpm install
 pnpm neer setup
 pnpm gateway:dev

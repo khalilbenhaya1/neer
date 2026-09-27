@@ -54,12 +54,12 @@
     "links": [
       {
         "label": "GitHub",
-        "href": "https://github.com/khalilbenhaya1/neerV1",
+        "href": "https://github.com/y5uxm/neer",
         "icon": "github"
       },
       {
         "label": "Releases",
-        "href": "https://github.com/khalilbenhaya1/neerV1/releases",
+        "href": "https://github.com/y5uxm/neer/releases",
         "icon": "package"
       }
     ]
@@ -67,7 +67,7 @@
   "footer": {
     "socials": {
       "website": "https://neer.ai/",
-      "github": "https://github.com/khalilbenhaya1/neerV1",
+      "github": "https://github.com/y5uxm/neer",
       "instagram": "https://www.instagram.com/y5uuuxm/"
     },
     "links": [
@@ -92,10 +92,10 @@
         "group": "Introduction",
         "pages": [
           "neer-documentation/getting-started/introduction",
-          "neer-documentation/getting-started/creator-credits",
           "neer-documentation/getting-started/quickstart",
           "neer-documentation/getting-started/installation",
-          "neer-documentation/getting-started/configuration"
+          "neer-documentation/getting-started/configuration",
+          "neer-documentation/getting-started/creator-credits"
         ]
       },
       {

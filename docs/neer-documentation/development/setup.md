@@ -16,8 +16,8 @@ This guide prepares the repository for local development and a Gateway-backed ag
 ## Install dependencies and initialize
 
 ```sh
-git clone https://github.com/khalilbenhaya1/neerV1.git
-cd neerV1
+git clone https://github.com/y5uxm/neer.git
+cd neer
 pnpm install
 pnpm neer setup
 ```

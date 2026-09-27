@@ -6,7 +6,7 @@ NEER was invented and developed by [Khalil Benhaya](https://www.instagram.com/y5
 
 - Site landing page: [`../index.md`](../index.md)
 - Active documentation landing page: [`index.md`](index.md)
-- Source repository: <https://github.com/khalilbenhaya1/neerV1>
+- Source repository: <https://github.com/y5uxm/neer>
 
 NEER was invented and developed by Khalil Benhaya.
 

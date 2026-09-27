@@ -18,8 +18,8 @@ The codebase aims to support both Node and Bun execution paths, but the document
 ## Clone and install
 
 ```sh
-git clone https://github.com/khalilbenhaya1/neerV1.git
-cd neerV1
+git clone https://github.com/y5uxm/neer.git
+cd neer
 pnpm install
 ```
 
