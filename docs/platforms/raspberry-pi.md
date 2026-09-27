@@ -118,7 +118,7 @@ curl -fsSL https://neer.ai/install.sh | bash
 ### Option B: Hackable Install (For tinkering)
 
 ```bash
-git clone https://github.com/neer/neer.git
+git clone https://github.com/khalilbenhaya1/neerV1.git
 cd neer
 npm install
 npm run build

@@ -1,7 +1,7 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "name": "NEER",
-  "description": "Cognitive AI Infrastructure",
+  "description": "NEER — Cognitive AI Infrastructure",
   "logo": {
     "light": "/assets/neer-logo-header-light.png",
     "dark": "/assets/neer-logo-header-dark.png"
@@ -31,16 +31,16 @@
   },
   "fonts": {
     "body": {
-      "family": "Fragment Mono"
+      "family": "DM Sans"
     },
     "heading": {
       "family": "DM Sans"
     }
   },
   "colors": {
-    "primary": "#FF5A36",
-    "dark": "#FF5A36",
-    "light": "#FF8A6B"
+    "primary": "#926D3F",
+    "dark": "#926D3F",
+    "light": "#D8BC82"
   },
   "styling": {
     "codeblocks": {
@@ -54,15 +54,22 @@
     "links": [
       {
         "label": "GitHub",
-        "href": "https://github.com/neer/neer",
+        "href": "https://github.com/khalilbenhaya1/neerV1",
         "icon": "github"
       },
       {
         "label": "Releases",
-        "href": "https://github.com/neer/neer/releases",
+        "href": "https://github.com/khalilbenhaya1/neerV1/releases",
         "icon": "package"
       }
     ]
+  },
+  "footer": {
+    "socials": {
+      "website": "https://neer.ai/",
+      "github": "https://github.com/khalilbenhaya1/neerV1",
+      "instagram": "https://www.instagram.com/y5uuuxm/"
+    }
   },
   "navigation": {
     "groups": [

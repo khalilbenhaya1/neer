@@ -1,6 +1,11 @@
+---
+title: "Dashboard and Control UI"
+description: "Open the Gateway-served Control UI and distinguish it from the experimental ui-next interface."
+---
+
 # Dashboard and Control UI
 
-NEER includes a browser Control UI served by the Gateway. It provides an interface for inspecting and operating supported Gateway features, including conversations, agents, channels, devices, skills, configuration, logs, usage, and approvals as available to the connected installation.
+NEER includes a browser Control UI served by the Gateway. It provides views for supported Gateway features such as conversations, agents, channels, devices, skills, configuration, logs, usage, and approvals, depending on the connected installation and permissions.
 
 ## Open the Control UI
 

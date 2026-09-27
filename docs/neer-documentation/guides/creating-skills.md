@@ -1,3 +1,8 @@
+---
+title: "Create a workspace skill"
+description: "Write and validate an instruction-based skill in an agent workspace."
+---
+
 # Create a workspace skill
 
 A skill is a set of instructions that NEER can load into an agent's context. It can describe a repeatable workflow, decision rules, and how to use tools that are already available. A skill does not add executable tools or permissions by itself.

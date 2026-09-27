@@ -1,22 +1,18 @@
 ---
 title: "NEER documentation"
-description: "Cognitive AI Infrastructure"
+description: "Build, configure, and operate NEER, a local-first Cognitive AI Infrastructure platform."
 ---
 
-# NEER
+# NEER documentation
 
-**Cognitive AI Infrastructure**
-
-Local-first, multimodal, multi-channel, and autonomous by design. The Gateway coordinates configured agents, model providers, workspace memory, skills, tools, and channel adapters. Provider, channel, and permission configuration determine which capabilities are available; a local Gateway may still use an external provider.
+NEER is a self-hostable agent runtime organized around a Gateway, configurable agents, model providers, memory, skills, tools, and channel adapters. These pages explain the implementation in this repository and label experimental or planned behavior explicitly.
 
 ## Start here
 
-- [Introduction](/getting-started/introduction)
-- [Quickstart](/getting-started/quickstart)
-- [Installation](/getting-started/installation)
-- [Configuration](/getting-started/configuration)
-
-These short getting-started routes redirect to the corresponding active NEER pages under the documentation directory.
+- [Introduction](/neer-documentation/getting-started/introduction)
+- [Quickstart](/neer-documentation/getting-started/quickstart)
+- [Installation](/neer-documentation/getting-started/installation)
+- [Configuration](/neer-documentation/getting-started/configuration)
 
 ## Documentation map
 
@@ -69,6 +65,8 @@ These short getting-started routes redirect to the corresponding active NEER pag
 
 - [Cognitive Roadmap](/neer-documentation/roadmap/cognitive-roadmap)
 
-## About implementation status
+## Project
 
-The repository implements the Gateway, agents, provider configuration, memory indexing and retrieval, skills and tools, channel adapters, and cron scheduling. Cognitive Pulse and other longer-term autonomy concepts are described with their implementation status in [Cognitive Roadmap](/neer-documentation/roadmap/cognitive-roadmap).
+NEER was invented and developed by Khalil Benhaya.
+
+© 2026 Khalil Benhaya. All rights reserved.

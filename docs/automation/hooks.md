@@ -874,6 +874,6 @@ node -e "import('./path/to/handler.ts').then(console.log)"
 ## See Also
 
 - [CLI Reference: hooks](/cli/hooks)
-- [Bundled Hooks README](https://github.com/neer/neer/tree/main/src/hooks/bundled)
+- [Bundled Hooks README](https://github.com/khalilbenhaya1/neerV1/tree/main/src/hooks/bundled)
 - [Webhook Hooks](/automation/webhook)
 - [Configuration](/gateway/configuration#hooks)

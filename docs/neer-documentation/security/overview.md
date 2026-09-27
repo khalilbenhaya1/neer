@@ -1,3 +1,8 @@
+---
+title: "NEER security overview"
+description: "Review the Gateway, channel, tool, filesystem, and provider boundaries in a NEER deployment."
+---
+
 # NEER security overview
 
 NEER security is configured across the Gateway, browser clients, channel policies, tool execution, and optional sandboxing. These controls reduce specific risks; they do not make an exposed instance safe by default or guarantee that model/provider traffic remains local.
@@ -19,6 +24,8 @@ pnpm neer security audit
 ```
 
 The command also has deep and fix modes. Deep mode can perform additional probes; fix mode can change state, so review its output and help before using it. An audit is a useful check, not a complete security certification.
+
+The Gateway currently starts a live proactive loop. `NEER_AUTONOMOUS_MODE=true` enables Cognitive Pulse worker ticks, but setting it to another value does not disable that separate live loop. Review [Cognitive Core](/neer-documentation/concepts/cognitive-core) before operating an unattended Gateway.
 
 ## Operational baseline
 

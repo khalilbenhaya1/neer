@@ -1,0 +1,9 @@
+# Publish the NEER landing page, logo assets, and active NEER documentation only.
+# Legacy documentation remains in the repository for now but is not a published route.
+/*
+!/docs.json
+!/index.md
+!/assets/
+!/assets/**
+!/neer-documentation/
+!/neer-documentation/**

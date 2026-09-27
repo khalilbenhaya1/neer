@@ -1,3 +1,8 @@
+---
+title: "Install and develop NEER"
+description: "Prepare a supported Node.js and pnpm environment from the NEER source repository."
+---
+
 # Install and develop NEER
 
 This page covers a source checkout, the reproducible path for contributors and developers. A source checkout requires Node.js and pnpm; optional model providers and channels have their own setup requirements.
@@ -13,8 +18,8 @@ The codebase aims to support both Node and Bun execution paths, but the document
 ## Clone and install
 
 ```sh
-git clone https://github.com/neer/neer.git
-cd neer
+git clone https://github.com/khalilbenhaya1/neerV1.git
+cd neerV1
 pnpm install
 ```
 
@@ -24,7 +29,7 @@ For a user configuration and workspace, run first-time setup:
 pnpm neer setup
 ```
 
-Use pnpm neer setup --help to inspect options such as workspace selection, local or remote mode, and the interactive wizard.
+Use `pnpm neer setup --help` to inspect workspace options. The related `pnpm neer onboard --help` command exposes the interactive wizard and local/remote setup options.
 
 ## Start NEER
 
@@ -34,11 +39,11 @@ For local development, start the Gateway in a second terminal:
 pnpm gateway:dev
 ```
 
-This repository script skips channel startup and launches the Gateway in development mode. To run the development CLI, use pnpm neer COMMAND; pnpm dev runs the development entry point.
+This repository script skips built-in channel startup and launches the Gateway in development mode. To run the development CLI, use `pnpm neer COMMAND`; `pnpm dev` runs the development entry point.
 
 ## Optional interfaces
 
-pnpm ui:dev starts the classic Control UI development server. The separate ui-next/ package is a work in progress; its current pages include placeholders and are not a replacement for the complete Control UI. See [Dashboard](/neer-documentation/interface/dashboard).
+`pnpm ui:dev` starts the classic Control UI development server. The separate `ui-next/` package remains experimental; some screens use demonstration data and are not a replacement for the classic Control UI. See [Dashboard](/neer-documentation/interface/dashboard).
 
 ## Troubleshooting
 

@@ -1,6 +1,11 @@
+---
+title: "Schedule work with cron"
+description: "Create, inspect, and manage Gateway cron jobs for system events or agent turns."
+---
+
 # Schedule work with cron
 
-NEER's Gateway includes a cron scheduler for one-time, interval-based, or five-field cron jobs. Jobs can enqueue a system event in the main session or send a message as an agent turn. The Gateway must be running for scheduled jobs to execute.
+NEER's Gateway includes a cron scheduler for one-time, interval-based, or five-field cron jobs. Jobs can enqueue a system event in the main session or send a message as an agent turn. The Gateway must be running for scheduled jobs to execute. Cron is separate from the Cognitive Pulse worker and the live proactive loop described in [Cognitive Core](/neer-documentation/concepts/cognitive-core).
 
 ## Add a recurring agent job
 
@@ -21,7 +26,7 @@ pnpm neer cron list
 pnpm neer cron status
 ```
 
-Use pnpm neer cron --help to inspect edit and remove commands. Scheduled work only has the capabilities of its agent, model, tools, and channel configuration. Cron is not a goal queue or a general autonomous planning engine.
+Use `pnpm neer cron --help` to inspect edit and remove commands. Scheduled work only has the capabilities of its agent, model, tools, and channel configuration. Cron is a scheduler; it does not guarantee agent task completion.
 
 ## Related
 

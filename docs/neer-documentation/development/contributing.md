@@ -1,3 +1,8 @@
+---
+title: "Contribute to NEER"
+description: "Follow repository conventions and validate changes across affected NEER surfaces."
+---
+
 # Contribute to NEER
 
 Contributions should follow the existing architecture and repository checks. Before changing shared behavior, identify the affected runtime, UI, channel, and extension surfaces.

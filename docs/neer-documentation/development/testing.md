@@ -1,3 +1,8 @@
+---
+title: "Test and check NEER changes"
+description: "Choose source, test, build, format, and documentation checks for a NEER change."
+---
+
 # Test and check NEER changes
 
 Choose checks that cover the code or documentation you changed. The repository uses Vitest for tests and Oxlint/Oxfmt for code quality; documentation has separate formatting and link checks.

@@ -16,7 +16,7 @@ title: "Tests"
 
 ## Model latency bench (local keys)
 
-Script: [`scripts/bench-model.ts`](https://github.com/neer/neer/blob/main/scripts/bench-model.ts)
+Script: [`scripts/bench-model.ts`](https://github.com/khalilbenhaya1/neerV1/blob/main/scripts/bench-model.ts)
 
 Usage:
 

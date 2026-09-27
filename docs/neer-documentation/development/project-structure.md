@@ -1,3 +1,8 @@
+---
+title: "NEER repository structure"
+description: "Locate runtime, CLI, UI, extension, native app, and documentation code in the repository."
+---
+
 # NEER repository structure
 
 The repository keeps the Gateway runtime, CLI, browser interfaces, channel extensions, native clients, and documentation in separate areas.

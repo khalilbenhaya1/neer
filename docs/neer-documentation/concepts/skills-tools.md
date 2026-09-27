@@ -1,3 +1,8 @@
+---
+title: "Skills and tools"
+description: "Extend agents with instruction-based skills and runtime tools controlled by policy."
+---
+
 # Skills and tools
 
 Skills and tools serve different purposes in NEER. A skill is a SKILL.md instruction bundle that helps an agent follow a workflow. A tool is a runtime operation the agent can call when it is available and allowed by policy. A skill does not automatically grant a tool or operating-system permission.
@@ -18,7 +23,7 @@ Create a directory under the agent workspace's skills/ directory and add a SKILL
 
 ## Tool access and policy
 
-Tools are supplied by the NEER runtime and extensions. Their availability depends on the active agent, loaded extensions, and execution/security configuration. Review [Permissions](/neer-documentation/security/permissions) before enabling actions that can modify files, run commands, or interact with external systems.
+Tools are supplied by the NEER runtime and extensions. Their availability depends on the active agent, loaded extensions, and execution/security configuration. The runtime also registers goal and experience tools such as `create_goal`, `list_goals`, `complete_goal`, `delete_goal`, `record_experience`, and `recall_experiences`; effective tool policy can restrict their use. Review [Cognitive Core](/neer-documentation/concepts/cognitive-core) and [Permissions](/neer-documentation/security/permissions) before enabling actions that can modify files, run commands, or interact with external systems.
 
 ## Related
 

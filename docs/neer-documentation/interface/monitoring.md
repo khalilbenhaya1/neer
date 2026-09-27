@@ -1,6 +1,11 @@
+---
+title: "Monitor NEER"
+description: "Use Gateway health, status, channel probes, and logs to inspect a running NEER instance."
+---
+
 # Monitor NEER
 
-Use the CLI and classic Control UI for operational state backed by the running Gateway. The experimental ui-next/ contains prototype metrics; distinguish those screens from live health checks.
+Use the CLI and classic Control UI for operational state backed by the running Gateway. The experimental `ui-next/` contains prototype metrics; distinguish those screens from live health checks. In particular, its threat score and sample tool history are not a runtime threat feed or security audit.
 
 ## CLI checks
 

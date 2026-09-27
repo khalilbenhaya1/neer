@@ -1,6 +1,11 @@
+---
+title: "Gateway"
+description: "Run the NEER coordination service and understand its connections, routing, and exposure."
+---
+
 # Gateway
 
-The NEER Gateway is the long-running service that connects clients and channel adapters to agent sessions. It also exposes health, status, and control operations used by the CLI and browser Control UI.
+The NEER Gateway is the long-running service that connects clients and channel adapters to agent sessions. It also exposes health, status, and control operations used by the CLI and browser Control UI. Gateway startup wires the live proactive loop and starts the Cognitive Pulse worker; see [Cognitive Core](/neer-documentation/concepts/cognitive-core) for the different gates on those paths.
 
 ## Run and inspect
 
@@ -18,7 +23,7 @@ pnpm neer gateway health
 pnpm neer health
 ```
 
-The repository's development script skips channel startup. Production or channel-enabled operation requires the applicable channel configuration. See [Channels](/neer-documentation/guides/channels).
+The repository's development script skips built-in channel startup. Production or channel-enabled operation requires the applicable channel configuration. See [Channels](/neer-documentation/guides/channels).
 
 ## Connections and routing
 

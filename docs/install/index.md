@@ -105,10 +105,10 @@ The **installer script** is the recommended way to install Neer. It handles Node
 
     <Steps>
       <Step title="Clone and build">
-        Clone the [Neer repo](https://github.com/neer/neer) and build:
+        Clone the [Neer repo](https://github.com/khalilbenhaya1/neerV1) and build:
 
         ```bash
-        git clone https://github.com/neer/neer.git
+        git clone https://github.com/khalilbenhaya1/neerV1.git
         cd neer
         pnpm install
         pnpm ui:build

@@ -61,7 +61,7 @@ Neer 需要 Node 22 或更新版本。
 ## 从源码安装（开发）
 
 ```bash
-git clone https://github.com/neer/neer.git
+git clone https://github.com/khalilbenhaya1/neerV1.git
 cd neer
 pnpm install
 pnpm ui:build # 首次运行时会自动安装 UI 依赖

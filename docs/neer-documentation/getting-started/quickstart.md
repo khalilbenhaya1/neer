@@ -1,3 +1,8 @@
+---
+title: "Quickstart: Run NEER locally"
+description: "Install a source checkout, start the development Gateway, and send a first agent message."
+---
+
 # Quickstart: Run NEER locally
 
 This quickstart starts the development Gateway from a source checkout. It does not configure a model provider or messaging channel for you; those are separate setup steps.
@@ -11,14 +16,14 @@ This quickstart starts the development Gateway from a source checkout. It does n
 ## Start the Gateway
 
 ```sh
-git clone https://github.com/neer/neer.git
-cd neer
+git clone https://github.com/khalilbenhaya1/neerV1.git
+cd neerV1
 pnpm install
 pnpm neer setup
 pnpm gateway:dev
 ```
 
-The setup command creates local configuration and an agent workspace. The gateway:dev script starts the development Gateway with built-in channels skipped, which is useful for a first local run. Leave it running in that terminal.
+The setup command creates local configuration and an agent workspace. The `gateway:dev` package script starts the development Gateway with built-in channel startup skipped, which is useful for an initial local run. Leave it running in that terminal.
 
 In another terminal, check that the Gateway responds:
 
@@ -27,7 +32,7 @@ pnpm neer health
 pnpm neer status
 ```
 
-Health checks the running Gateway. Status reports configured channel health and recent session recipients; before a channel is configured, channel status may be empty or unavailable.
+`health` fetches health from the running Gateway. `status` summarizes channel health and recent session recipients; before a channel is configured, the channel section may be empty or unavailable.
 
 ## Configure a model
 
@@ -42,13 +47,13 @@ Replace the placeholder with an actual entry. Provider credentials or local prov
 
 ## Send a local agent message
 
-After selecting a usable model, try:
+After selecting a usable model and confirming that `pnpm neer models status` shows the provider configuration you expect, try:
 
 ```sh
 pnpm neer agent --agent main --message "Summarize the purpose of this repository."
 ```
 
-The agent command normally routes through the Gateway. The configured agent ID may differ; use pnpm neer agents list to see configured agents.
+The agent command normally routes through the Gateway. The configured agent ID may differ; use `pnpm neer agents list` to see configured agents. The selected provider may be local or remote; for a local Ollama setup, follow [Use Ollama](/neer-documentation/guides/ollama).
 
 ## Next steps
 

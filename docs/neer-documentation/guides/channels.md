@@ -1,3 +1,8 @@
+---
+title: "Configure messaging channels"
+description: "Inspect channel support, add an account, and review routing and sender policies."
+---
+
 # Configure messaging channels
 
 Channel adapters connect messaging systems to the Gateway. A channel must be supported by the installation, configured with its own credentials or account, and permitted by sender/group policies before it can route messages to an agent.

@@ -1,3 +1,8 @@
+---
+title: "Agent permissions and execution policy"
+description: "Understand tool policy, command execution modes, sandbox settings, and channel allowlists."
+---
+
 # Agent permissions and execution policy
 
 An agent's practical permissions come from its tools, execution-approval policy, optional sandbox configuration, and connected-channel policies. Creating an agent or writing a skill does not grant broader system access by itself.

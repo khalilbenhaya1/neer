@@ -32,7 +32,7 @@ x-i18n:
 
 ```bash
 # Clone the repo
-git clone https://github.com/neer/neer.git
+git clone https://github.com/khalilbenhaya1/neerV1.git
 cd neer
 
 # Create a new Fly app (pick your own name)

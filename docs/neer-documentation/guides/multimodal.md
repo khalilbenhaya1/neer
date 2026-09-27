@@ -1,3 +1,8 @@
+---
+title: "Multimodal input and output"
+description: "Check provider and channel support before routing image, audio, or video content through NEER."
+---
+
 # Multimodal input and output
 
 NEER's media pipelines can pass supported image, audio, and video content through configured media-understanding providers. Which media types work depends on the channel adapter, provider integration, model capabilities, and request path. Do not assume every model or channel accepts every format.

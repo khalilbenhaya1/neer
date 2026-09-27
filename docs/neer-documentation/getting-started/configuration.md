@@ -1,6 +1,11 @@
+---
+title: "Configure NEER"
+description: "Inspect and update NEER's validated JSON5 configuration for the Gateway, agents, and models."
+---
+
 # Configure NEER
 
-NEER reads a JSON5 configuration file from the user configuration directory, normally ~/.neer/neer.json. The setup command creates the initial configuration and workspace. Use the CLI to inspect or change settings instead of guessing key names.
+NEER reads a JSON5 configuration file from the user configuration directory, normally `~/.neer/neer.json`. The setup command creates the initial configuration and workspace. Use the CLI to inspect or change settings rather than guessing key names; the configuration is validated against the repository schema.
 
 ## Read and set a value
 
@@ -11,7 +16,7 @@ pnpm neer config get gateway.bind
 pnpm neer config set gateway.bind loopback
 ```
 
-The set command validates the resulting file against the NEER schema and reports that the Gateway should be restarted to apply the change. Use pnpm neer config --help for supported commands and JSON5 values. Avoid printing entire secret-bearing sections into shared logs.
+The set command validates the resulting file against the NEER schema and reports that the Gateway should be restarted to apply the change. Use `pnpm neer config --help` for supported commands and JSON5 values. Avoid printing secret-bearing sections into shared logs.
 
 ## Gateway basics
 
@@ -40,7 +45,7 @@ pnpm neer health
 pnpm neer status
 ```
 
-Some configuration changes reload live; others may require restarting the Gateway. If validation reports an unknown key or invalid value, consult the matching page under [Core Concepts](/neer-documentation/concepts/architecture) and inspect pnpm neer config --help.
+Some configuration changes reload live; others may require restarting the Gateway. If validation reports an unknown key or invalid value, inspect `pnpm neer config --help` and the relevant [Core Concepts](/neer-documentation/concepts/architecture) page. Provider-specific fields should match the provider integration you configured.
 
 ## Related
 

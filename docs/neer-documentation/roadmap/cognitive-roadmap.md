@@ -1,28 +1,37 @@
+---
+title: "Cognitive roadmap"
+description: "Separate implemented cognitive runtime foundations from incomplete and planned phases."
+---
+
 # Cognitive roadmap
 
-This roadmap separates capabilities present in the repository from directions that are still being developed or planned. Status labels below describe the code inspected for this documentation pass; they are not release commitments or a substitute for a published milestone schedule.
+This page records the status visible in the repository source. Phase names describe the NEER direction; they are not release commitments, dated milestones, or evidence that a phase is complete.
 
-## Implemented foundation
+## Implemented in the repository
 
-The repository contains the operational foundation for agent workflows: Gateway coordination, configurable agents and model providers, workspace memory indexing and retrieval, skills and runtime tools, channel adapters, browser Control UI, heartbeat controls, cron scheduling, and operational CLI commands.
+- **Gateway and agent foundation:** the Gateway routes client and channel requests to configured agents, models, memory, and tools.
+- **Persona and behavior building blocks:** agents can have identity files and workspace instructions. A separate self-state and intent module participates in the live proactive loop. The repository does not declare the Persona & Behavioral Stability phase formally closed.
+- **Cognitive Pulse building blocks:** Gateway startup starts a worker that processes stored goals and experience records. Pulse ticks run only with `NEER_AUTONOMOUS_MODE=true`, and are capped at three per hour. A separate live proactive loop starts regardless of that variable. These paths are experimental and do not guarantee task completion.
+- **Memory building blocks:** workspace Markdown can be indexed and searched, and a separate experience store records explicit outcomes and lessons. The two stores do not form a unified learning system.
+- **Scheduling and operations:** cron, heartbeat, health/status commands, and the classic Control UI are present in the repository.
 
-Identity and workspace instructions are also implemented. The repository does not identify a formal milestone closure or completion date for the original Persona & Behavioral Stability phase, so that milestone should be treated as unverified even though related building blocks exist.
+See [Architecture](/neer-documentation/concepts/architecture), [Cognitive Core](/neer-documentation/concepts/cognitive-core), and [Memory](/neer-documentation/concepts/memory) for implementation details.
 
-## Active direction: Cognitive Pulse
+## Phase status
 
-The existing project roadmap identifies a Cognitive Pulse direction. Current code provides Gateway heartbeat behavior and a ui-next/ prototype screen. It does not implement the screen's represented goal queue, reflective timeline, or full pulse engine. Those parts remain planned; the active label here describes the roadmap direction, not shipped functionality.
+| Phase                                 | Status supported by the source                                                                                                                                                                                        |
+| ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **1. Persona & Behavioral Stability** | Identity and self-state building blocks exist. No formal phase-completion record was found.                                                                                                                           |
+| **2. Cognitive Pulse Engine**         | A Gateway-wired, environment-gated worker and a separate proactive loop exist. The current implementation is experimental and has limits documented in [Cognitive Core](/neer-documentation/concepts/cognitive-core). |
+| **3. Memory Architecture**            | Workspace search and JSON-backed experiences exist as separate systems. A broader unified memory architecture remains incomplete.                                                                                     |
+| **4. Autonomous Action Layer**        | Goal tools and gated background goal dispatch exist. Reliable autonomous planning, completion guarantees, and a complete operator control surface are not established.                                                |
+| **5. Economic Intelligence**          | Planned direction. No economic-intelligence engine was verified in this repository.                                                                                                                                   |
+| **6. Meta-Cognitive Layer**           | Basic self-state and intent logic exist. A general self-evaluation or model-adaptation layer remains planned and was not verified.                                                                                    |
 
-## Planned phases
+## How to read these labels
 
-- **Memory Architecture:** broader memory organization and lifecycle beyond the implemented workspace Markdown index and search backends.
-- **Autonomous Action Layer:** persistent goal management and multi-step planning beyond current agent turns, heartbeat events, and scheduled cron jobs.
-- **Economic Intelligence:** a future product direction; no corresponding economic-analysis engine was verified in the repository.
-- **Meta-Cognitive Layer:** a future direction for introspection and adaptation; no general self-evaluation engine was verified.
-
-## How to read status
-
-Use [Cognitive State](/neer-documentation/interface/cognitive-state) for current heartbeat signals and prototype limits. Use [Architecture](/neer-documentation/concepts/architecture) for implemented execution flow. A page or UI route alone does not establish that a roadmap feature is implemented.
+“Implemented” means the corresponding code path is present; it does not mean every path is enabled by default, production-hardened, or exposed in the UI. “Planned” marks a direction without a verified implementation. The current source does not define dates or delivery commitments for these phases.
 
 ## Related
 
-[Cognitive Core](/neer-documentation/concepts/cognitive-core) · [Memory](/neer-documentation/concepts/memory) · [Monitoring](/neer-documentation/interface/monitoring)
+[Cognitive Core](/neer-documentation/concepts/cognitive-core) · [Cognitive State](/neer-documentation/interface/cognitive-state) · [Monitoring](/neer-documentation/interface/monitoring) · [Security Overview](/neer-documentation/security/overview)

@@ -1,3 +1,8 @@
+---
+title: "Create and configure agents"
+description: "Add a NEER agent with a workspace, optional model, and channel bindings."
+---
+
 # Create and configure agents
 
 Use agents to give separate workflows their own identity, workspace, model settings, or channel bindings. An agent is not automatically isolated at the operating-system level; review its execution policy and sandbox settings separately.

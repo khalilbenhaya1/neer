@@ -1,3 +1,8 @@
+---
+title: "Models and providers"
+description: "Inspect configured models and connect NEER agents to local or remote model providers."
+---
+
 # Models and providers
 
 NEER separates the model ID used by an agent from the provider integration that serves it. The available catalog depends on installed code, provider configuration, credentials, and local services.
@@ -19,7 +24,7 @@ Use the exact ID shown by models list. Per-agent model settings can override def
 
 ## Provider setup
 
-A provider may require credentials, a local server, or an explicit provider profile. Keep secrets out of committed files and shell history where possible; use provider-supported environment variables or the configuration mechanism for your deployment. A local Gateway does not guarantee inference stays local: that depends on the selected provider and model.
+A provider may require credentials, a local server, or an explicit provider profile. Keep secrets out of committed files and shell history where possible; use provider-supported environment variables or the configuration mechanism for your deployment. A local Gateway does not guarantee inference stays local: that depends on the selected provider and model. Provider catalogs and media/tool support vary; the model being listed does not guarantee every request path supports every capability.
 
 For a local Ollama server, follow [Ollama](/neer-documentation/guides/ollama). For supported image, audio, or video paths and provider requirements, see [Multimodal](/neer-documentation/guides/multimodal).
 

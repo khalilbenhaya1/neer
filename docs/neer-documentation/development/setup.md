@@ -1,3 +1,8 @@
+---
+title: "Set up a NEER development environment"
+description: "Install dependencies, initialize local state, and run the development Gateway."
+---
+
 # Set up a NEER development environment
 
 This guide prepares the repository for local development and a Gateway-backed agent session.
@@ -11,13 +16,13 @@ This guide prepares the repository for local development and a Gateway-backed ag
 ## Install dependencies and initialize
 
 ```sh
-git clone https://github.com/neer/neer.git
-cd neer
+git clone https://github.com/khalilbenhaya1/neerV1.git
+cd neerV1
 pnpm install
 pnpm neer setup
 ```
 
-The setup command initializes local configuration and an agent workspace. Use pnpm neer setup --help for wizard, workspace, and local/remote mode options.
+The setup command initializes local configuration and an agent workspace. Use `pnpm neer setup --help` for workspace options and `pnpm neer onboard --help` for wizard and local/remote mode options.
 
 ## Start the development Gateway
 

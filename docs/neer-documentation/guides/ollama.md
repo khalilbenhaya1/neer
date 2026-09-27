@@ -1,3 +1,8 @@
+---
+title: "Use Ollama as a model provider"
+description: "Configure NEER to discover and use models served by an Ollama instance."
+---
+
 # Use Ollama as a model provider
 
 NEER can configure an Ollama provider for a local or remote Ollama server. The provider is added only when Ollama is explicitly configured through OLLAMA_API_KEY or an authentication profile. The default API base is [the local Ollama endpoint](http://127.0.0.1:11434); an explicit provider base URL can point to another instance.
@@ -12,7 +17,7 @@ Follow Ollama's own installation instructions to install and run its server. Thi
 
 ## Configure and select a model
 
-Set up the provider using your environment's secret/configuration management. NEER checks for OLLAMA_API_KEY or an Ollama auth profile before adding the provider. For a non-default server, configure the provider baseUrl using the model-provider configuration supported by your version.
+Set up the provider using your environment's secret/configuration management. NEER checks for `OLLAMA_API_KEY` or an Ollama auth profile before adding the provider. For a non-default server, configure the Ollama provider's `baseUrl` in the model-provider configuration accepted by your NEER version. The default provider endpoint is `http://127.0.0.1:11434`; the adapter accepts an OpenAI-compatible `/v1` suffix and normalizes it.
 
 Then inspect models and choose an available model:
 
@@ -22,7 +27,7 @@ pnpm neer models status
 pnpm neer models set ollama/<model-id>
 ```
 
-Replace the placeholder with the model identifier reported by your Ollama installation. If it is not listed, check the provider environment/profile and server address before changing agent configuration.
+Replace the placeholder with the model identifier reported by your Ollama server. If it is not listed, check that Ollama is reachable, `OLLAMA_API_KEY` or an auth profile is present, and the configured server address is correct before changing agent configuration.
 
 ## Verify
 

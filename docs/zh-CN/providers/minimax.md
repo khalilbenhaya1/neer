@@ -55,7 +55,7 @@ neer onboard --auth-choice minimax-portal
 - **Global** - 国际用户（`api.minimax.io`）
 - **CN** - 中国用户（`api.minimaxi.com`）
 
-详情参见 [MiniMax OAuth 插件 README](https://github.com/neer/neer/tree/main/extensions/minimax-portal-auth)。
+详情参见 [MiniMax OAuth 插件 README](https://github.com/khalilbenhaya1/neerV1/tree/main/extensions/minimax-portal-auth)。
 
 ### MiniMax M2.1（API 密钥）
 

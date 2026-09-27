@@ -81,7 +81,7 @@ echo 'source ~/.clawdock/clawdock-helpers.sh' >> ~/.zshrc && source ~/.zshrc
 
 Then use `clawdock-start`, `clawdock-stop`, `clawdock-dashboard`, etc. Run `clawdock-help` for all commands.
 
-See [`ClawDock` Helper README](https://github.com/neer/neer/blob/main/scripts/shell-helpers/README.md) for details.
+See [`ClawDock` Helper README](https://github.com/khalilbenhaya1/neerV1/blob/main/scripts/shell-helpers/README.md) for details.
 
 ### Manual flow (compose)
 
@@ -575,7 +575,7 @@ Example:
 
 ## Troubleshooting
 
-- Image missing: build with [`scripts/sandbox-setup.sh`](https://github.com/neer/neer/blob/main/scripts/sandbox-setup.sh) or set `agents.defaults.sandbox.docker.image`.
+- Image missing: build with [`scripts/sandbox-setup.sh`](https://github.com/khalilbenhaya1/neerV1/blob/main/scripts/sandbox-setup.sh) or set `agents.defaults.sandbox.docker.image`.
 - Container not running: it will auto-create per session on demand.
 - Permission errors in sandbox: set `docker.user` to a UID:GID that matches your
   mounted workspace ownership (or chown the workspace folder).

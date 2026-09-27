@@ -23,7 +23,7 @@ x-i18n:
 
 ## 模型延迟基准测试（本地密钥）
 
-脚本：[`scripts/bench-model.ts`](https://github.com/neer/neer/blob/main/scripts/bench-model.ts)
+脚本：[`scripts/bench-model.ts`](https://github.com/khalilbenhaya1/neerV1/blob/main/scripts/bench-model.ts)
 
 用法：
 

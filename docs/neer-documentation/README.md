@@ -1,11 +1,11 @@
-# Neer Documentation
+# NEER documentation source
 
-This directory contains the documentation for **Neer — Cognitive AI Infrastructure**.
+This directory contains the NEER pages referenced by [`docs.json`](../docs.json). The documentation describes behavior verified against the source in this repository; experimental interfaces and roadmap items are identified as such.
 
-Start with [`index.md`](index.md).
+- Site landing page: [`../index.md`](../index.md)
+- Active documentation landing page: [`index.md`](index.md)
+- Source repository: <https://github.com/khalilbenhaya1/neerV1>
 
-Neer is designed as a local-first, multimodal, multi-channel cognitive AI infrastructure platform connecting agents, models, memory, tools, automation, communication surfaces, and interfaces.
+NEER was invented and developed by Khalil Benhaya.
 
-Website: https://neer.ai/  
-Documentation: https://docs.neer.ai/  
-Source: https://github.com/khalilbenhaya1/neerV1
+© 2026 Khalil Benhaya. All rights reserved.

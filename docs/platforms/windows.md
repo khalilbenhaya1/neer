@@ -143,7 +143,7 @@ systemctl --user status
 Follow the Linux Getting Started flow inside WSL:
 
 ```bash
-git clone https://github.com/neer/neer.git
+git clone https://github.com/khalilbenhaya1/neerV1.git
 cd neer
 pnpm install
 pnpm ui:build # auto-installs UI deps on first run

@@ -135,7 +135,7 @@ neer health
 
 Notes:
 
-- `pnpm build` matters when you run the packaged `neer` binary ([`neer.mjs`](https://github.com/neer/neer/blob/main/neer.mjs)) or use Node to run `dist/`.
+- `pnpm build` matters when you run the packaged `neer` binary ([`neer.mjs`](https://github.com/khalilbenhaya1/neerV1/blob/main/neer.mjs)) or use Node to run `dist/`.
 - If you run from a repo checkout without a global install, use `pnpm neer ...` for CLI commands.
 - If you run directly from TypeScript (`pnpm neer ...`), a rebuild is usually unnecessary, but **config migrations still apply** → run doctor.
 - Switching between global and git installs is easy: install the other flavor, then run `neer doctor` so the gateway service entrypoint is rewritten to the current install.

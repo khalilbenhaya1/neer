@@ -100,7 +100,7 @@ neer onboard --install-daemon
 ### 3）从源代码（贡献者/开发）
 
 ```bash
-git clone https://github.com/neer/neer.git
+git clone https://github.com/khalilbenhaya1/neerV1.git
 cd neer
 pnpm install
 pnpm ui:build # 首次运行时自动安装 UI 依赖
