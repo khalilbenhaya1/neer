@@ -20,7 +20,7 @@ NEER's vision is to build extensible, local-first AI infrastructure that brings 
 ## Project links
 
 - [Khalil Benhaya on Instagram](https://www.instagram.com/y5uuuxm/)
-- [NEER source repository](https://github.com/y5uxm/neer)
+- [NEER source repository](https://github.com/khalilbenhaya1/neer)
 
 ## Related
 
