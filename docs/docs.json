@@ -54,20 +54,19 @@
     "links": [
       {
         "label": "GitHub",
-        "href": "https://github.com/y5uxm/neer",
+        "href": "https://github.com/khalilbenhaya1",
         "icon": "github"
       },
       {
         "label": "Releases",
-        "href": "https://github.com/y5uxm/neer/releases",
+        "href": "https://github.com/khalilbenhaya1/releases",
         "icon": "package"
       }
     ]
   },
   "footer": {
     "socials": {
-      "website": "https://neer.ai/",
-      "github": "https://github.com/y5uxm/neer",
+      "github": "https://github.com/khalilbenhaya1",
       "instagram": "https://www.instagram.com/y5uuuxm/"
     },
     "links": [
